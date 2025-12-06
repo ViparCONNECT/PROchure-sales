@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, CheckCircle2, Sparkles } from "lucide-react";
 import { GOOGLE_FORM_URL } from "../config/constants";
 
 export default function SubscriptionSection() {
@@ -12,39 +12,102 @@ export default function SubscriptionSection() {
       className="max-w-4xl mx-auto"
     >
       <div className="relative">
-        {/* Glow effect */}
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-purple-400/20 to-purple-500/10 rounded-3xl blur-3xl" />
+        {/* Animated glow effect */}
+        <div className="absolute inset-0 bg-gradient-to-r from-prochure-bg/20 via-prochure-bg/30 to-prochure-bg/20 rounded-3xl blur-3xl animate-pulse" />
 
-        <div className="relative bg-white rounded-3xl shadow-xl shadow-purple-900/5 overflow-hidden border border-purple-100">
-          <div className="p-8 text-center bg-gray-50 border-b border-gray-100">
-            <h3 className="text-2xl font-bold text-gray-800">
-              Join the PROchure Community
-            </h3>
-            <p className="text-gray-500 mt-2">
-              Fill out the form below to activate your membership instantly.
-            </p>
+        <div className="relative bg-white rounded-3xl shadow-2xl shadow-prochure-bg/10 overflow-hidden border border-gray-100">
+          {/* Header Section */}
+          <div className="relative overflow-hidden">
+            {/* Background Pattern */}
+            <div className="absolute inset-0 bg-gradient-to-br from-prochure-bg via-prochure-bg to-[#3d2835] opacity-95" />
+            <div
+              className="absolute inset-0 opacity-10"
+              style={{
+                backgroundImage: `radial-gradient(circle at 2px 2px, white 1px, transparent 0)`,
+                backgroundSize: "32px 32px",
+              }}
+            />
+
+            <div className="relative p-8 sm:p-12 text-center text-white">
+              <motion.div
+                initial={{ scale: 0 }}
+                whileInView={{ scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ type: "spring", duration: 0.6, delay: 0.2 }}
+                className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-sm mb-6"
+              >
+                <Sparkles className="w-8 h-8 text-white" />
+              </motion.div>
+
+              <h3 className="text-3xl sm:text-4xl font-bold mb-3">
+                Join the PROchure Community
+              </h3>
+              <p className="text-white/90 text-lg max-w-2xl mx-auto">
+                Become a member today and unlock exclusive access to
+                professional services and products
+              </p>
+            </div>
           </div>
 
-          <div className="w-full h-[600px] sm:h-[700px] bg-white relative">
-            <iframe
-              src={GOOGLE_FORM_URL}
-              className="w-full h-full border-0"
-              title="Subscription Form"
+          {/* Benefits Section */}
+          <div className="p-8 sm:p-12 bg-gradient-to-b from-gray-50 to-white">
+            <div className="grid sm:grid-cols-3 gap-6 mb-8">
+              {[
+                { title: "Instant Access", desc: "Get started immediately" },
+                { title: "Professional Network", desc: "Connect with experts" },
+                { title: "Exclusive Content", desc: "Premium resources" },
+              ].map((benefit, index) => (
+                <motion.div
+                  key={benefit.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.1 * index }}
+                  className="flex items-start gap-3 p-4 rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-300"
+                >
+                  <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <h4 className="font-semibold text-gray-800 mb-1">
+                      {benefit.title}
+                    </h4>
+                    <p className="text-sm text-gray-600">{benefit.desc}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* CTA Button */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="text-center"
             >
-              Loading...
-            </iframe>
+              <a
+                href={GOOGLE_FORM_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center gap-3 px-8 py-4 bg-prochure-bg hover:bg-[#3d2835] text-white font-semibold text-lg rounded-2xl shadow-lg shadow-prochure-bg/30 hover:shadow-xl hover:shadow-prochure-bg/40 transition-all duration-300 hover:scale-105 active:scale-95"
+              >
+                <span>Complete Subscription Form</span>
+                <ExternalLink className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
+              </a>
+
+              <p className="text-sm text-gray-500 mt-4">
+                Opens in a new tab • Takes less than 2 minutes
+              </p>
+            </motion.div>
           </div>
 
-          <div className="bg-gray-50 p-4 text-center border-t border-gray-100">
-            <a
-              href={GOOGLE_FORM_URL}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 text-sm text-purple-600 hover:text-purple-800 font-medium"
-            >
-              Having trouble loading? Open form in new tab{" "}
-              <ExternalLink size={14} />
-            </a>
+          {/* Footer Note */}
+          <div className="bg-gray-50 px-8 py-6 border-t border-gray-100">
+            <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
+              <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+              <span>
+                Secure form powered by Google • Your data is protected
+              </span>
+            </div>
           </div>
         </div>
       </div>

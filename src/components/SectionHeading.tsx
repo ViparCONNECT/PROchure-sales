@@ -25,7 +25,7 @@ export default function SectionHeading({ number, title }: SectionHeadingProps) {
             type: "spring",
             stiffness: 200,
           }}
-          className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br from-purple-600 to-purple-800 flex items-center justify-center shadow-lg shadow-purple-500/30"
+          className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-prochure-bg flex items-center justify-center shadow-lg shadow-prochure-bg/40"
         >
           <span className="text-white font-bold text-xl sm:text-2xl">
             {number}
@@ -41,7 +41,7 @@ export default function SectionHeading({ number, title }: SectionHeadingProps) {
             whileInView={{ width: "100%" }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-            className="h-1.5 bg-gradient-to-r from-purple-500/50 to-transparent mt-4 rounded-full max-w-md"
+            className="h-1.5 bg-gradient-to-r from-prochure-bg/60 to-transparent mt-4 rounded-full max-w-md"
           />
         </div>
       </div>
