@@ -198,7 +198,7 @@ function ImagePreview({
 
           {/* Image Container - Constrained height to avoid touching edges */}
           <div
-            className="relative w-full max-w-5xl h-full max-h-[85vh] p-4 flex items-center justify-center overflow-hidden"
+            className="relative w-full max-w-5xl h-full max-h-[85dvh] p-4 flex items-center justify-center overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             <AnimatePresence mode="wait" custom={direction}>

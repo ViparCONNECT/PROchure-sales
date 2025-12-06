@@ -12,17 +12,22 @@ export default function LoadingAnimation() {
       <div className="loading-container">
         {/* Icon/Logo */}
         {/* use the "proicon.png" */}
-        <img src={getAssetPath("/proicon.png")} alt="PROchure" width={100} />
+        <img
+          src={getAssetPath("/proicon.png")}
+          alt="PROchure"
+          width={100}
+          className="loading-logo"
+        />
 
         {/* Title with ® symbol */}
-        <span className="loading-title">
+        <span className="loading-title relative">
           PROchure
           <span
             style={{
               fontSize: "0.4em",
-              position: "relative",
-              top: "-35px",
-              marginLeft: "5px",
+              position: "absolute",
+              top: "20px",
+              right: "-35px",
             }}
           >
             ®
