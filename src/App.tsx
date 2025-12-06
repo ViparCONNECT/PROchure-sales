@@ -1,3 +1,3 @@
 export default function App() {
-  return <div>Deploy test</div>;
+  return <div>Deploy test for PROchure</div>;
 }
