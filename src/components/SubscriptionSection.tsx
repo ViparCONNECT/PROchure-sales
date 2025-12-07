@@ -36,15 +36,14 @@ export default function SubscriptionSection() {
                 transition={{ type: "spring", duration: 0.6, delay: 0.2 }}
                 className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-sm mb-6"
               >
-                <Sparkles className="w-8 h-8 text-white" />
+                <img src="/PROchure-sales/proicon.png" alt="PRO Icon" className="w-8 h-8" />
               </motion.div>
 
               <h3 className="text-3xl sm:text-4xl font-bold mb-3">
                 Join the PROchure Community
               </h3>
               <p className="text-white/90 text-lg max-w-2xl mx-auto">
-                Become a member today and unlock exclusive access to
-                professional services and products
+                and “Be a PRO !”<br />to showcase your talent, your services portfolio, your product catalogues” on an exclusive and dedicated business-oriented professional-networking platform
               </p>
             </div>
           </div>
