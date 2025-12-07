@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ExternalLink, CheckCircle2, Sparkles } from "lucide-react";
+import { ExternalLink, CheckCircle2 } from "lucide-react";
 import { GOOGLE_FORM_URL } from "../config/constants";
 
 export default function SubscriptionSection() {
@@ -36,7 +36,7 @@ export default function SubscriptionSection() {
                 transition={{ type: "spring", duration: 0.6, delay: 0.2 }}
                 className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-sm mb-6"
               >
-                <img src="/PROchure-sales/proicon.png" alt="PRO Icon" className="w-8 h-8" />
+                <img src="/PROchure-sales/proicon.png" alt="PRO Icon" className="max-w-full h-7" />
               </motion.div>
 
               <h3 className="text-3xl sm:text-4xl font-bold mb-3">
@@ -52,9 +52,9 @@ export default function SubscriptionSection() {
           <div className="p-8 sm:p-12 bg-gradient-to-b from-gray-50 to-white">
             <div className="grid sm:grid-cols-3 gap-6 mb-8">
               {[
-                { title: "Instant Access", desc: "Get started immediately" },
-                { title: "Professional Network", desc: "Connect with experts" },
-                { title: "Exclusive Content", desc: "Premium resources" },
+                { title: "Global Exposure", desc: "Showcase your business to a worldwide audience" },
+                { title: "Industry Group Creation", desc: "Form and join industry-specific groups" },
+                { title: "Manage up to 20 business profiles", desc: "Handle multiple businesses from one account." },
               ].map((benefit, index) => (
                 <motion.div
                   key={benefit.title}
