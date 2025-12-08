@@ -1,11 +1,14 @@
 import { motion } from "framer-motion";
 
 interface SectionHeadingProps {
-  number: string;
+  icon: any;
   title: string;
 }
 
-export default function SectionHeading({ number, title }: SectionHeadingProps) {
+export default function SectionHeading({
+  icon: Icon,
+  title,
+}: SectionHeadingProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -27,9 +30,7 @@ export default function SectionHeading({ number, title }: SectionHeadingProps) {
           }}
           className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-prochure-bg flex items-center justify-center shadow-lg shadow-prochure-bg/40"
         >
-          <span className="text-white font-bold text-xl sm:text-2xl">
-            {number}
-          </span>
+          <Icon className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
         </motion.div>
 
         <div className="flex-1 pt-1">
