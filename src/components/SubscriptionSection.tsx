@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ExternalLink, CheckCircle2, Sparkles, Zap } from "lucide-react";
+import { ExternalLink, CheckCircle2, Zap } from "lucide-react";
 import { GOOGLE_FORM_URL } from "../config/constants";
 export default function SubscriptionSection() {
   return (
