@@ -46,7 +46,7 @@ export default function SubscriptionSection() {
                 and “Be a PRO !”
                 <br />
                 to showcase your talent, your services portfolio, your product
-                catalogues” on an exclusive and dedicated business-oriented
+                catalogues on an exclusive and dedicated business-oriented
                 professional-networking platform
               </p>
             </div>
