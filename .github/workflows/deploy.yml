@@ -13,13 +13,6 @@ jobs:
   build-and-deploy:
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
-    
-    # 🌟 CRITICAL FIX: Add this permissions block to grant write access.
-    permissions:
-      contents: write # Allows the action to push to the gh-pages branch
-      pages: write    # Best practice for GitHub Pages deployment
-      id-token: write # For future compatibility with OIDC/GitHub Pages V3
-      
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -32,19 +25,17 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      # ➡️ Ensure this step succeeds and creates the ./dist folder
       - name: Build project
-        run: npm run build 
+        run: npm run build
 
-      - name: Deploy to GitHub Pages (using peaceiris)
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          # Use the GITHUB_TOKEN provided by the runner
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          # The branch to publish to
-          publish_branch: gh-pages
-          # The directory to publish (must be created by 'npm run build')
-          publish_dir: ./dist
-          # 💡 OPTIONAL BUT RECOMMENDED: Uncomment this line 
-          # to ensure the CNAME file is always present, which prevents 404 on the custom domain.
-          # cname: www.prochure.app
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Deploy to GitHub Pages
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+        run: |
+          git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/ViparCONNECT/PROchure-sales.git
+          npm run deploy
