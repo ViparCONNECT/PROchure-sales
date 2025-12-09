@@ -26,19 +26,16 @@ jobs:
         run: npm install
 
       - name: Build project
-        run: npm run build
+        run: npm run build 
 
-      - name: Configure Git
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
-      - name: Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages (using peaceiris)
         uses: peaceiris/actions-gh-pages@v3
         with:
-          # Use the GITHUB_TOKEN provided by the GitHub Actions runner
+          # Use the GITHUB_TOKEN provided by the runner
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          # The branch the 'dist' folder will be pushed to
+          # The branch to publish to
           publish_branch: gh-pages
-          # The directory containing the built files (from 'npm run build')
+          # The directory to publish (must be created by 'npm run build')
           publish_dir: ./dist
+          # 📝 OPTIONAL: This will prevent gh-pages from removing the CNAME file if you place it in /public
+          # cname: www.prochure.app
