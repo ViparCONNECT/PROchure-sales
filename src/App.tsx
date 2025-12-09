@@ -6,7 +6,8 @@ import SubscriptionSection from "./components/SubscriptionSection";
 import LoadingAnimation from "./components/LoadingAnimation";
 import { useEffect, useState } from "react";
 import { AnimatePresence } from "framer-motion";
-import { Video, Sparkles, Handshake } from "lucide-react";
+// import { Video } from "lucide-react";
+import { Sparkles, Handshake } from "lucide-react";
 import Footer from "./components/Footer";
 
 export default function App() {
