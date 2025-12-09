@@ -34,8 +34,11 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Deploy to GitHub Pages
-        env:
-          GH_PAT: ${{ secrets.GH_PAT }}
-        run: |
-          git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/ViparCONNECT/PROchure-sales.git
-          npm run deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          # Use the GITHUB_TOKEN provided by the GitHub Actions runner
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          # The branch the 'dist' folder will be pushed to
+          publish_branch: gh-pages
+          # The directory containing the built files (from 'npm run build')
+          publish_dir: ./dist
