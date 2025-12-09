@@ -34,7 +34,7 @@ export default function SubscriptionSection() {
                 className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-sm mb-6"
               >
                 <img
-                  src="/PROchure-sales/proicon.png"
+                  src="/proicon.png"
                   alt="PRO Icon"
                   className="max-w-full h-7"
                 />

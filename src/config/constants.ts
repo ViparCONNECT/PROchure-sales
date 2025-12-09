@@ -1,6 +1,6 @@
 export const GOOGLE_FORM_URL = "https://forms.gle/NcQbG5tqtbPZv8Nf8";
 
-export const BASE_ASSET_URL = "/PROchure-sales";
+export const BASE_ASSET_URL = "";
 export const ARTICLES = [
   {
     id: 1,

@@ -1,7 +1,7 @@
 import Navbar from "./components/Navbar";
 import SectionHeading from "./components/SectionHeading";
 import ArticleGrid from "./components/ArticleGrid";
-import VideoSection from "./components/VideoSection";
+// import VideoSection from "./components/VideoSection";
 import SubscriptionSection from "./components/SubscriptionSection";
 import LoadingAnimation from "./components/LoadingAnimation";
 import { useEffect, useState } from "react";
@@ -42,13 +42,13 @@ export default function App() {
             </section>
 
             {/* Section 2: Video */}
-            <section className="py-16 sm:py-24 border-b border-prochure-100/50">
+            {/* <section className="py-16 sm:py-24 border-b border-prochure-100/50">
               <SectionHeading
                 icon={Video}
                 title="What does our mascot Bino-bird have to say?"
               />
               <VideoSection />
-            </section>
+            </section> */}
 
             {/* Section 3: Subscription */}
             <section className="py-16 sm:py-24 pb-32">
