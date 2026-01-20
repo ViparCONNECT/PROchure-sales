@@ -1,26 +1,25 @@
-import Navbar from "./components/Navbar";
-import SectionHeading from "./components/SectionHeading";
-import ArticleGrid from "./components/ArticleGrid";
-// import VideoSection from "./components/VideoSection";
-import SubscriptionSection from "./components/SubscriptionSection";
 import LoadingAnimation from "./components/LoadingAnimation";
 import { useEffect, useState } from "react";
 import { AnimatePresence } from "framer-motion";
-// import { Video } from "lucide-react";
-import { Sparkles, Handshake } from "lucide-react";
-import Footer from "./components/Footer";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Layout from "./components/Layout";
+import HomePage from "./pages/HomePage";
+import CategoryListPage from "./pages/CategoryListPage";
+import SubcategoryListPage from "./pages/SubcategoryListPage";
+import SubcategoryPage from "./SubcategoryPage";
+import { SubscptionPage } from "./pages/SubscptionPage";
 
 export default function App() {
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
 
-  useEffect(() => {
-    // Hide loading screen after 5 seconds (adjust as needed)
-    const timer = setTimeout(() => {
-      setIsVisible(false);
-    }, 7000);
+  // useEffect(() => {
+  //   // Hide loading screen after 7 seconds (matching original)
+  //   const timer = setTimeout(() => {
+  //     setIsVisible(false);
+  //   }, 7000);
 
-    return () => clearTimeout(timer);
-  }, []);
+  //   return () => clearTimeout(timer);
+  // }, []);
 
   return (
     <>
@@ -29,38 +28,17 @@ export default function App() {
           <LoadingAnimation />
         </AnimatePresence>
       ) : (
-        <div className="min-h-screen bg-[#FDFBF7] selection:bg-purple-200 text-slate-900">
-          <Navbar />
-
-          <main className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-            {/* Section 1: Articles */}
-            <section className="py-16 sm:py-24 border-b border-prochure-100/50">
-              <SectionHeading
-                icon={Handshake}
-                title="What is PROchure and Why should you be a member?"
-              />
-              <ArticleGrid />
-            </section>
-
-            {/* Section 2: Video */}
-            {/* <section className="py-16 sm:py-24 border-b border-prochure-100/50">
-              <SectionHeading
-                icon={Video}
-                title="What does our mascot Bino-bird have to say?"
-              />
-              <VideoSection />
-            </section> */}
-
-            {/* Section 3: Subscription */}
-            <section className="py-16 sm:py-24 pb-32">
-              <SectionHeading icon={Sparkles} title="Subscription Process" />
-              <SubscriptionSection />
-            </section>
-          </main>
-
-          {/* Footer */}
-          <Footer />
-        </div>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              <Route index element={<HomePage />} />
+              <Route path="/register" element={<SubscptionPage />} />
+              <Route path=":type" element={<CategoryListPage />} />
+              <Route path=":type/:category" element={<SubcategoryListPage />} />
+              <Route path=":type/:category/:subcategory" element={<SubcategoryPage />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
       )}
     </>
   );

@@ -37,8 +37,7 @@ export default function ArticleGrid() {
             <motion.div
               key={article.id}
               initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
+              animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: index * 0.08 }}
               whileHover={{ scale: 1.02, y: -4 }}
               onClick={() => {

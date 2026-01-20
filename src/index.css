@@ -164,6 +164,10 @@
   opacity: 0;
 }
 
+.prochure-text{
+  color: var(--color-prochure-bg);
+}
+
 .monotype-text {
   color: #4ade80;
   font-family: var(--font-family-monotype);
