@@ -62,7 +62,7 @@ export default function InceptionModal({ isOpen, onClose }: InceptionModalProps)
                             {/* Content */}
                             <div className="space-y-8 text-lg sm:text-xl leading-relaxed font-light text-white/90">
                                 <p>
-                                    <span className="text-yellow-400 font-normal">PROchure ®</span> is a path-breaking concept envisioned by Architect Vinod Venugopal, a registered architect with the Council of Architecture (CA/2011/51213).
+                                    <span className="text-yellow-400 font-normal">PROchure </span><sup>®</sup> is a path-breaking concept envisioned by Architect Vinod Venugopal, a registered architect with the Council of Architecture (CA/2011/51213).
                                 </p>
 
                                 <p>
@@ -70,7 +70,7 @@ export default function InceptionModal({ isOpen, onClose }: InceptionModalProps)
                                 </p>
 
                                 <p>
-                                    <span className="text-yellow-400 font-normal">PROchure ®</span> is an application developed by <span className="monotype-text">Vipar</span> CONNECT, a wing of <span className="monotype-text">Vipar</span>® (founded by Ar. Vinod).
+                                    <span className="text-yellow-400 font-normal">PROchure </span><sup>®</sup> is an application developed by <span className="monotype-text">Vipar&nbsp;</span> CONNECT, a wing of <span className="monotype-text">Vipar </span><sup> ®</sup> (founded by Ar. Vinod).
                                 </p>
                             </div>
                         </div>

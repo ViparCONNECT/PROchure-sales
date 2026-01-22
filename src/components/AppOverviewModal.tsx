@@ -62,7 +62,7 @@ export default function AppOverviewModal({ isOpen, onClose }: AppOverviewModalPr
                                     <img src={getAssetPath("/proicon.png")} alt="Logo" className="w-16 h-auto" />
                                     <div className="flex flex-col">
                                         <h1 className="text-4xl sm:text-4xl text-yellow-400 font-normal">
-                                            PROchure <sup className="text-xl">®</sup>
+                                            PROchure <sup className="text-xl text-white">®</sup>
                                         </h1>
                                         <p className="text-yellow-400 text-lg">the Professional brochure</p>
                                     </div>
