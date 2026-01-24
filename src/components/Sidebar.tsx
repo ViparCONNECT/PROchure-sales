@@ -160,13 +160,6 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                                         >
                                             PROLIFIC INFORMATION
                                         </Link>
-                                        <Link
-                                            to="#"
-                                            onClick={onClose}
-                                            className="block p-2 text-white/90 hover:text-white text-sm transition-colors"
-                                        >
-                                            CUBICLES
-                                        </Link>
                                     </div>
                                 </div>
 
