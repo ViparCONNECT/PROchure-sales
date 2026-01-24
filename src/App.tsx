@@ -10,16 +10,16 @@ import SubcategoryPage from "./SubcategoryPage";
 import { SubscptionPage } from "./pages/SubscptionPage";
 
 export default function App() {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
 
-  // useEffect(() => {
-  //   // Hide loading screen after 7 seconds (matching original)
-  //   const timer = setTimeout(() => {
-  //     setIsVisible(false);
-  //   }, 7000);
+  useEffect(() => {
+    // Hide loading screen after 7 seconds (matching original)
+    const timer = setTimeout(() => {
+      setIsVisible(false);
+    }, 7000);
 
-  //   return () => clearTimeout(timer);
-  // }, []);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <>

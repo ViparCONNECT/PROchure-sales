@@ -5,7 +5,6 @@ import servicesData from "../data/services.json";
 import productsData from "../data/products.json";
 import Breadcrumbs from "../components/Breadcrumbs";
 import SectionHeading from "../components/SectionHeading";
-import { motion } from "framer-motion";
 
 const toSlug = (str: string) => str.toLowerCase().replace(/\s+/g, "-");
 

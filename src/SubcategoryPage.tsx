@@ -30,7 +30,7 @@ export default function SubcategoryPage() {
     useEffect(() => {
         if (!type || !categorySlug || !subcategorySlug) return;
 
-        const rootData = type === "services" ? servicesData.service : productsData.product;
+        const rootData = (type === "services" ? servicesData.service : productsData.product) as { categories: Category[] };
 
         // Find category
         const category = rootData.categories.find(c => toSlug(c.name) === categorySlug);
@@ -40,7 +40,7 @@ export default function SubcategoryPage() {
         }
 
         // Find subcategory
-        const subcategory = category.subcategories.find(s => toSlug(s.name) === subcategorySlug);
+        const subcategory = category.subcategories.find(s => toSlug(s.name) === subcategorySlug) as Subcategory | undefined;
         if (!subcategory) {
             setData(null);
             return;
