@@ -58,6 +58,8 @@ export default function SubscriptionSection() {
             <PricingSection />
             {/* CTA Button */}
             <CTAButton />
+            {/* Important Notes Section */}
+            <ImportantNotesSection />
           </div>
           {/* Footer Note */}
           <div className="bg-gray-50 px-8 py-6 border-t border-gray-100">
@@ -133,13 +135,13 @@ function PricingSection() {
           <div className="flex justify-center mb-4">
             <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-prochure-bg text-white text-sm font-medium rounded-full">
               <Zap className="w-4 h-4" />
-              Launching in January 2026
+              Launched in January 2026
             </span>
           </div>
-          {/* Pre-launch Offer Heading */}
+          {/* Promotional Offer Heading */}
           <div className="text-center mb-6">
             <h4 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">
-              Pre-launch Offer
+              PROMOTIONAL OFFER!
             </h4>
             <div className="w-20 h-1 bg-gradient-to-r from-amber-400 to-yellow-400 mx-auto rounded-full" />
           </div>
@@ -152,7 +154,7 @@ function PricingSection() {
                   ₹25,000/-
                 </span>
               </div>
-              <p className="text-sm text-gray-500 mt-1">for one year</p>
+              <p className="text-sm text-gray-500 mt-1">WAIVED OFF</p>
             </div>
             {/* Arrow or Divider */}
             <div className="hidden sm:block text-3xl font-bold text-amber-500">
@@ -165,16 +167,16 @@ function PricingSection() {
                   ₹5,000/-
                 </span>
                 {/* Savings Badge */}
-                <div className="absolute -top-3 -right-12 sm:-right-16">
+                {/* <div className="absolute -top-3 -right-12 sm:-right-16">
                   <span className="inline-block px-2 py-1 bg-green-500 text-white text-xs font-bold rounded-full transform rotate-12">
                     90% OFF
                   </span>
-                </div>
+                </div> */}
               </div>
               <p className="text-sm font-semibold text-prochure-bg mt-1">
                 for 2 years
               </p>
-              <p className="text-xs text-gray-500 mt-1">Save ₹45,000!</p>
+              {/* <p className="text-xs text-gray-500 mt-1">Save ₹45,000!</p> */}
             </div>
           </div>
         </div>
@@ -206,6 +208,64 @@ function CTAButton() {
       <p className="text-sm text-gray-500 mt-4">
         Opens in a new tab • Takes less than 2 minutes
       </p>
+    </motion.div>
+  );
+}
+/**
+ * Important Notes Section Component
+ */
+function ImportantNotesSection() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, delay: 0.4 }}
+      className="mt-8 mb-8"
+    >
+      <div className="bg-blue-50 border-l-4 border-blue-500 rounded-lg p-6">
+        <h4 className="text-lg font-semibold text-blue-900 mb-4">
+          Important Notes to Remember
+        </h4>
+        <ul className="space-y-3">
+          <li className="flex gap-3 text-gray-700">
+            <span className="text-blue-500 font-bold mt-0.5">•</span>
+            <span>
+              Your profile will reflect on the PROchure app within 24 hours after receiving your profile creation form and successful payment only.
+            </span>
+          </li>
+          <li className="flex gap-3 text-gray-700">
+            <span className="text-blue-500 font-bold mt-0.5">•</span>
+            <span>
+              Your Payment Invoice (non-gst) shall be sent to your email id.
+            </span>
+          </li>
+          <li className="flex gap-3 text-gray-700">
+            <span className="text-blue-500 font-bold mt-0.5">•</span>
+            <span>
+              Access to Self-manage your Profile on the PROchure app will be effective from 15th of March, 2026.
+            </span>
+          </li>
+          <li className="flex gap-3 text-gray-700">
+            <span className="text-blue-500 font-bold mt-0.5">•</span>
+            <span>
+              Credentials to Sign-in/Login to your PROchure account shall be shared with you on or before 15-03-2026 via an email notification.
+            </span>
+          </li>
+          <li className="flex gap-3 text-gray-700">
+            <span className="text-blue-500 font-bold mt-0.5">•</span>
+            <span>
+              You may contact us for any queries / clarifications / grievances by sending a mail to{" "}
+              <a
+                href="mailto:prochure.app@gmail.com"
+                className="text-blue-600 hover:text-blue-800 font-medium underline"
+              >
+                prochure.app@gmail.com
+              </a>
+            </span>
+          </li>
+        </ul>
+      </div>
     </motion.div>
   );
 }
