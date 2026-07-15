@@ -50,7 +50,7 @@ export default function LoadingAnimation() {
 
         {/* Subtitle 4 with Monotype */}
         <span className="loading-subtitle4">
-          a <span className="monotype-text">Vipar</span> product
+          a <span className="monotype-text">Vipar</span> creation
         </span>
       </div>
 

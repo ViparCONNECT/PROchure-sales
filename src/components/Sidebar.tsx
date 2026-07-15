@@ -2,19 +2,34 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import { useState } from "react";
-import InceptionModal from "./InceptionModal";
-import SubscriptionFeesModal from "./SubscriptionFeesModal";
-import AppOverviewModal from "./AppOverviewModal";
+import type { ComponentType } from "react";
+import ContentModal from "./ContentModal";
+import LocationModal from "./LocationModal";
+import C1WhoseIdea from "./docs/C1WhoseIdea";
+import C2FoundersMessage from "./docs/C2FoundersMessage";
+import D1ForYourKindInformation from "./docs/D1ForYourKindInformation";
+import D2BeAware from "./docs/D2BeAware";
+import D3TermsOfUse from "./docs/D3TermsOfUse";
+import D4PrivacyPolicy from "./docs/D4PrivacyPolicy";
+import D5CancellationPolicy from "./docs/D5CancellationPolicy";
+import D6Disclaimer from "./docs/D6Disclaimer";
 
 interface SidebarProps {
     isOpen: boolean;
     onClose: () => void;
 }
 
+const LINK_CLASS = "block p-2 text-white/90 hover:text-white text-sm transition-colors";
+const BTN_CLASS = "block w-full text-left p-2 text-white/90 hover:text-white text-sm transition-colors focus:outline-none cursor-pointer";
+const SECTION_TITLE_CLASS = "text-center text-xs font-bold text-white/70 pb-2 border-b border-white/20 mt-3 uppercase";
+
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
-    const [isInceptionOpen, setIsInceptionOpen] = useState(false);
-    const [isSubscriptionOpen, setIsSubscriptionOpen] = useState(false);
-    const [isAppOverviewOpen, setIsAppOverviewOpen] = useState(false);
+    const [openDoc, setOpenDoc] = useState<{ title: string; Component: ComponentType } | null>(null);
+    const [isLocationOpen, setIsLocationOpen] = useState(false);
+
+    const openPopup = (title: string, Component: ComponentType) => {
+        setOpenDoc({ title, Component });
+    };
 
     return (
         <>
@@ -49,18 +64,12 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                                         width="160"
                                         height="48"
                                         viewBox="0 0 906 258"
-                                        // INCREASED: w-32 -> w-36 (mobile), sm:w-40 -> sm:w-48 (desktop)
                                         className="w-36 h-9 sm:w-48 sm:h-12"
                                     >
                                         <text
                                             className="fill-white font-bold"
-                                            // Adjusted translate Y slightly to keep it centered with new size if needed,
-                                            // but keeping your original coordinates usually works fine for small bumps.
                                             transform="translate(37 165) scale(1.172 1.069)"
-                                            style={{
-                                                // INCREASED: 140px -> 160px
-                                                fontSize: "160px",
-                                            }}
+                                            style={{ fontSize: "160px" }}
                                         >
                                             PROchure
                                             <tspan fontSize="0.5em" baselineShift="0.8em">
@@ -78,152 +87,117 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                             </div>
 
                             <nav className="p-4 space-y-6">
-                                {/* Top Navigation Items */}
+
+                                {/* Top links */}
                                 <div className="space-y-2">
-                                    <Link
-                                        to="/register"
-                                        onClick={onClose}
-                                        className="block p-2 text-white/90 hover:text-white text-sm font-medium transition-colors"
-                                    >
-                                        BE A PRO-MEMBER
+                                    <Link to="/" onClick={onClose} className={LINK_CLASS}>
+                                        Go to the LOBBY Page
                                     </Link>
-                                    <Link
-                                        to="#"
-                                        onClick={onClose}
-                                        className="block p-2 text-white/90 hover:text-white text-sm font-medium transition-colors"
+                                    <button
+                                        onClick={() => setIsLocationOpen(true)}
+                                        className={BTN_CLASS}
                                     >
-                                        SIGN IN / LOG IN
-                                    </Link>
-                                    <Link
-                                        to="/"
-                                        onClick={onClose}
-                                        className="block p-2 text-white/90 hover:text-white text-sm font-medium transition-colors"
-                                    >
-                                        LOBBY
-                                    </Link>
-                                    <Link
-                                        to="#"
-                                        onClick={onClose}
-                                        className="block p-2 text-white/90 hover:text-white text-sm font-medium transition-colors"
-                                    >
-                                        FAVOURITES
-                                    </Link>
-                                    <Link
-                                        to="#"
-                                        onClick={onClose}
-                                        className="block p-2 text-white/90 hover:text-white text-sm font-medium transition-colors"
-                                    >
-                                        VIRTUAL SECRETARY
-                                    </Link>
+                                        Set LOCATION &amp; LANGUAGE
+                                    </button>
                                 </div>
 
-                                {/* Brands Section */}
+                                {/* BRANDS EXPLORATION */}
                                 <div>
-                                    <h3 className="text-center text-xs font-bold text-white/70 pb-2 border-b border-white/20 mt-3">
-                                        brands
-                                    </h3>
+                                    <h3 className={SECTION_TITLE_CLASS}>brands exploration</h3>
                                     <div className="space-y-2 pt-3">
-                                        <Link
-                                            to="/services"
-                                            onClick={onClose}
-                                            className="block p-2 text-white/90 hover:text-white text-sm transition-colors"
-                                        >
-                                            CONSULTANT & SERVICE BRANDS
+                                        <Link to="/consultants" onClick={onClose} className={LINK_CLASS}>
+                                            CONSULTANTS Brands
                                         </Link>
-                                        <Link
-                                            to="/products"
-                                            onClick={onClose}
-                                            className="block p-2 text-white/90 hover:text-white text-sm transition-colors"
-                                        >
-                                            RETAIL BRANDS
+                                        <Link to="/services" onClick={onClose} className={LINK_CLASS}>
+                                            SERVICE Brands
                                         </Link>
-                                        <Link
-                                            to="#"
-                                            onClick={onClose}
-                                            className="block p-2 text-white/90 hover:text-white text-sm transition-colors"
-                                        >
-                                            PRODUCT BRANDS
+                                        <Link to="/products" onClick={onClose} className={LINK_CLASS}>
+                                            RETAIL Brands
+                                        </Link>
+                                        <Link to="/products" onClick={onClose} className={LINK_CLASS}>
+                                            PRODUCT Brands
                                         </Link>
                                     </div>
                                 </div>
 
-                                {/* Information & Interaction Section */}
-                                <div>
-                                    <h3 className="text-center text-xs font-bold text-white/70 pb-2 border-b border-white/20 mt-3">
-                                        information. interaction.
-                                    </h3>
+                                {/* PROFESSIONAL & EDUCATIONAL INFORMATION */}
+                                {/* <div>
+                                    <h3 className={SECTION_TITLE_CLASS}>professional &amp; educational information</h3>
+                                </div> */}
+
+                                {/* CLARIFICATION & DISCUSSION */}
+                                {/* <div>
+                                    <h3 className={SECTION_TITLE_CLASS}>clarification &amp; discussion</h3>
+                                    <p className="text-center text-[10px] text-white/50 mt-1">(Bino-bird answers)</p>
                                     <div className="space-y-2 pt-3">
-                                        <Link
-                                            to="#"
-                                            onClick={onClose}
-                                            className="block p-2 text-white/90 hover:text-white text-sm transition-colors"
-                                        >
-                                            PROLIFIC INFORMATION
+                                        <Link to="#" onClick={onClose} className={LINK_CLASS}>
+                                            Quick Fix and Solution Key
                                         </Link>
+                                        <Link to="#" onClick={onClose} className={LINK_CLASS}>
+                                            Post your Query
+                                        </Link>
+                                    </div>
+                                </div> */}
+
+                                {/* IDEA & INCEPTION */}
+                                <div>
+                                    <h3 className={SECTION_TITLE_CLASS}>idea &amp; inception</h3>
+                                    <div className="space-y-2 pt-3">
+                                        <button
+                                            onClick={() => openPopup("Whose Idea is it ?", C1WhoseIdea)}
+                                            className={BTN_CLASS}
+                                        >
+                                            Whose Idea is it ?
+                                        </button>
+                                        <button
+                                            onClick={() => openPopup("Founder's Message", C2FoundersMessage)}
+                                            className={BTN_CLASS}
+                                        >
+                                            Founder's Message
+                                        </button>
                                     </div>
                                 </div>
 
-                                {/* Tools Section */}
+                                {/* POLICIES & REGULATION */}
                                 <div>
-                                    <h3 className="text-center text-xs font-bold text-white/70 pb-2 border-b border-white/20 mt-3">
-                                        tools
-                                    </h3>
-                                    <div className="space-y-2 pt-3">
-                                        <Link
-                                            to="#"
-                                            onClick={onClose}
-                                            className="block p-2 text-white/90 hover:text-white text-sm transition-colors"
-                                        >
-                                            QUICK FIX
-                                        </Link>
-                                        <Link
-                                            to="#"
-                                            onClick={onClose}
-                                            className="block p-2 text-white/90 hover:text-white text-sm transition-colors"
-                                        >
-                                            ASK US
-                                        </Link>
-                                    </div>
-                                </div>
-
-                                {/* About Section */}
-                                <div>
-                                    <h3 className="text-center text-xs font-bold text-white/70 pb-2 border-b border-white/20 mt-3">
-                                        about
-                                    </h3>
+                                    <h3 className={SECTION_TITLE_CLASS}>policies &amp; regulation</h3>
                                     <div className="space-y-2 pt-3">
                                         <button
-                                            onClick={() => setIsInceptionOpen(true)}
-                                            className="block w-full text-left p-2 text-white/90 hover:text-white text-sm transition-colors focus:outline-none"
+                                            onClick={() => openPopup("For Your Kind Information", D1ForYourKindInformation)}
+                                            className={BTN_CLASS}
                                         >
-                                            INCEPTION
+                                            For Your Kind Information
                                         </button>
                                         <button
-                                            onClick={() => setIsAppOverviewOpen(true)}
-                                            className="block w-full text-left p-2 text-white/90 hover:text-white text-sm transition-colors focus:outline-none"
+                                            onClick={() => openPopup("Be Aware", D2BeAware)}
+                                            className={BTN_CLASS}
                                         >
-                                            APP OVERVIEW
+                                            Be Aware
                                         </button>
                                         <button
-                                            onClick={() => setIsSubscriptionOpen(true)}
-                                            className="block w-full text-left p-2 text-white/90 hover:text-white text-sm transition-colors focus:outline-none"
+                                            onClick={() => openPopup("Terms of Use", D3TermsOfUse)}
+                                            className={BTN_CLASS}
                                         >
-                                            SUBSCRIPTION FEES
+                                            Terms of Use
                                         </button>
-                                        <Link
-                                            to="#"
-                                            onClick={onClose}
-                                            className="block p-2 text-white/90 hover:text-white text-sm transition-colors"
+                                        <button
+                                            onClick={() => openPopup("Privacy Policy", D4PrivacyPolicy)}
+                                            className={BTN_CLASS}
                                         >
-                                            APP POLICIES
-                                        </Link>
-                                        <Link
-                                            to="#"
-                                            onClick={onClose}
-                                            className="block p-2 text-white/90 hover:text-white text-sm transition-colors"
+                                            Privacy Policy
+                                        </button>
+                                        <button
+                                            onClick={() => openPopup("Cancellation Policy", D5CancellationPolicy)}
+                                            className={BTN_CLASS}
                                         >
-                                            BE AWARE (DISCLAIMER)
-                                        </Link>
+                                            Cancellation Policy
+                                        </button>
+                                        <button
+                                            onClick={() => openPopup("Disclaimer", D6Disclaimer)}
+                                            className={BTN_CLASS}
+                                        >
+                                            Disclaimer
+                                        </button>
                                     </div>
                                 </div>
                             </nav>
@@ -231,9 +205,18 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                     </>
                 )}
             </AnimatePresence>
-            <InceptionModal isOpen={isInceptionOpen} onClose={() => setIsInceptionOpen(false)} />
-            <SubscriptionFeesModal isOpen={isSubscriptionOpen} onClose={() => setIsSubscriptionOpen(false)} />
-            <AppOverviewModal isOpen={isAppOverviewOpen} onClose={() => setIsAppOverviewOpen(false)} />
+
+            {/* Document Popup Modal */}
+            <ContentModal
+                isOpen={!!openDoc}
+                title={openDoc?.title || ""}
+                onClose={() => setOpenDoc(null)}
+            >
+                {openDoc ? <openDoc.Component /> : null}
+            </ContentModal>
+
+            {/* Languages & Location Modal */}
+            <LocationModal isOpen={isLocationOpen} onClose={() => setIsLocationOpen(false)} />
         </>
     );
 }

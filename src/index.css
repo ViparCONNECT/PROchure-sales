@@ -344,3 +344,49 @@ html {
   background-color: var(--color-prochure-bg);
   color: white;
 }
+
+/* ===========================
+   DOCX MODAL CONTENT STYLES
+   (docx-preview full-fidelity render)
+   =========================== */
+/* Strip docx-preview's default page chrome so content sits on the modal bg */
+.docx-render .docx-wrapper {
+  background: transparent !important;
+  padding: 0 !important;
+  display: block !important;
+}
+.docx-render .docx-wrapper > section.docx {
+  background: transparent !important;
+  box-shadow: none !important;
+  width: 100% !important;
+  min-height: auto !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+  margin: 0 auto !important;
+}
+/* Default any uncoloured runs to white; inline colours (e.g. green Vipar) still win */
+.docx-render,
+.docx-render span,
+.docx-render p {
+  color: #ffffff;
+}
+.docx-render p {
+  margin-bottom: 0.4rem;
+  line-height: 1.5;
+}
+.docx-render a {
+  color: #fbbf24;
+  text-decoration: underline;
+}
+/* Bullet / numbered lists still render with markers */
+.docx-render ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+}
+.docx-render ol {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+}
+.docx-render li {
+  margin-bottom: 0.4rem;
+}

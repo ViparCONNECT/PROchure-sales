@@ -1,0 +1,26 @@
+{
+  "consultant": {
+    "categories": [
+      { "id": 1, "name": "ARCHITECTURE", "subcategories": [] },
+      { "id": 2, "name": "CORPORATE ADVISORY SERVICES", "subcategories": [] },
+      { "id": 3, "name": "COUNSELLING and GUIDANCE", "subcategories": [] },
+      { "id": 4, "name": "EDUCATION CONSULTANTS & PROFESSIONALS", "subcategories": [] },
+      { "id": 5, "name": "FINANCE", "subcategories": [] },
+      { "id": 6, "name": "IMAGE CONSULTANTS", "subcategories": [] },
+      { "id": 7, "name": "INFORMATION TECHNOLOGY", "subcategories": [] },
+      { "id": 8, "name": "INSURANCE", "subcategories": [] },
+      { "id": 9, "name": "LAW, LEGAL, ARBITRATION, MEDIATION", "subcategories": [] },
+      { "id": 10, "name": "MEDIA and MARKETING", "subcategories": [] },
+      { "id": 11, "name": "MORTGAGE LOANS", "subcategories": [] },
+      { "id": 12, "name": "REAL ESTATE", "subcategories": [] },
+      { "id": 13, "name": "HEALTHCARE PROFESSIONALS", "subcategories": [] },
+      { "id": 14, "name": "DOCTORS (ALLOPATHY)", "subcategories": [] },
+      { "id": 15, "name": "DENTISTRY", "subcategories": [] },
+      { "id": 16, "name": "COMPLEMENTARY and ALTERNATIVE MEDICINE / TRADITIONAL MEDICINE", "subcategories": [] },
+      { "id": 17, "name": "DISORDER THERAPIES", "subcategories": [] },
+      { "id": 18, "name": "COPYRIGHT, PATENT, TRADEMARK", "subcategories": [] },
+      { "id": 19, "name": "PRODUCT DESIGNING", "subcategories": [] },
+      { "id": 20, "name": "SECURITY SERVICES", "subcategories": [] }
+    ]
+  }
+}
