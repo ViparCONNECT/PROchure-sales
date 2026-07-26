@@ -7,6 +7,7 @@ import { Brand, BeAProButton, LobbyDoc } from "./shared";
 export default function D1ForYourKindInformation() {
     return (
         <LobbyDoc>
+            {/*
             <p className="text-sm sm:text-base">
                 The ONLY platform URL for <Brand /> :
             </p>
@@ -25,8 +26,8 @@ export default function D1ForYourKindInformation() {
                 The platform communication EMAIL ID for <Brand /> :
             </p>
             <p className="text-sm sm:text-base font-medium">
-                <a href="mailto:prochure.app@gmail.com" className="text-[#99D050] underline">
-                    prochure.app@gmail.com
+                <a href="mailto:prochure@vipar.company" className="text-[#99D050] underline">
+                    prochure@vipar.company
                 </a>
             </p>
 
@@ -57,6 +58,29 @@ export default function D1ForYourKindInformation() {
             <p className="text-sm sm:text-base pt-2">
                 To publish your Brand, click here on <BeAProButton />
             </p>
+            */}
+
+            <div className="space-y-3 text-sm sm:text-base">
+                <div className="flex justify-between gap-4">
+                    <span>The Only web APP URL :</span>
+                    <span className="font-medium ">www.prochure.app</span>
+                </div>
+                <div className="flex justify-between gap-4">
+                    <span>The Only BLOG URL :</span>
+                    <span className="font-medium ">www.prochure.blog</span>
+                </div>
+                <div className="flex justify-between gap-4">
+                    <span>The Only YouTube CHANNEL :</span>
+                    <span className="font-medium ">www.youtube.com/@PROchure</span>
+                </div>
+                <div className="flex justify-between gap-4">
+                    <span>The Only official EMAIL ID :</span>
+                    <span className="font-medium ">prochure@vipar.company</span>
+                </div>
+                <p className="text-center pt-4">
+                    PLEASE READ ‘ POLICIES &amp; REGULATION ’ clearly on the navigation bar.
+                </p>
+            </div>
         </LobbyDoc>
     );
 }

@@ -257,10 +257,10 @@ function ImportantNotesSection() {
             <span>
               You may contact us for any queries / clarifications / grievances by sending a mail to{" "}
               <a
-                href="mailto:prochure.app@gmail.com"
+                href="mailto:prochure@vipar.company"
                 className="text-blue-600 hover:text-blue-800 font-medium underline"
               >
-                prochure.app@gmail.com
+                prochure@vipar.company
               </a>
             </span>
           </li>

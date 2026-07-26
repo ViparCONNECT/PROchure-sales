@@ -3,6 +3,7 @@ import type { ComponentType } from "react";
 import ContentModal from "../components/ContentModal";
 import { GOOGLE_FORM_URL } from "../config/constants";
 import A2WhatIsProchure from "../components/docs/A2WhatIsProchure";
+import A2WhyProchure from "../components/docs/A2WhyProchure";
 import A3WhyConsultantsShouldAdvertise from "../components/docs/A3WhyConsultantsShouldAdvertise";
 import A4ConsultantsCanAdvertise from "../components/docs/A4ConsultantsCanAdvertise";
 import A5WhyBusinessBrands from "../components/docs/A5WhyBusinessBrands";
@@ -10,6 +11,7 @@ import A6NotOnlyBusinesses from "../components/docs/A6NotOnlyBusinesses";
 import A7MembershipProcess from "../components/docs/A7MembershipProcess";
 
 import A2 from "../assets/lobby_images/A2.png";
+import A22 from "../assets/lobby_images/A22.png";
 import A3 from "../assets/lobby_images/A3.png";
 import A4 from "../assets/lobby_images/A4.png";
 import A5 from "../assets/lobby_images/A5.png";
@@ -26,6 +28,7 @@ interface LobbyCardData {
 
 const lobbyCards: LobbyCardData[] = [
     { title: "What Is PROchure ?", image: A2, Component: A2WhatIsProchure },
+    { title: "Why PROchure ?", image: A22, Component: A2WhyProchure },
     { title: "Why Consultants Should Advertise !", image: A3, Component: A3WhyConsultantsShouldAdvertise },
     { title: "Consultants CAN Advertise ! – The Laws", image: A4, Component: A4ConsultantsCanAdvertise },
     { title: "Why we focus Only on Business Brands ?", image: A5, Component: A5WhyBusinessBrands },
@@ -60,7 +63,7 @@ function LobbyCard({ title, image, Component }: LobbyCardData) {
                     className="text-center font-semibold text-base sm:text-lg mb-3 group-hover:underline transition-all"
                     style={{ color: BRAND_COLOR }}
                 >
-                    [ {title} ]
+                    {title}
                 </p>
                 <div className="w-full overflow-hidden rounded-sm shadow-md group-hover:shadow-xl transition-shadow">
                     <img
@@ -85,15 +88,15 @@ export default function LobbyPage() {
             <section className="bg-white py-12 px-4 flex flex-col items-center gap-10">
 
                 {/* Mascot address */}
-                <p
+                {/* <p
                     className="text-center font-semibold text-base sm:text-lg"
                     style={{ color: BRAND_COLOR }}
                 >
                     [ Our Mascot Bino-bird's ADDRESS TO THE NATION ! ]
-                </p>
+                </p> */}
 
                 {/* YouTube video embed */}
-                <div className="w-full max-w-2xl mx-auto aspect-video rounded-sm overflow-hidden shadow-md">
+                {/* <div className="w-full max-w-2xl mx-auto aspect-video rounded-sm overflow-hidden shadow-md">
                     <iframe
                         className="w-full h-full"
                         src="https://www.youtube.com/embed/KGc2CjVvp-I?autoplay=1&mute=1"
@@ -101,7 +104,7 @@ export default function LobbyPage() {
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
                     />
-                </div>
+                </div> */}
 
                 {/* CTA */}
                 <p className="text-center text-sm sm:text-base" style={{ color: BRAND_COLOR }}>
@@ -169,7 +172,7 @@ export default function LobbyPage() {
 
                     <p className="text-2xl tracking-widest mb-6">प्रोशर</p>
 
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-3 text-sm">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-3 text-xl">
                         <span>പ്രൊഷർ</span>
                         <span>ಪ್ರೊಶ್ ರ್</span>
                         <span>ப்ரோஷர்</span>

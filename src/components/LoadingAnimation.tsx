@@ -38,11 +38,11 @@ export default function LoadingAnimation() {
         {/* <div className="strike-animation"></div> */}
 
         {/* Subtitle 1 */}
-        <span className="loading-subtitle1">an E-Brochure of</span>
+        <span className="loading-subtitle1">an e-brochure of Professional</span>
 
         {/* Subtitle 2 */}
         <span className="loading-subtitle2">
-          Professional Services and Products
+          Brands and Information
         </span>
 
         {/* Subtitle 3 */}
@@ -50,7 +50,7 @@ export default function LoadingAnimation() {
 
         {/* Subtitle 4 with Monotype */}
         <span className="loading-subtitle4">
-          a <span className="monotype-text">Vipar</span> creation
+          a <span className="monotype-text">Vipar&nbsp;</span>&nbsp;creation
         </span>
       </div>
 

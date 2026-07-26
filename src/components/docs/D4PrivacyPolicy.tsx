@@ -392,7 +392,7 @@ export default function D4PrivacyPolicy() {
             <LegalHeading>6.2. Contact Information</LegalHeading>
             <LegalP>
                 If you have questions or complaints regarding this Policy, please reach out to us at
-                prochure.app@gmail.com.
+                prochure@vipar.company.
             </LegalP>
         </LegalDoc>
     );

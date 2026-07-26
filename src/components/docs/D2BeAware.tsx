@@ -53,7 +53,7 @@ export default function D2BeAware() {
             <p>
                 Payment towards Subscription Fees must be made ONLY to the company bank (current) account of{" "}
                 <Vipar />, the details of which we shall share ONLY from our official mail id of <Brand />{" "}
-                which is prochure.app@gmail.com.
+                which is prochure@vipar.company.
             </p>
             <p>
                 <Brand /> DOES NOT SAVE your Card Details for future payments.
