@@ -2,7 +2,9 @@
  * D1 — "For Your Kind Information"
  * Hand-authored from `public/Side-Navbar-and-its-content/D1. For Your Kind Information.docx`.
  */
-import { Brand, BeAProButton, LobbyDoc } from "./shared";
+import { LobbyDoc } from "./shared";
+// import { Brand, BeAProButton } from "./shared";
+
 
 export default function D1ForYourKindInformation() {
     return (
