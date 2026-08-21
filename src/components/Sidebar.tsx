@@ -4,7 +4,6 @@ import { X } from "lucide-react";
 import { useState } from "react";
 import type { ComponentType } from "react";
 import ContentModal from "./ContentModal";
-import LocationModal from "./LocationModal";
 import C1WhoseIdea from "./docs/C1WhoseIdea";
 import C2FoundersMessage from "./docs/C2FoundersMessage";
 import D1ForYourKindInformation from "./docs/D1ForYourKindInformation";
@@ -17,15 +16,15 @@ import D6Disclaimer from "./docs/D6Disclaimer";
 interface SidebarProps {
     isOpen: boolean;
     onClose: () => void;
+    onOpenLocation: () => void;
 }
 
 const LINK_CLASS = "block p-2 text-white/90 hover:text-white text-sm transition-colors";
 const BTN_CLASS = "block w-full text-left p-2 text-white/90 hover:text-white text-sm transition-colors focus:outline-none cursor-pointer";
 const SECTION_TITLE_CLASS = "text-center text-xs font-bold text-white/70 pb-2 border-b border-white/20 mt-3 uppercase";
 
-export default function Sidebar({ isOpen, onClose }: SidebarProps) {
+export default function Sidebar({ isOpen, onClose, onOpenLocation }: SidebarProps) {
     const [openDoc, setOpenDoc] = useState<{ title: string; Component: ComponentType } | null>(null);
-    const [isLocationOpen, setIsLocationOpen] = useState(false);
 
     const openPopup = (title: string, Component: ComponentType) => {
         setOpenDoc({ title, Component });
@@ -94,7 +93,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                                         Go to the LOBBY Page
                                     </Link>
                                     <button
-                                        onClick={() => setIsLocationOpen(true)}
+                                        onClick={() => onOpenLocation()}
                                         className={BTN_CLASS}
                                     >
                                         Set LOCATION &amp; LANGUAGE
@@ -106,7 +105,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                                     <h3 className={SECTION_TITLE_CLASS}>brands exploration</h3>
                                     <div className="space-y-2 pt-3">
                                         <Link to="/consultants" onClick={onClose} className={LINK_CLASS}>
-                                            CONSULTANTS Brands
+                                            Professional CONSULTANTS
                                         </Link>
                                         <Link to="/services" onClick={onClose} className={LINK_CLASS}>
                                             SERVICE Brands
@@ -215,8 +214,6 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                 {openDoc ? <openDoc.Component /> : null}
             </ContentModal>
 
-            {/* Languages & Location Modal */}
-            <LocationModal isOpen={isLocationOpen} onClose={() => setIsLocationOpen(false)} />
         </>
     );
 }

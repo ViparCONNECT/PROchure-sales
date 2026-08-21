@@ -1,6 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import ProfileCard from "./components/ProfileCard";
+import BrandCard, { type Brand } from "./components/BrandCard";
 import servicesData from "./data/services.json";
 import productsData from "./data/products.json";
 import consultantsData from "./data/consultants.json";
@@ -8,12 +8,10 @@ import Breadcrumbs from "./components/Breadcrumbs";
 import SectionHeading from "./components/SectionHeading";
 import { Users, MapPin } from "lucide-react";
 
-import type { Profile } from "./components/ProfileCard";
-
 interface Subcategory {
     id: number;
     name: string;
-    profiles: Profile[]; // Use the imported Profile type
+    profiles: Brand[];
 }
 
 interface Category {
@@ -76,7 +74,7 @@ export default function SubcategoryPage() {
 
     const filteredProfiles = selectedCity
         ? subcategory.profiles.filter(
-              (p) => p.city.toLowerCase() === selectedCity.toLowerCase()
+              (p) => (p.city_town || "").toLowerCase() === selectedCity.toLowerCase()
           )
         : subcategory.profiles;
 
@@ -94,7 +92,7 @@ export default function SubcategoryPage() {
             <div className="mb-12">
                 <SectionHeading
                     icon={Users}
-                    title={`${subcategory.name} Profiles`}
+                    title={`${subcategory.name} Brands`}
                 />
                 <p className="mt-4 text-slate-600 max-w-2xl mx-auto text-center text-lg">
                     Browse our professional profiles specialized in {subcategory.name}.
@@ -108,11 +106,9 @@ export default function SubcategoryPage() {
                 </div>
             )}
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 {filteredProfiles.map(profile => (
-                    <div key={profile.id} className="h-full">
-                        <ProfileCard profile={profile} />
-                    </div>
+                    <BrandCard key={profile.id} brand={profile} isConsultant={type === "consultants"} />
                 ))}
             </div>
 

@@ -16,7 +16,7 @@ function getProfileCount(category: any, city: string | null): number {
     return category.subcategories.reduce((acc: number, sub: any) => {
         if (!sub.profiles) return acc;
         const profiles = city
-            ? sub.profiles.filter((p: any) => p.city.toLowerCase() === city.toLowerCase())
+            ? sub.profiles.filter((p: any) => (p.city_town || p.city || "").toLowerCase() === city.toLowerCase())
             : sub.profiles;
         return acc + profiles.length;
     }, 0);
@@ -25,7 +25,7 @@ function getProfileCount(category: any, city: string | null): number {
 function getSubcategoryCount(category: any, city: string | null): number {
     if (!city || !category.subcategories) return category.subcategories?.length || 0;
     return category.subcategories.filter((sub: any) =>
-        sub.profiles?.some((p: any) => p.city.toLowerCase() === city.toLowerCase())
+        sub.profiles?.some((p: any) => (p.city_town || p.city || "").toLowerCase() === city.toLowerCase())
     ).length;
 }
 
