@@ -1,4 +1,6 @@
 export const GOOGLE_FORM_URL = "https://forms.gle/NcQbG5tqtbPZv8Nf8";
+export const GOOGLE_FORM_CONSULTANTS_URL = "https://forms.gle/asEwVMRTE3QxuHj87";
+export const GOOGLE_FORM_BUSINESS_URL = "https://forms.gle/hzrt51S3UcZD9ZjW9";
 
 export const BASE_ASSET_URL = "";
 export const ARTICLES = [
