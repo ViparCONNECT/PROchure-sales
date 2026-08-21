@@ -14,7 +14,7 @@ const toSlug = (str: string) => str.toLowerCase().replace(/\s+/g, "-");
 function getSubProfileCount(sub: any, city: string | null): number {
     if (!sub.profiles) return 0;
     if (!city) return sub.profiles.length;
-    return sub.profiles.filter((p: any) => p.city.toLowerCase() === city.toLowerCase()).length;
+    return sub.profiles.filter((p: any) => (p.city_town || p.city || "").toLowerCase() === city.toLowerCase()).length;
 }
 
 export default function SubcategoryListPage() {
