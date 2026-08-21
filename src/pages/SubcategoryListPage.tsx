@@ -6,6 +6,7 @@ import productsData from "../data/products.json";
 import consultantsData from "../data/consultants.json";
 import Breadcrumbs from "../components/Breadcrumbs";
 import SectionHeading from "../components/SectionHeading";
+import { useSeo } from "../hooks/useSeo";
 
 const FILTER_BY_CITY = true;
 
@@ -40,6 +41,13 @@ export default function SubcategoryListPage() {
         const foundCategory = data[dataKey]?.categories.find((c: any) => toSlug(c.name) === categorySlug);
         setCategory(foundCategory);
     }, [type, categorySlug]);
+
+    useSeo({
+        title: category ? `${category.name} | PROchure` : "Category | PROchure",
+        description: category
+            ? `Explore ${category.name} and discover professional brands on PROchure.`
+            : "Explore categories and discover professional brands on PROchure.",
+    });
 
     if (!category) return <div className="p-8 text-center text-slate-500">Category Not Found</div>;
 
