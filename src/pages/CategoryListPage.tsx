@@ -6,6 +6,7 @@ import productsData from "../data/products.json";
 import consultantsData from "../data/consultants.json";
 import Breadcrumbs from "../components/Breadcrumbs";
 import SectionHeading from "../components/SectionHeading";
+import { useSeo } from "../hooks/useSeo";
 
 const FILTER_BY_CITY = true;
 
@@ -33,6 +34,12 @@ export default function CategoryListPage() {
     const { type } = useParams();
     const [categories, setCategories] = useState<any[]>([]);
     const [selectedCity, setSelectedCity] = useState<string | null>(null);
+
+    const pageTitle = type === "consultants" ? "Consultant Brands" : type === "services" ? "Service Brands" : "Product & Retail Brands";
+    useSeo({
+        title: `${pageTitle} | PROchure`,
+        description: `Browse ${pageTitle.toLowerCase()} on PROchure — an e-brochure of professional services and products across India.`,
+    });
 
     useEffect(() => {
         const saved = localStorage.getItem("prochure_selected_city");
