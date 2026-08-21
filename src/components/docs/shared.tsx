@@ -2,8 +2,9 @@
  * Shared inline helpers for hand-authored document components.
  * Keeps brand styling (fonts / colours) consistent across all popups.
  */
-import type { ReactNode } from "react";
-import { GOOGLE_FORM_URL } from "../../config/constants";
+import { useState } from "react";
+import type { ReactNode, MouseEvent } from "react";
+import BeAProPopup from "../BeAProPopup";
 
 /** App theme colour. */
 const THEME_COLOR = "#55374a";
@@ -20,19 +21,26 @@ export function BeAPro() {
 
 /**
  * "Be a PRO !" call-to-action button — white background, theme-colour text.
- * Opens the registration form in a new tab.
+ * Opens a popup to choose between Professional Consultants and Business Brands forms.
  */
 export function BeAProButton() {
+    const [isOpen, setIsOpen] = useState(false);
+
     return (
-        <a
-            href={GOOGLE_FORM_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block px-4 py-1 bg-white font-semibold rounded-sm cursor-pointer hover:opacity-90 transition-opacity align-middle font-['Maiandra_GD']"
-            style={{ color: THEME_COLOR }}
-        >
-            Be a PRO !
-        </a>
+        <>
+            <a
+                href="#"
+                onClick={(e: MouseEvent<HTMLAnchorElement>) => {
+                    e.preventDefault();
+                    setIsOpen(true);
+                }}
+                className="inline-block px-4 py-1 bg-white font-semibold rounded-sm cursor-pointer hover:opacity-90 transition-opacity align-middle font-['Maiandra_GD'] no-underline"
+                style={{ color: THEME_COLOR }}
+            >
+                Be a PRO !
+            </a>
+            <BeAProPopup isOpen={isOpen} onClose={() => setIsOpen(false)} />
+        </>
     );
 }
 
