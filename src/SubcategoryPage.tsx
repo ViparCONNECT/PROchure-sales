@@ -7,6 +7,7 @@ import consultantsData from "./data/consultants.json";
 import Breadcrumbs from "./components/Breadcrumbs";
 import SectionHeading from "./components/SectionHeading";
 import { Users, MapPin } from "lucide-react";
+import { useSeo } from "./hooks/useSeo";
 
 interface Subcategory {
     id: number;
@@ -59,6 +60,13 @@ export default function SubcategoryPage() {
         setData({ category: category as unknown as Category, subcategory: subcategory as unknown as Subcategory });
 
     }, [type, categorySlug, subcategorySlug]);
+
+    useSeo({
+        title: data ? `${data.subcategory.name} | PROchure` : "Subcategory | PROchure",
+        description: data
+            ? `Browse ${data.subcategory.name} brands on PROchure — discover consultants, services, retail and product brands.`
+            : "Browse brands on PROchure — an e-brochure of professional services and products.",
+    });
 
     if (!data) {
         return (
