@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { ComponentType, ReactNode, CSSProperties, MouseEvent } from "react";
+import { useSeo } from "../hooks/useSeo";
 import ContentModal from "../components/ContentModal";
 import BeAProPopup from "../components/BeAProPopup";
 import A2WhatIsProchure from "../components/docs/A2WhatIsProchure";
@@ -99,6 +100,10 @@ function LobbyCard({ title, image, Component }: LobbyCardData) {
 }
 
 export default function LobbyPage() {
+    useSeo({
+        title: "PROchure — an e-brochure of Professional services and Products",
+        description: "PROchure — an e-brochure of Professional services and Products. Discover consultants, service brands, retail brands, and product brands across India.",
+    });
     return (
         <div className="w-full">
             {/* ── FIRST HALF ── white background, brand-color text ── */}
