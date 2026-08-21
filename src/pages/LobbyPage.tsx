@@ -1,7 +1,7 @@
 import { useState } from "react";
-import type { ComponentType } from "react";
+import type { ComponentType, ReactNode, CSSProperties, MouseEvent } from "react";
 import ContentModal from "../components/ContentModal";
-import { GOOGLE_FORM_URL } from "../config/constants";
+import BeAProPopup from "../components/BeAProPopup";
 import A2WhatIsProchure from "../components/docs/A2WhatIsProchure";
 import A2WhyProchure from "../components/docs/A2WhyProchure";
 import A3WhyConsultantsShouldAdvertise from "../components/docs/A3WhyConsultantsShouldAdvertise";
@@ -27,7 +27,7 @@ interface LobbyCardData {
 }
 
 const lobbyCards: LobbyCardData[] = [
-    { title: "What Is PROchure ?", image: A2, Component: A2WhatIsProchure },
+    { title: "What is PROchure ?", image: A2, Component: A2WhatIsProchure },
     { title: "Why PROchure ?", image: A22, Component: A2WhyProchure },
     { title: "Why Consultants Should Advertise !", image: A3, Component: A3WhyConsultantsShouldAdvertise },
     { title: "Consultants CAN Advertise ! – The Laws", image: A4, Component: A4ConsultantsCanAdvertise },
@@ -36,17 +36,34 @@ const lobbyCards: LobbyCardData[] = [
     { title: "The Membership Process", image: A7, Component: A7MembershipProcess },
 ];
 
-function BeAProButton() {
+interface BeAProButtonProps {
+    className?: string;
+    style?: CSSProperties;
+    children?: ReactNode;
+}
+
+function BeAProButton({
+    className = "inline-block px-4 py-2 text-white font-semibold text-base rounded-sm cursor-pointer transition-opacity hover:opacity-90 active:scale-95 no-underline",
+    style = { backgroundColor: BRAND_COLOR },
+    children = "Be a PRO !",
+}: BeAProButtonProps) {
+    const [isOpen, setIsOpen] = useState(false);
+
     return (
-        <a
-            href={GOOGLE_FORM_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block px-4 py-2 text-white font-semibold text-base rounded-sm cursor-pointer transition-opacity hover:opacity-90 active:scale-95"
-            style={{ backgroundColor: BRAND_COLOR }}
-        >
-            Be a PRO !
-        </a>
+        <>
+            <a
+                href="#"
+                onClick={(e: MouseEvent<HTMLAnchorElement>) => {
+                    e.preventDefault();
+                    setIsOpen(true);
+                }}
+                className={className}
+                style={style}
+            >
+                {children}
+            </a>
+            <BeAProPopup isOpen={isOpen} onClose={() => setIsOpen(false)} />
+        </>
     );
 }
 
@@ -146,15 +163,12 @@ export default function LobbyPage() {
 
                 <p className="text-center text-sm sm:text-base max-w-xl leading-relaxed">
                     Click here on{" "}
-                    <a
-                        href={GOOGLE_FORM_URL}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-block px-4 py-2 bg-white font-semibold rounded-sm cursor-pointer hover:opacity-90 transition-opacity"
+                    <BeAProButton
+                        className="inline-block px-4 py-2 bg-white font-semibold rounded-sm cursor-pointer hover:opacity-90 transition-opacity no-underline"
                         style={{ color: BRAND_COLOR }}
                     >
                         Be a PRO !
-                    </a>{" "}
+                    </BeAProButton>{" "}
                     to fill-in a simple form of registration.<br />
                     And begin your journey with PROchure towards commercial satisfaction !
                 </p>
@@ -207,15 +221,12 @@ export default function LobbyPage() {
 
                 <p className="text-center text-sm sm:text-base">
                     To publish your Brand, click here on{" "}
-                    <a
-                        href={GOOGLE_FORM_URL}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-block px-4 py-2 bg-white font-semibold rounded-sm cursor-pointer hover:opacity-90 transition-opacity"
+                    <BeAProButton
+                        className="inline-block px-4 py-2 bg-white font-semibold rounded-sm cursor-pointer hover:opacity-90 transition-opacity no-underline"
                         style={{ color: BRAND_COLOR }}
                     >
                         Be a PRO !
-                    </a>
+                    </BeAProButton>
                 </p>
 
                 <p className="text-center text-sm sm:text-base opacity-90">
