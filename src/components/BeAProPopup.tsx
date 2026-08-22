@@ -46,7 +46,7 @@ export default function BeAProPopup({ isOpen, onClose }: BeAProPopupProps) {
                         style={{ color: THEME_COLOR }}
                         onClick={onClose}
                     >
-                        PROFESSIONAL CONSULTANT
+                        PROFESSIONAL CONSULTANTS
                     </a>
                     <a
                         href={GOOGLE_FORM_BUSINESS_URL}
@@ -56,7 +56,7 @@ export default function BeAProPopup({ isOpen, onClose }: BeAProPopupProps) {
                         style={{ color: THEME_COLOR }}
                         onClick={onClose}
                     >
-                        BUSINESS BRAND
+                        BUSINESS BRANDS
                     </a>
                 </div>
             </div>

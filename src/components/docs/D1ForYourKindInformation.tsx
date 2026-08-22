@@ -71,11 +71,11 @@ export default function D1ForYourKindInformation() {
                     <span>The Only BLOG URL :</span>
                     <span className="font-medium ">www.prochure.blog</span>
                 </div>
-                <div className="flex justify-between gap-4">
+                <div className="flex justify-between items-center gap-4 text-left">
                     <span>The Only YouTube CHANNEL :</span>
                     <span className="font-medium ">www.youtube.com/@PROchure</span>
                 </div>
-                <div className="flex justify-between gap-4">
+                <div className="flex justify-between items-center gap-4 text-left">
                     <span>The Only official EMAIL ID :</span>
                     <span className="font-medium ">prochure@vipar.company</span>
                 </div>

@@ -27,7 +27,7 @@ export default function BrandModal({ brand, isOpen, onClose }: BrandModalProps) 
     const name =
         brand.consultant_or_consultation_firm_name ||
         brand.name_of_the_service_brand_retail_brand_product_brand ||
-        `Profile ${brand.id}`;
+        `PROFILE NAME`;
 
     const year = brand.year_of_starting_practice_or_service || brand.year_of_establishment;
 
@@ -79,7 +79,7 @@ export default function BrandModal({ brand, isOpen, onClose }: BrandModalProps) 
                                 <div className="w-24 h-24 bg-white/90 rounded-lg flex items-center justify-center overflow-hidden border-2 border-white">
                                     {brand.image || brand.card_image ? (
                                         <img
-                                            src={brand.image || brand.card_image}
+                                            src={brand.image || "https://res.cloudinary.com/ovyuvqxa/image/upload/v1787371391/ChatGPT_Image_Aug_22_2026_09_31_19_AM_zbklwv.png"}
                                             alt={name}
                                             className="w-full h-full object-cover"
                                         />
@@ -115,18 +115,18 @@ export default function BrandModal({ brand, isOpen, onClose }: BrandModalProps) 
                             )}
 
                             {/* Address */}
-                            {addressParts.length > 0 && (
-                                <InfoSection label="Address" icon={<MapPin size={16} className="text-prochure-bg" />}>
+                            <InfoSection label="Address" icon={<MapPin size={16} className="text-prochure-bg" />}>
+                                {addressParts.length > 0 && (
                                     <div className="space-y-1 text-slate-700">
                                         {addressParts.map((line, i) => (
                                             <div key={i}>{line}</div>
                                         ))}
                                     </div>
-                                </InfoSection>
-                            )}
+                                )}
+                            </InfoSection>
 
-                            {/* Contact */}
-                            <InfoSection label="Contact Information" icon={<Phone size={16} className="text-prochure-bg" />}>
+                            {/* Contact divided into separate sections */}
+                            <InfoSection label="Contact Number" icon={<Phone size={16} className="text-prochure-bg" />}>
                                 <div className="space-y-3">
                                     {phone && (
                                         <div className="flex items-center gap-3 text-slate-700">
@@ -134,6 +134,11 @@ export default function BrandModal({ brand, isOpen, onClose }: BrandModalProps) 
                                             <span>{phone}</span>
                                         </div>
                                     )}
+                                </div>
+                            </InfoSection>
+
+                            <InfoSection label="Email ID" icon={<Mail size={16} className="text-prochure-bg" />}>
+                                <div className="space-y-3">
                                     {brand.official_email_id && (
                                         <div className="flex items-center gap-3 text-slate-700">
                                             <Mail size={18} className="prochure-text shrink-0" />
@@ -142,6 +147,11 @@ export default function BrandModal({ brand, isOpen, onClose }: BrandModalProps) 
                                             </a>
                                         </div>
                                     )}
+                                </div>
+                            </InfoSection>
+
+                            <InfoSection label="Website" icon={<Globe size={16} className="text-prochure-bg" />}>
+                                <div className="space-y-3">
                                     {brand.official_website_app && (
                                         <div className="flex items-center gap-3 text-slate-700">
                                             <Globe size={18} className="prochure-text shrink-0" />
@@ -159,11 +169,11 @@ export default function BrandModal({ brand, isOpen, onClose }: BrandModalProps) 
                             </InfoSection>
 
                             {/* Availability */}
-                            {brand.availability && (
-                                <InfoSection label="Availability Information" icon={<Clock size={16} className="text-prochure-bg" />}>
+                            <InfoSection label="Availability Information" icon={<Clock size={16} className="text-prochure-bg" />}>
+                                {brand.availability && (
                                     <div className="text-slate-700">{brand.availability}</div>
-                                </InfoSection>
-                            )}
+                                )}
+                            </InfoSection>
 
                             {/* Contact Person */}
                             {(brand.contact_person_name || brand.contact_person_designation || brand.preferred_languages) && (

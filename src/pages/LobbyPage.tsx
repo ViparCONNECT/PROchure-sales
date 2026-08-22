@@ -130,6 +130,17 @@ export default function LobbyPage() {
 
                 {/* CTA */}
                 <p className="text-center text-sm sm:text-base" style={{ color: BRAND_COLOR }}>
+                    <a
+                        href="https://prochure.blog/2026/07/26/an-invitation-from-arch-vinod-venugopal/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2"
+                    >
+                        <span aria-hidden>👉</span>
+                        <span>An Invitation to Professional Consultants from the Founder</span>
+                    </a>
+                </p>
+                <p className="text-center text-sm sm:text-base" style={{ color: BRAND_COLOR }}>
                     To publish your Brand, click here on{" "}
                     <BeAProButton />
                 </p>
