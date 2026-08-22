@@ -82,8 +82,8 @@ export default function SubcategoryPage() {
 
     const filteredProfiles = selectedCity
         ? subcategory.profiles.filter(
-              (p) => (p.city_town || "").toLowerCase() === selectedCity.toLowerCase()
-          )
+            (p) => (p.city_town || "").toLowerCase() === selectedCity.toLowerCase()
+        )
         : subcategory.profiles;
 
     return (
@@ -100,11 +100,11 @@ export default function SubcategoryPage() {
             <div className="mb-12">
                 <SectionHeading
                     icon={Users}
-                    title={`${subcategory.name} Brands`}
+                    title={`${subcategory.name}`}
                 />
-                <p className="mt-4 text-slate-600 max-w-2xl mx-auto text-center text-lg">
+                {/* <p className="mt-4 text-slate-600 max-w-2xl mx-auto text-center text-lg">
                     Browse our professional profiles specialized in {subcategory.name}.
-                </p>
+                </p> */}
             </div>
 
             {selectedCity && (
