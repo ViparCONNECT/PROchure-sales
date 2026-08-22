@@ -8,9 +8,11 @@ interface BreadcrumbsProps {
 export default function Breadcrumbs({ items }: BreadcrumbsProps) {
     const isServiceOrProduct = (label: string) => {
         if (label.toLowerCase() === "services") {
-            return "Consultant & Service brands";
+            return "Service Brands";
         } else if (label.toLowerCase() === "products") {
             return "Retail Brands";
+        } else if (label.toLowerCase() === "consultants") {
+            return "Professional Consultants";
         } else {
             return label;
         }
