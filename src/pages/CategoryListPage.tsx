@@ -76,7 +76,7 @@ export default function CategoryListPage() {
 
             <SectionHeading
                 icon={Folder}
-                title={`${type === "consultants" ? "Consultant Brands" : type === "services" ? "Service Brands" : "Retail Brands"} Categories`}
+                title={`${type === "consultants" ? "Professional Consultant" : type === "services" ? "Service Brand" : "Product Brands"} Categories`}
             />
 
             {selectedCity && (
