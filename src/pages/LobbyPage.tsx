@@ -23,7 +23,7 @@ import A7 from "../assets/lobby_images/A7.png";
 const BRAND_COLOR = "#55374a";
 
 const BANNER_CAROUSEL_IMAGES = [
-    "https://res.cloudinary.com/ovyuvqxa/image/upload/v1787538868/ChatGPT_Image_Aug_23_2026_08_10_40_PM_fq0cjp.png",
+    "https://res.cloudinary.com/ovyuvqxa/image/upload/v1787541231/ChatGPT_Image_Aug_23_2026_09_39_51_PM_kmgepn.png",
     "https://res.cloudinary.com/ovyuvqxa/image/upload/v1787538868/ChatGPT_Image_Aug_21_2026_09_22_07_PM_uziqkk.png",
     "https://res.cloudinary.com/ovyuvqxa/image/upload/v1787538870/ChatGPT_Image_Aug_23_2026_08_32_32_PM_wgfao3.png",
     "https://res.cloudinary.com/ovyuvqxa/image/upload/v1787538869/Wright_Inspires_SHE_PRO_exact_badge_zaetii.png"
