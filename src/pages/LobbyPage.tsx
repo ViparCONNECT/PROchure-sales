@@ -23,16 +23,17 @@ import A7 from "../assets/lobby_images/A7.png";
 const BRAND_COLOR = "#55374a";
 
 const BANNER_CAROUSEL_IMAGES = [
-    "https://picsum.photos/seed/banner1/700/400",
-    "https://picsum.photos/seed/banner2/700/400",
-    "https://picsum.photos/seed/banner3/700/400",
+    "https://res.cloudinary.com/ovyuvqxa/image/upload/v1787538868/ChatGPT_Image_Aug_23_2026_08_10_40_PM_fq0cjp.png",
+    "https://res.cloudinary.com/ovyuvqxa/image/upload/v1787538868/ChatGPT_Image_Aug_21_2026_09_22_07_PM_uziqkk.png",
+    "https://res.cloudinary.com/ovyuvqxa/image/upload/v1787538870/ChatGPT_Image_Aug_23_2026_08_32_32_PM_wgfao3.png",
+    "https://res.cloudinary.com/ovyuvqxa/image/upload/v1787538869/Wright_Inspires_SHE_PRO_exact_badge_zaetii.png"
 ];
 
-const SQUARE_CAROUSEL_IMAGES = [
-    "https://picsum.photos/seed/square1/400/400",
-    "https://picsum.photos/seed/square2/400/400",
-    "https://picsum.photos/seed/square3/400/400",
-];
+// const SQUARE_CAROUSEL_IMAGES = [
+//     "https://picsum.photos/seed/square1/400/400",
+//     "https://picsum.photos/seed/square2/400/400",
+//     "https://picsum.photos/seed/square3/400/400",
+// ];
 
 interface LobbyCardData {
     title: string;

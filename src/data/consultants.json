@@ -33,7 +33,8 @@
               { "id": 22, "card_image": "https://res.cloudinary.com/ovyuvqxa/image/upload/v1787368454/A23_xaxgju.png" },
               { "id": 23, "card_image": "https://res.cloudinary.com/ovyuvqxa/image/upload/v1787368453/A21_p06th2.png" },
               { "id": 24, "card_image": "https://res.cloudinary.com/ovyuvqxa/image/upload/v1787368454/A13_gx8ojy.png" },
-              { "id": 25, "card_image": "https://res.cloudinary.com/ovyuvqxa/image/upload/v1787368453/A20_q8qgjr.png" }
+              { "id": 25, "card_image": "https://res.cloudinary.com/ovyuvqxa/image/upload/v1787368453/A20_q8qgjr.png" },
+              { "id": 26, "card_image": "https://res.cloudinary.com/ovyuvqxa/image/upload/v1787538869/Wright_Inspires_SHE_PRO_exact_badge_zaetii.png", "city_town" : "Bangalore" }
             ]
           }
         ]
@@ -41,16 +42,40 @@
       { "id": 2, "name": "CORPORATE ADVISORY SERVICES", "subcategories": [] },
       { "id": 3, "name": "COUNSELLING and GUIDANCE", "subcategories": [] },
       { "id": 4, "name": "EDUCATION CONSULTANTS & PROFESSIONALS", "subcategories": [] },
-      { "id": 5, "name": "FINANCE", "subcategories": [] },
+      { "id": 5, "name": "FINANCE", "subcategories": [
+        { 
+          "id": 1,
+          "name": "CHARTERED ACCOUNTANTS",
+          "profiles": [
+              { "id": 1, "card_image": "https://res.cloudinary.com/ovyuvqxa/image/upload/v1787538868/ChatGPT_Image_Aug_21_2026_09_22_07_PM_uziqkk.png", "city_town" : "Bangalore" }
+            ]
+        }
+      ] },
       { "id": 6, "name": "IMAGE CONSULTANTS", "subcategories": [] },
       { "id": 7, "name": "INFORMATION TECHNOLOGY", "subcategories": [] },
       { "id": 8, "name": "INSURANCE", "subcategories": [] },
-      { "id": 9, "name": "LAW, LEGAL, ARBITRATION, MEDIATION", "subcategories": [] },
+      { "id": 9, "name": "LAW, LEGAL, ARBITRATION, MEDIATION", "subcategories": [
+        { 
+          "id": 1,
+          "name": "CIVIL",
+          "profiles": [
+              { "id": 1, "card_image": "https://res.cloudinary.com/ovyuvqxa/image/upload/v1787538868/ChatGPT_Image_Aug_23_2026_08_10_40_PM_fq0cjp.png", "city_town" : "Mumbai" }
+            ]
+        }
+      ] },
       { "id": 10, "name": "MEDIA and MARKETING", "subcategories": [] },
       { "id": 11, "name": "MORTGAGE LOANS", "subcategories": [] },
       { "id": 12, "name": "REAL ESTATE", "subcategories": [] },
       { "id": 13, "name": "HEALTHCARE PROFESSIONALS", "subcategories": [] },
-      { "id": 14, "name": "DOCTORS (ALLOPATHY)", "subcategories": [] },
+      { "id": 14, "name": "DOCTORS (ALLOPATHY)", "subcategories": [
+      { 
+          "id": 1,
+          "name": "DERMATOLOGY",
+          "profiles": [
+              { "id": 1, "card_image": "https://res.cloudinary.com/ovyuvqxa/image/upload/v1787538870/ChatGPT_Image_Aug_23_2026_08_32_32_PM_wgfao3.png", "city_town" : "Cochin" }
+            ]
+        }
+      ] },
       { "id": 15, "name": "DENTISTRY", "subcategories": [] },
       { "id": 16, "name": "COMPLEMENTARY and ALTERNATIVE MEDICINE / TRADITIONAL MEDICINE", "subcategories": [] },
       { "id": 17, "name": "DISORDER THERAPIES", "subcategories": [] },
