@@ -11,6 +11,12 @@ export default function Layout() {
     const location = useLocation();
 
     useEffect(() => {
+        const handler = () => setIsSidebarOpen(true);
+        window.addEventListener("openSidebar", handler);
+        return () => window.removeEventListener("openSidebar", handler);
+    }, []);
+
+    useEffect(() => {
         const saved = localStorage.getItem("prochure_selected_city");
         if (!saved) {
             const timer = setTimeout(() => setIsLocationOpen(true), 800);
