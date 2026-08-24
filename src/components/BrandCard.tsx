@@ -14,7 +14,8 @@ export interface Brand {
     consultant_or_consultation_firm_name?: string;
     qualifications_degrees?: string;
     year_of_starting_practice_or_service?: string;
-    specialized_services_skills?: string;
+    specialized_skills?: string;
+    services?: string;
     // Service / Retail / Product
     name_of_the_service_brand_retail_brand_product_brand?: string;
     year_of_establishment?: string;
