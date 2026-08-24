@@ -102,11 +102,17 @@ export default function BrandModal({ brand, isOpen, onClose }: BrandModalProps) 
                         <div className="p-6 overflow-y-auto custom-scrollbar space-y-6">
 
                             {/* Specialization / Services */}
-                            {brand.specialized_services_skills && (
-                                <InfoSection label="Specializations / Services">
-                                    <div className="text-slate-700">{brand.specialized_services_skills}</div>
-                                </InfoSection>
-                            )}
+                            <InfoSection label="Specializations / Skills">
+                                {brand.specialized_skills && (
+                                    <div className="text-slate-700">{brand.specialized_skills}</div>
+                                )}
+                            </InfoSection>
+                            
+                            <InfoSection label="Services">
+                                {brand.services && (
+                                    <div className="text-slate-700">{brand.services}</div>
+                                )}
+                            </InfoSection>
 
                             {brand.qualifications_degrees && (
                                 <InfoSection label="Qualifications">
