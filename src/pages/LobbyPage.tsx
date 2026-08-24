@@ -3,6 +3,7 @@ import type { ComponentType, ReactNode, CSSProperties, MouseEvent } from "react"
 import { useSeo } from "../hooks/useSeo";
 import ContentModal from "../components/ContentModal";
 import BeAProPopup from "../components/BeAProPopup";
+import ImageCarousel from "../components/ImageCarousel";
 import A2WhatIsProchure from "../components/docs/A2WhatIsProchure";
 import A2WhyProchure from "../components/docs/A2WhyProchure";
 import A3WhyConsultantsShouldAdvertise from "../components/docs/A3WhyConsultantsShouldAdvertise";
@@ -20,6 +21,18 @@ import A6 from "../assets/lobby_images/A6.png";
 import A7 from "../assets/lobby_images/A7.png";
 
 const BRAND_COLOR = "#55374a";
+
+const BANNER_CAROUSEL_IMAGES = [
+    "https://picsum.photos/seed/banner1/700/400",
+    "https://picsum.photos/seed/banner2/700/400",
+    "https://picsum.photos/seed/banner3/700/400",
+];
+
+const SQUARE_CAROUSEL_IMAGES = [
+    "https://picsum.photos/seed/square1/400/400",
+    "https://picsum.photos/seed/square2/400/400",
+    "https://picsum.photos/seed/square3/400/400",
+];
 
 interface LobbyCardData {
     title: string;
@@ -140,14 +153,48 @@ export default function LobbyPage() {
                         <span>An Invitation to Professional Consultants from the Founder</span>
                     </a>
                 </p>
-                <p className="text-center text-sm sm:text-base" style={{ color: BRAND_COLOR }}>
+                {/* <p className="text-center text-sm sm:text-base" style={{ color: BRAND_COLOR }}>
                     To publish your Brand, click here on{" "}
                     <BeAProButton />
-                </p>
+                </p> */}
 
-                <p className="text-center text-sm sm:text-base" style={{ color: BRAND_COLOR }}>
-                    To view Brand Profiles, click on the navigation bar.
-                </p>
+                <div className="flex flex-row gap-3 sm:gap-4 justify-center w-full max-w-2xl mx-auto px-4">
+                    <BeAProButton
+                        className="flex-1 flex flex-col items-center justify-center rounded-xl text-white uppercase tracking-wide py-6 sm:py-8 shadow-lg hover:opacity-90 transition-opacity"
+                        style={{ backgroundColor: BRAND_COLOR }}
+                    >
+                        <span className="text-xl sm:text-2xl font-bold">PUBLISH</span>
+                        <span className="text-sm sm:text-base mt-1">Profiles & Brands</span>
+                    </BeAProButton>
+
+                    <a
+                        href="#"
+                        onClick={(e: MouseEvent<HTMLAnchorElement>) => {
+                            e.preventDefault();
+                            window.dispatchEvent(new CustomEvent("openSidebar"));
+                        }}
+                        className="flex-1 flex flex-col items-center justify-center rounded-xl text-white uppercase tracking-wide py-6 sm:py-8 shadow-lg hover:opacity-90 transition-opacity"
+                        style={{ backgroundColor: BRAND_COLOR }}
+                    >
+                        <span className="text-xl sm:text-2xl font-bold">EXPLORE</span>
+                        <span className="text-sm sm:text-base mt-1">Profiles & Brands</span>
+                    </a>
+                </div>
+
+                <div className="w-full max-w-5xl mx-auto flex flex-col gap-8">
+                    <ImageCarousel
+                        images={BANNER_CAROUSEL_IMAGES}
+                        aspectRatio="1.75 / 1"
+                        className="w-full shadow-lg"
+                        carouselTitle="PROFESSIONAL CONSULTANTS"
+                    />
+                    {/* <ImageCarousel
+                        images={SQUARE_CAROUSEL_IMAGES}
+                        aspectRatio="1 / 1"
+                        className="w-full max-w-md mx-auto shadow-lg"
+                        carouselTitle="Square Carousel"
+                    /> */}
+                </div>
 
                 <hr className="w-full max-w-2xl border-t" style={{ borderColor: BRAND_COLOR + "40" }} />
 
