@@ -8,7 +8,7 @@ import LocationModal from "./LocationModal";
 export default function Layout() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isLocationOpen, setIsLocationOpen] = useState(false);
-    const location = useLocation();
+    // const location = useLocation();
 
     useEffect(() => {
         const handler = () => setIsSidebarOpen(true);
