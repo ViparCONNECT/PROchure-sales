@@ -16,13 +16,13 @@ export default function Layout() {
         return () => window.removeEventListener("openSidebar", handler);
     }, []);
 
-    useEffect(() => {
-        const saved = localStorage.getItem("prochure_selected_city");
-        if (!saved) {
-            const timer = setTimeout(() => setIsLocationOpen(true), 800);
-            return () => clearTimeout(timer);
-        }
-    }, [location]);
+    // useEffect(() => {
+    //     const saved = localStorage.getItem("prochure_selected_city");
+    //     if (!saved) {
+    //         const timer = setTimeout(() => setIsLocationOpen(true), 800);
+    //         return () => clearTimeout(timer);
+    //     }
+    // }, [location]);
 
     // useEffect(() => {
     //     const saved = localStorage.getItem("prochure_selected_city");

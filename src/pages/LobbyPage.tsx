@@ -182,7 +182,7 @@ export default function LobbyPage() {
                     </a>
                 </div>
 
-                <div className="w-full max-w-5xl mx-auto flex flex-col gap-8">
+                <div className="w-full max-w-xl mx-auto flex flex-col gap-8">
                     <ImageCarousel
                         images={BANNER_CAROUSEL_IMAGES}
                         aspectRatio="1.75 / 1"
@@ -205,14 +205,28 @@ export default function LobbyPage() {
                 ))}
 
                 {/* Bottom CTA in first half */}
-                <p className="text-center text-sm sm:text-base" style={{ color: BRAND_COLOR }}>
-                    To publish your Brand, click here on{" "}
-                    <BeAProButton />
-                </p>
+                <div className="flex flex-row gap-3 sm:gap-4 justify-center w-full max-w-2xl mx-auto px-4">
+                    <BeAProButton
+                        className="flex-1 flex flex-col items-center justify-center rounded-xl text-white uppercase tracking-wide py-6 sm:py-8 shadow-lg hover:opacity-90 transition-opacity"
+                        style={{ backgroundColor: BRAND_COLOR }}
+                    >
+                        <span className="text-xl sm:text-2xl font-bold">PUBLISH</span>
+                        <span className="text-sm sm:text-base mt-1">Profiles & Brands</span>
+                    </BeAProButton>
 
-                <p className="text-center text-sm sm:text-base" style={{ color: BRAND_COLOR }}>
-                    To view Brand Profiles, click on the navigation bar.
-                </p>
+                    <a
+                        href="#"
+                        onClick={(e: MouseEvent<HTMLAnchorElement>) => {
+                            e.preventDefault();
+                            window.dispatchEvent(new CustomEvent("openSidebar"));
+                        }}
+                        className="flex-1 flex flex-col items-center justify-center rounded-xl text-white uppercase tracking-wide py-6 sm:py-8 shadow-lg hover:opacity-90 transition-opacity"
+                        style={{ backgroundColor: BRAND_COLOR }}
+                    >
+                        <span className="text-xl sm:text-2xl font-bold">EXPLORE</span>
+                        <span className="text-sm sm:text-base mt-1">Profiles & Brands</span>
+                    </a>
+                </div>
             </section>
 
             {/* ── SECOND HALF ── brand-color background, white text ── */}
@@ -226,14 +240,7 @@ export default function LobbyPage() {
                 </p>
 
                 <p className="text-center text-sm sm:text-base max-w-xl leading-relaxed">
-                    Click here on{" "}
-                    <BeAProButton
-                        className="inline-block px-4 py-2 bg-white font-semibold rounded-sm cursor-pointer hover:opacity-90 transition-opacity no-underline"
-                        style={{ color: BRAND_COLOR }}
-                    >
-                        Be a PRO !
-                    </BeAProButton>{" "}
-                    to fill-in a simple form of registration.<br />
+                    Fill-in a simple form of registration.<br />
                     And begin your journey with PROchure towards commercial satisfaction !
                 </p>
 
@@ -283,19 +290,28 @@ export default function LobbyPage() {
 
                 <hr className="w-full max-w-2xl border-t border-white/20" />
 
-                <p className="text-center text-sm sm:text-base">
-                    To publish your Brand, click here on{" "}
+                <div className="flex flex-row gap-3 sm:gap-4 justify-center w-full max-w-2xl mx-auto px-4">
                     <BeAProButton
-                        className="inline-block px-4 py-2 bg-white font-semibold rounded-sm cursor-pointer hover:opacity-90 transition-opacity no-underline"
-                        style={{ color: BRAND_COLOR }}
+                        className="flex-1 flex flex-col items-center justify-center rounded-xl uppercase tracking-wide py-6 sm:py-8 shadow-lg hover:opacity-90 transition-opacity"
+                        style={{ backgroundColor: 'white', color: BRAND_COLOR }}
                     >
-                        Be a PRO !
+                        <span className="text-xl sm:text-2xl font-bold">PUBLISH</span>
+                        <span className="text-sm sm:text-base mt-1">Profiles & Brands</span>
                     </BeAProButton>
-                </p>
 
-                <p className="text-center text-sm sm:text-base opacity-90">
-                    To view Brand Profiles, click on the navigation bar.
-                </p>
+                    <a
+                        href="#"
+                        onClick={(e: MouseEvent<HTMLAnchorElement>) => {
+                            e.preventDefault();
+                            window.dispatchEvent(new CustomEvent("openSidebar"));
+                        }}
+                        className="flex-1 flex flex-col items-center justify-center rounded-xl uppercase tracking-wide py-6 sm:py-8 shadow-lg hover:opacity-90 transition-opacity"
+                        style={{ backgroundColor: 'white', color: BRAND_COLOR }}
+                    >
+                        <span className="text-xl sm:text-2xl font-bold">EXPLORE</span>
+                        <span className="text-sm sm:text-base mt-1">Profiles & Brands</span>
+                    </a>
+                </div>
             </section>
         </div>
     );

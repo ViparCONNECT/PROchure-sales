@@ -7,7 +7,30 @@
       { "id": 4, "name": "AQUARIUMS", "subcategories": [] },
       { "id": 5, "name": "ART", "subcategories": [] },
       { "id": 6, "name": "AUTOMOBILES / AUTOMOTIVES", "subcategories": [] },
-      { "id": 7, "name": "BUILDING CONSTRUCTION", "subcategories": [] },
+      { "id": 7, "name": "BUILDING CONSTRUCTION", "subcategories": [
+        {
+        "id":1,
+        "name":"SANITARY FIXTURES and WASHING SINKS",
+        "profiles" : [
+          { "id": 1, "card_image": "https://res.cloudinary.com/nahriacm/image/upload/v1787583564/ChatGPT_Image_Aug_24_2026_03_45_36_PM_as7bbt.png", "city_town" : "Bangalore" },
+          { "id": 2, "card_image": "https://res.cloudinary.com/nahriacm/image/upload/v1787583592/ChatGPT_Image_Aug_24_2026_03_51_31_PM_mxlhyt.png", "city_town" : "Bangalore" },
+          { "id": 3, "card_image": "https://res.cloudinary.com/nahriacm/image/upload/v1787583592/ChatGPT_Image_Aug_24_2026_03_59_33_PM_u3x5yx.png", "city_town" : "Bangalore" },
+          { "id": 4, "card_image": "https://res.cloudinary.com/nahriacm/image/upload/v1787583505/ChatGPT_Image_Aug_24_2026_03_30_10_PM_d3qqkv.png", "city_town" : "Bangalore" },
+          { "id": 5, "card_image": "https://res.cloudinary.com/nahriacm/image/upload/v1787583553/ChatGPT_Image_Aug_24_2026_03_36_47_PM_iwbywi.png", "city_town" : "Bangalore" }
+        ]
+      },
+      {
+        "id":2,
+        "name":"WALL and FLOOR TILES",
+        "profiles" : [
+          { "id": 1, "card_image": "https://res.cloudinary.com/nahriacm/image/upload/v1787583564/ChatGPT_Image_Aug_24_2026_03_45_36_PM_as7bbt.png", "city_town" : "Bangalore" },
+          { "id": 2, "card_image": "https://res.cloudinary.com/nahriacm/image/upload/v1787583592/ChatGPT_Image_Aug_24_2026_03_51_31_PM_mxlhyt.png", "city_town" : "Bangalore" },
+          { "id": 3, "card_image": "https://res.cloudinary.com/nahriacm/image/upload/v1787583592/ChatGPT_Image_Aug_24_2026_03_59_33_PM_u3x5yx.png", "city_town" : "Bangalore" },
+          { "id": 4, "card_image": "https://res.cloudinary.com/nahriacm/image/upload/v1787583505/ChatGPT_Image_Aug_24_2026_03_30_10_PM_d3qqkv.png", "city_town" : "Bangalore" },
+          { "id": 5, "card_image": "https://res.cloudinary.com/nahriacm/image/upload/v1787583553/ChatGPT_Image_Aug_24_2026_03_36_47_PM_iwbywi.png", "city_town" : "Bangalore" }
+        ]
+      }
+      ] },
       { "id": 8, "name": "COFFINS", "subcategories": [] },
       { "id": 9, "name": "COSMETICS, SKIN and HAIR CARE", "subcategories": [] },
       { "id": 10, "name": "DÉCOR", "subcategories": [] },

@@ -102,7 +102,7 @@ export default function Sidebar({ isOpen, onClose, onOpenLocation }: SidebarProp
 
                                 {/* BRANDS EXPLORATION */}
                                 <div>
-                                    <h3 className={SECTION_TITLE_CLASS}>brands exploration</h3>
+                                    <h3 className={SECTION_TITLE_CLASS}>Profiles & Brands exploration</h3>
                                     <div className="space-y-2 pt-3">
                                         <Link to="/consultants" onClick={onClose} className={LINK_CLASS}>
                                             Professional CONSULTANTS

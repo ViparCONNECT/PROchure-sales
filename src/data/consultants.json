@@ -34,7 +34,7 @@
               { "id": 23, "card_image": "https://res.cloudinary.com/ovyuvqxa/image/upload/v1787368453/A21_p06th2.png", "city_town" : "Bangalore" },
               { "id": 24, "card_image": "https://res.cloudinary.com/ovyuvqxa/image/upload/v1787368454/A13_gx8ojy.png", "city_town" : "Bangalore" },
               { "id": 25, "card_image": "https://res.cloudinary.com/ovyuvqxa/image/upload/v1787368453/A20_q8qgjr.png", "city_town" : "Bangalore" },
-              { "id": 26, "card_image": "https://res.cloudinary.com/ovyuvqxa/image/upload/v1787538869/Wright_Inspires_SHE_PRO_exact_badge_zaetii.png", "city_town" : "Bangalore" }
+              { "id": 26, "card_image": "https://res.cloudinary.com/ovyuvqxa/image/upload/v1787538869/Wright_Inspires_SHE_PRO_exact_badge_zaetii.png", "city_town" : "Bangalore", "is_she_pro" : true }
             ]
           }
         ]

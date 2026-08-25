@@ -42,6 +42,7 @@ export interface Brand {
     // Meta
     profile_created_by?: string;
     profile_creator_name?: string;
+    is_she_pro?: boolean;
 }
 
 interface BrandCardProps {
