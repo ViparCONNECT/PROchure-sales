@@ -40,7 +40,15 @@
       { "id": 14, "name": "FURNITURE", "subcategories": [] },
       { "id": 15, "name": "HARDWARE", "subcategories": [] },
       { "id": 16, "name": "HEAVY DUTY MACHINES (BUILDING CONSTRUCTION and GENERAL)", "subcategories": [] },
-      { "id": 17, "name": "JEWELLERY, GEM STONES", "subcategories": [] },
+      { "id": 17, "name": "JEWELLERY, GEM STONES", "subcategories": [
+        {
+        "id":1,
+        "name":"JEWELLERY, GEM STONES",
+        "profiles" : [
+          { "id": 1, "card_image": "https://res.cloudinary.com/ovyuvqxa/image/upload/v1787672207/ChatGPT_Image_Aug_25_2026_08_23_55_PM_hkrdrx.png", "city_town" : "Kolkata" }
+        ]
+      }
+      ] },
       { "id": 18, "name": "LEATHER", "subcategories": [] },
       { "id": 19, "name": "LITERATURE, PUBLICATIONS", "subcategories": [] },
       { "id": 20, "name": "MACHINES, TOOLS and ARTICLES (COMMERCIAL and GENERAL)", "subcategories": [] },
