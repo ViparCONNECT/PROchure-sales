@@ -76,7 +76,7 @@ export default function BrandCard({ brand, isConsultant = false }: BrandCardProp
                 </div>
             </button>
 
-            <BrandModal brand={brand} isOpen={isOpen} onClose={() => setIsOpen(false)} />
+            <BrandModal brand={brand} isOpen={isOpen} onClose={() => setIsOpen(false)} isConsultant={isConsultant} />
         </>
     );
 }

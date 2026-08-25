@@ -8,9 +8,10 @@ interface BrandModalProps {
     brand: Brand;
     isOpen: boolean;
     onClose: () => void;
+    isConsultant?: boolean;
 }
 
-export default function BrandModal({ brand, isOpen, onClose }: BrandModalProps) {
+export default function BrandModal({ brand, isOpen, onClose, isConsultant = false }: BrandModalProps) {
     useEffect(() => {
         if (isOpen) {
             document.body.style.overflow = "hidden";
@@ -21,8 +22,6 @@ export default function BrandModal({ brand, isOpen, onClose }: BrandModalProps) 
             document.body.style.overflow = "unset";
         };
     }, [isOpen]);
-
-    const isConsultant = brand.classification === "Professional Consultants";
 
     const name =
         brand.consultant_or_consultation_firm_name ||
@@ -79,7 +78,7 @@ export default function BrandModal({ brand, isOpen, onClose }: BrandModalProps) 
                                 <div className="w-24 h-24 bg-white/90 rounded-lg flex items-center justify-center overflow-hidden border-2 border-white">
                                     {brand.image || brand.card_image ? (
                                         <img
-                                            src={brand.image || "https://res.cloudinary.com/ovyuvqxa/image/upload/v1787371391/ChatGPT_Image_Aug_22_2026_09_31_19_AM_zbklwv.png"}
+                                            src={brand.image || isConsultant ? "https://res.cloudinary.com/ovyuvqxa/image/upload/v1787371391/ChatGPT_Image_Aug_22_2026_09_31_19_AM_zbklwv.png" : "https://res.cloudinary.com/ovyuvqxa/image/upload/v1787672207/ChatGPT_Image_Aug_25_2026_07_19_53_PM_mnmjhn.png"}
                                             alt={name}
                                             className="w-full h-full object-cover"
                                         />
@@ -102,17 +101,21 @@ export default function BrandModal({ brand, isOpen, onClose }: BrandModalProps) 
                         <div className="p-6 overflow-y-auto custom-scrollbar space-y-6">
 
                             {/* Specialization / Services */}
-                            <InfoSection label="Specializations / Skills">
-                                {brand.specialized_skills && (
-                                    <div className="text-slate-700">{brand.specialized_skills}</div>
-                                )}
-                            </InfoSection>
-                            
-                            <InfoSection label="Services">
-                                {brand.services && (
-                                    <div className="text-slate-700">{brand.services}</div>
-                                )}
-                            </InfoSection>
+                            {isConsultant && (
+                                <>
+                                    <InfoSection label="Specializations / Skills">
+                                        {brand.specialized_skills && (
+                                            <div className="text-slate-700">{brand.specialized_skills}</div>
+                                        )}
+                                    </InfoSection>
+
+                                    <InfoSection label="Services">
+                                        {brand.services && (
+                                            <div className="text-slate-700">{brand.services}</div>
+                                        )}
+                                    </InfoSection>
+                                </>
+                            )}
 
                             {brand.qualifications_degrees && (
                                 <InfoSection label="Qualifications">
