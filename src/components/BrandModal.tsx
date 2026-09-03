@@ -42,7 +42,7 @@ export default function BrandModal({ brand, isOpen, onClose, isConsultant = fals
                         const mapped: Brand = {
                             ...fullBrand,
                             id: p.id,
-                            image: p.image || p.logo,
+                            image: p.logo,
                             card_image: p.image || p.logo,
                             consultant_or_consultation_firm_name: p.name,
                             name_of_the_service_brand_retail_brand_product_brand: p.name,
@@ -108,7 +108,7 @@ export default function BrandModal({ brand, isOpen, onClose, isConsultant = fals
 
     const placeholderConsultant = "https://res.cloudinary.com/ovyuvqxa/image/upload/v1787371391/ChatGPT_Image_Aug_22_2026_09_31_19_AM_zbklwv.png";
     const placeholderOther = "https://res.cloudinary.com/ovyuvqxa/image/upload/v1787672207/ChatGPT_Image_Aug_25_2026_07_19_53_PM_mnmjhn.png";
-    const imgSrc = fullBrand.image || fullBrand.card_image || (isConsultant ? placeholderConsultant : placeholderOther);
+    const imgSrc = fullBrand.image || (isConsultant ? placeholderConsultant : placeholderOther);
 
     return createPortal(
         <AnimatePresence>
