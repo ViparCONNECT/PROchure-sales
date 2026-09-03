@@ -4,15 +4,19 @@ import { Folder, MapPin } from "lucide-react";
 import servicesData from "../data/services.json";
 import productsData from "../data/products.json";
 import consultantsData from "../data/consultants.json";
+import { getCategories } from "../config/api";
 import Breadcrumbs from "../components/Breadcrumbs";
 import SectionHeading from "../components/SectionHeading";
 import { useSeo } from "../hooks/useSeo";
+import PageSpinner from "../components/PageSpinner";
 
 const FILTER_BY_CITY = true;
 
-const toSlug = (str: string) => str.toLowerCase().replace(/\s+/g, "-");
+// const toSlug = (str: string) => str.toLowerCase().replace(/\s+/g, "-");
 
 function getProfileCount(category: any, city: string | null): number {
+    // Prefer backend-provided count
+    if (typeof category.profileCount === "number") return category.profileCount;
     if (!category.subcategories) return 0;
     return category.subcategories.reduce((acc: number, sub: any) => {
         if (!sub.profiles) return acc;
@@ -23,16 +27,18 @@ function getProfileCount(category: any, city: string | null): number {
     }, 0);
 }
 
-function getSubcategoryCount(category: any, city: string | null): number {
-    if (!city || !category.subcategories) return category.subcategories?.length || 0;
-    return category.subcategories.filter((sub: any) =>
-        sub.profiles?.some((p: any) => (p.city_town || p.city || "").toLowerCase() === city.toLowerCase())
-    ).length;
-}
+// function getSubcategoryCount(category: any, city: string | null): number {
+//     if (typeof category.subCategoryCount === "number" && (!city)) return category.subCategoryCount;
+//     if (!city || !category.subcategories) return category.subcategories?.length || 0;
+//     return category.subcategories.filter((sub: any) =>
+//         sub.profiles?.some((p: any) => (p.city_town || p.city || "").toLowerCase() === city.toLowerCase())
+//     ).length;
+// }
 
 export default function CategoryListPage() {
     const { type } = useParams();
     const [categories, setCategories] = useState<any[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
     const [selectedCity, setSelectedCity] = useState<string | null>(null);
 
     const pageTitle = type === "consultants" ? "Consultant Brands" : type === "services" ? "Service Brands" : "Product & Retail Brands";
@@ -52,17 +58,38 @@ export default function CategoryListPage() {
     useEffect(() => {
         if (!type) return;
 
-        // Normalize type to singular for data access (service | product | consultant)
-        const dataKey = type === "consultants" ? "consultant" : type === "services" ? "service" : "product";
-        const data = type === "consultants" ? consultantsData : type === "services" ? servicesData : productsData;
+        let cancelled = false;
+        (async () => {
+            setLoading(true);
+            try {
+                const typeMap: Record<string, string> = {
+                    consultants: "PROFESSIONAL_CONSULTANT",
+                    services: "SERVICE_BRANDS",
+                    products: "PRODUCT_BRANDS",
+                    retail: "RETAIL_BRANDS",
+                };
+                const apiType = typeMap[type as string] || "SERVICE_BRANDS";
+                const cats = await getCategories(apiType);
+                if (cancelled) return;
+                setCategories(cats);
+            } catch (err) {
+                const dataKey = type === "consultants" ? "consultant" : type === "services" ? "service" : "product";
+                const data = type === "consultants" ? consultantsData : type === "services" ? servicesData : productsData;
+                // @ts-ignore - dynamic access
+                setCategories(data[dataKey]?.categories || []);
+            } finally {
+                if (!cancelled) setLoading(false);
+            }
+        })();
 
-        // @ts-ignore - dynamic access
-        setCategories(data[dataKey]?.categories || []);
+        return () => { cancelled = true; };
     }, [type]);
 
-    const filteredCategories = (FILTER_BY_CITY && selectedCity)
-        ? categories.filter((cat) => getProfileCount(cat, selectedCity) > 0)
+    const filteredCategories = FILTER_BY_CITY && selectedCity
+        ? categories.filter((c) => getProfileCount(c, selectedCity) > 0)
         : categories;
+
+    if (loading) return <div className="min-h-[30vh] flex items-center justify-center"><PageSpinner /></div>;
 
     if (!filteredCategories.length) return (
         <div className="p-8 text-center text-slate-500">
@@ -88,10 +115,11 @@ export default function CategoryListPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredCategories.map((category) => {
-                    const profileCount = getProfileCount(category, selectedCity);
-                    const subCatCount = getSubcategoryCount(category, selectedCity);
+                    // const profileCount = getProfileCount(category, selectedCity);
+                    // const subCatCount = getSubcategoryCount(category, selectedCity);
+                    const target = (category.isSubCategoryNeeded === false) ? `/${type}/${category.id}/profiles` : `/${type}/${category.id}`;
                     return (
-                        <Link to={`/${type}/${toSlug(category.name)}`} key={category.id}>
+                        <Link to={target} key={category.id}>
                             <div
                                 className="group p-6 bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-xl hover:shadow-prochure-bg/10 transition-all duration-300 h-full flex flex-col items-center text-center cursor-pointer"
                             >
@@ -101,9 +129,9 @@ export default function CategoryListPage() {
                                 <h3 className="text-xl font-bold text-slate-800 group-hover:prochure-text transition-colors">
                                     {category.name}
                                 </h3>
-                                <p className="mt-2 text-slate-500 text-sm">
+                                {/* <p className="mt-2 text-slate-500 text-sm">
                                     Sub Categories : {subCatCount} | Profiles : {profileCount}
-                                </p>
+                                </p> */}
                             </div>
                         </Link>
                     );

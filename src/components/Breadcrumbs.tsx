@@ -10,6 +10,8 @@ export default function Breadcrumbs({ items }: BreadcrumbsProps) {
         if (label.toLowerCase() === "services") {
             return "Service Brands";
         } else if (label.toLowerCase() === "products") {
+            return "Product Brands";
+        } else if (label.toLowerCase() === "retail") {
             return "Retail Brands";
         } else if (label.toLowerCase() === "consultants") {
             return "Professional Consultants";

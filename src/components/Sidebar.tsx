@@ -110,7 +110,7 @@ export default function Sidebar({ isOpen, onClose, onOpenLocation }: SidebarProp
                                         <Link to="/services" onClick={onClose} className={LINK_CLASS}>
                                             SERVICE Brands
                                         </Link>
-                                        <Link to="/products" onClick={onClose} className={LINK_CLASS}>
+                                        <Link to="/retail" onClick={onClose} className={LINK_CLASS}>
                                             RETAIL Brands
                                         </Link>
                                         <Link to="/products" onClick={onClose} className={LINK_CLASS}>

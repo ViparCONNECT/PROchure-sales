@@ -4,10 +4,12 @@ import BrandCard, { type Brand } from "./components/BrandCard";
 import servicesData from "./data/services.json";
 import productsData from "./data/products.json";
 import consultantsData from "./data/consultants.json";
+import { getCategories, getSubcategories, getProfiles } from "./config/api";
 import Breadcrumbs from "./components/Breadcrumbs";
 import SectionHeading from "./components/SectionHeading";
 import { Users, MapPin, Filter } from "lucide-react";
 import { useSeo } from "./hooks/useSeo";
+import PageSpinner from "./components/PageSpinner";
 
 interface Subcategory {
     id: number;
@@ -91,12 +93,16 @@ const INDIAN_CITIES = [
 ];
 
 export default function SubcategoryPage() {
-    const { type, category: categorySlug, subcategory: subcategorySlug } = useParams();
+    const { type, category: categorySlug, subcategory: subcategoryParam } = useParams();
     const [data, setData] = useState<{ category: Category; subcategory: Subcategory } | null>(null);
     const [selectedCity, setSelectedCity] = useState<string | null>(null);
     const [cityFilter, setCityFilter] = useState<string | "All">("All");
     const [isSheOnly, setIsSheOnly] = useState<boolean>(false);
+    // Applied filters (only used for API calls when user clicks Apply)
+    const [appliedCity, setAppliedCity] = useState<string | undefined>(undefined);
+    const [appliedIsSheOnly, setAppliedIsSheOnly] = useState<boolean>(false);
     const [showFilterModal, setShowFilterModal] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
         const saved = localStorage.getItem("prochure_selected_city");
@@ -109,32 +115,157 @@ export default function SubcategoryPage() {
     // Initialize local city filter from global selected city when it changes
     useEffect(() => {
         setCityFilter(selectedCity || "All");
+        // if no appliedCity set yet, initialize appliedCity from global selectedCity
+        if (appliedCity === undefined) setAppliedCity(selectedCity || undefined);
     }, [selectedCity]);
 
     useEffect(() => {
-        if (!type || !categorySlug || !subcategorySlug) return;
+        if (!type || !categorySlug || !subcategoryParam) return;
 
-        const rootData = (type === "consultants" ? consultantsData.consultant : type === "services" ? servicesData.service : productsData.product) as { categories: Category[] };
+        let cancelled = false;
 
-        // Find category
-        const category = rootData.categories.find(c => toSlug(c.name) === categorySlug);
-        if (!category) {
-            setData(null);
-            return;
-        }
+        (async () => {
+            setLoading(true);
+            try {
+                // Map route type to API type value
+                const typeMap: Record<string, string> = {
+                    consultants: "PROFESSIONAL_CONSULTANT",
+                    services: "SERVICE_BRANDS",
+                    products: "PRODUCT_BRANDS",
+                    retail: "RETAIL_BRANDS",
+                };
 
-        // Find subcategory
-        const subcategory = category.subcategories.find(s => toSlug(s.name) === subcategorySlug) as Subcategory | undefined;
-        if (!subcategory) {
-            setData(null);
-            return;
-        }
+                const apiType = typeMap[type as string] || "SERVICE_BRANDS";
 
-        // Since our interfaces match the JSON structure loosely, we cast or just use it.
-        // The JSON structure has been validated by creation.
-        setData({ category: category as unknown as Category, subcategory: subcategory as unknown as Subcategory });
+                const categories = await getCategories(apiType);
 
-    }, [type, categorySlug, subcategorySlug]);
+                if (cancelled) return;
+
+                const category = categories.find((c: any) => c.id === categorySlug || (c.urlSlug || toSlug(c.name)) === categorySlug || toSlug(c.name) === categorySlug);
+                if (!category) {
+                    setData(null);
+                    return;
+                }
+
+                const subcats = await getSubcategories(category.id);
+                if (cancelled) return;
+
+
+                const subcategory = subcats.find((s: any) =>
+                    s.id === subcategoryParam ||
+                    (s.urlSlug || toSlug(s.name)) === subcategoryParam ||
+                    toSlug(s.name) === subcategoryParam
+                ) as any | undefined;
+
+                // If subcategory not found, but route indicates 'profiles', fetch by categoryId
+                if (!subcategory) {
+                    if (subcategoryParam === "profiles") {
+                        // Use applied filters for API call
+                        const cityParam = appliedCity;
+                        const params: any = { categoryId: category.id };
+                        if (cityParam) params.city = cityParam;
+                        if (appliedIsSheOnly) params.isWomenEntrepreneur = true;
+                        const profiles = await getProfiles(params);
+                        if (cancelled) return;
+                        const mapped = (profiles || []).map((p: any) => ({
+                            id: p.id,
+                            image: p.image || p.logo,
+                            card_image: p.image || p.logo,
+                            consultant_or_consultation_firm_name: p.name,
+                            name_of_the_service_brand_retail_brand_product_brand: p.name,
+                            year_of_establishment: p.yearOfEstablishment || p.year_of_establishment,
+                            professional_title: p.professionalTitle || p.professional_title,
+                            qualifications_degrees: p.qualifications || p.qualifications_degrees,
+                            specialized_skills: p.specializations,
+                            services: p.services,
+                            building_mall_property_name: p.address?.buildingMallPropertyName,
+                            door_shop_no: p.address?.doorShopNo,
+                            floor: p.address?.floor,
+                            street_lane_road_name_sub_locality: p.address?.streetLaneRoadNameSubLocality,
+                            nearest_landmark: p.address?.nearestLandmark,
+                            secondary_primary_locality: p.address?.secondaryPrimaryLocality,
+                            city_town: p.address?.cityTown,
+                            state_province: p.address?.stateProvince,
+                            country: p.address?.country,
+                            pin_code_zip_code: p.address?.pinCodeZipCode,
+                            country_code: p.contact?.countryCode,
+                            official_contact_number: p.contact?.officialContactNumber,
+                            official_email_id: p.contact?.officialEmailId,
+                            official_website_app: p.contact?.officialWebsiteApp,
+                            contact_person_name: p.contact?.contactPersonName,
+                            contact_person_designation: p.contact?.contactPersonDesignation,
+                            preferred_languages: (p.contact?.mostComfortablePreferredLanguages || []).join?.(", ") || undefined,
+                            is_she_pro: p.isShePro || p.is_she_pro || false,
+                        })) as unknown as Brand[];
+
+                        // create a pseudo-subcategory to render profiles under
+                        const pseudoSub: any = { id: `category-${category.id}`, name: `${category.name}`, profiles: mapped };
+                        setData({ category: category as unknown as Category, subcategory: pseudoSub as unknown as Subcategory });
+                        return;
+                    }
+
+                    // No subcategory found — treat as not found
+                    setData(null);
+                    return;
+                }
+
+                // Use applied filters for API call
+                const cityParam = appliedCity;
+                const params: any = { subCategoryId: subcategory.id };
+                if (cityParam) params.city = cityParam;
+                if (appliedIsSheOnly) params.isWomenEntrepreneur = true;
+                // Fetch profiles for the subcategory with filter query params
+                const profiles = await getProfiles(params);
+
+                if (cancelled) return;
+
+                // Map API profile objects to local Brand shape (best effort)
+                const mapped = (profiles || []).map((p: any) => ({
+                    id: p.id,
+                    image: p.image || p.logo,
+                    card_image: p.image || p.logo,
+                    consultant_or_consultation_firm_name: p.name,
+                    name_of_the_service_brand_retail_brand_product_brand: p.name,
+                    year_of_establishment: p.yearOfEstablishment || p.year_of_establishment,
+                    professional_title: p.professionalTitle || p.professional_title,
+                    qualifications_degrees: p.qualifications || p.qualifications_degrees,
+                    specialized_skills: p.specializations,
+                    services: p.services,
+                    building_mall_property_name: p.address?.buildingMallPropertyName,
+                    door_shop_no: p.address?.doorShopNo,
+                    floor: p.address?.floor,
+                    street_lane_road_name_sub_locality: p.address?.streetLaneRoadNameSubLocality,
+                    nearest_landmark: p.address?.nearestLandmark,
+                    secondary_primary_locality: p.address?.secondaryPrimaryLocality,
+                    city_town: p.address?.cityTown,
+                    state_province: p.address?.stateProvince,
+                    country: p.address?.country,
+                    pin_code_zip_code: p.address?.pinCodeZipCode,
+                    country_code: p.contact?.countryCode,
+                    official_contact_number: p.contact?.officialContactNumber,
+                    official_email_id: p.contact?.officialEmailId,
+                    official_website_app: p.contact?.officialWebsiteApp,
+                    contact_person_name: p.contact?.contactPersonName,
+                    contact_person_designation: p.contact?.contactPersonDesignation,
+                    preferred_languages: (p.contact?.mostComfortablePreferredLanguages || []).join?.(", ") || undefined,
+                    is_she_pro: p.isShePro || p.is_she_pro || false,
+                })) as unknown as Brand[];
+
+                setData({ category: category as unknown as Category, subcategory: { ...subcategory, profiles: mapped } as unknown as Subcategory });
+            } catch (err) {
+                // fallback to null
+                setData(null);
+                console.error("Failed to load categories/subcategories/profiles", err);
+            }
+            finally {
+                if (!cancelled) setLoading(false);
+            }
+        })();
+
+        return () => {
+            cancelled = true;
+        };
+    }, [type, categorySlug, subcategoryParam, appliedCity, appliedIsSheOnly]);
 
     useSeo({
         title: data ? `${data.subcategory.name} | PROchure` : "Subcategory | PROchure",
@@ -142,6 +273,8 @@ export default function SubcategoryPage() {
             ? `Browse ${data.subcategory.name} brands on PROchure — discover consultants, services, retail and product brands.`
             : "Browse brands on PROchure — an e-brochure of professional services and products.",
     });
+
+    if (loading) return <div className="min-h-[50vh] flex items-center justify-center"><PageSpinner /></div>;
 
     if (!data) {
         return (
@@ -157,23 +290,29 @@ export default function SubcategoryPage() {
 
     let filteredProfiles = subcategory.profiles.slice();
 
-    // Apply global selectedCity if present
-    if (selectedCity) {
-        filteredProfiles = filteredProfiles.filter(
-            (p) => (p.city_town || "").toLowerCase() === selectedCity.toLowerCase()
-        );
-    }
+    // If we asked the API for filtered results (appliedCity or appliedIsSheOnly),
+    // do not apply additional client-side filtering that could remove minimal server results.
+    const serverFiltered = (appliedCity !== undefined) || appliedIsSheOnly === true;
 
-    // Apply page-level city filter (select)
-    if (cityFilter && cityFilter !== "All") {
-        filteredProfiles = filteredProfiles.filter(
-            (p) => ((p.city_town || "") === cityFilter)
-        );
-    }
+    if (!serverFiltered) {
+        // Apply global selectedCity if present
+        if (selectedCity) {
+            filteredProfiles = filteredProfiles.filter(
+                (p) => (p.city_town || "").toLowerCase() === selectedCity.toLowerCase()
+            );
+        }
 
-    // Apply is_she_pro filter (checkbox)
-    if (isSheOnly) {
-        filteredProfiles = filteredProfiles.filter((p) => p.is_she_pro === true);
+        // Apply page-level city filter (select)
+        if (cityFilter && cityFilter !== "All") {
+            filteredProfiles = filteredProfiles.filter(
+                (p) => ((p.city_town || "") === cityFilter)
+            );
+        }
+
+        // Apply is_she_pro filter (checkbox)
+        if (isSheOnly) {
+            filteredProfiles = filteredProfiles.filter((p) => p.is_she_pro === true);
+        }
     }
 
     // (language filter removed)
@@ -211,10 +350,10 @@ export default function SubcategoryPage() {
 
                 {/* Active filter badges */}
                 <div className="flex items-center gap-2">
-                    {cityFilter && cityFilter !== "All" && (
-                        <span className="text-sm bg-slate-100 border border-slate-200 px-2 py-1 rounded">{cityFilter}</span>
+                    {appliedCity && (
+                        <span className="text-sm bg-slate-100 border border-slate-200 px-2 py-1 rounded">{appliedCity}</span>
                     )}
-                    {isSheOnly && (
+                    {appliedIsSheOnly && (
                         <span className="text-sm bg-prochure-50 border border-prochure-200 px-2 py-1 rounded prochure-text">{type === "consultants" ? "Women Professionals" : "Women Entrepreneurs"}</span>
                     )}
                 </div>
@@ -253,7 +392,12 @@ export default function SubcategoryPage() {
 
                         <div className="mt-6 flex items-center justify-end">
                             <button
-                                onClick={() => setShowFilterModal(false)}
+                                onClick={() => {
+                                    // apply current UI filters to API
+                                    setAppliedCity(cityFilter && cityFilter !== "All" ? cityFilter : undefined);
+                                    setAppliedIsSheOnly(isSheOnly);
+                                    setShowFilterModal(false);
+                                }}
                                 className="px-4 py-2 bg-white text-slate-900 rounded text-sm"
                             >
                                 Apply

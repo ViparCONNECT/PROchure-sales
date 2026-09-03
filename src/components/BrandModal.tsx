@@ -1,8 +1,9 @@
-import { useEffect, type MouseEvent, type ReactNode } from "react";
+import { useEffect, useState, type MouseEvent, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Mail, Phone, Globe, MapPin, Clock, User } from "lucide-react";
 import type { Brand } from "./BrandCard";
+import { getProfile } from "../config/api";
 
 interface BrandModalProps {
     brand: Brand;
@@ -23,27 +24,91 @@ export default function BrandModal({ brand, isOpen, onClose, isConsultant = fals
         };
     }, [isOpen]);
 
+    const [fullBrand, setFullBrand] = useState<Brand>(brand);
+
+    useEffect(() => setFullBrand(brand), [brand]);
+
+    useEffect(() => {
+        if (!isOpen) return;
+        // If the passed brand seems partial (missing contact), try fetching full profile by id
+        (async () => {
+            try {
+                if (!brand || !brand.id) return;
+                // fetch only if some key fields missing
+                if (!brand.official_contact_number && (brand as any).id) {
+                    const p = await getProfile(String((brand as any).id));
+                    // getProfile returns the profile object (not envelope)
+                    if (p) {
+                        const mapped: Brand = {
+                            ...fullBrand,
+                            id: p.id,
+                            image: p.image || p.logo,
+                            card_image: p.image || p.logo,
+                            consultant_or_consultation_firm_name: p.name,
+                            name_of_the_service_brand_retail_brand_product_brand: p.name,
+                            year_of_establishment: p.yearOfEstablishment || p.year_of_establishment,
+                            professional_title: p.professionalTitle || p.professional_title,
+                            qualifications_degrees: p.qualifications || p.qualifications_degrees,
+                            specialized_skills: p.specializations,
+                            services: p.services,
+                            building_mall_property_name: p.address?.buildingMallPropertyName,
+                            door_shop_no: p.address?.doorShopNo,
+                            floor: p.address?.floor,
+                            street_lane_road_name_sub_locality: p.address?.streetLaneRoadNameSubLocality,
+                            nearest_landmark: p.address?.nearestLandmark,
+                            secondary_primary_locality: p.address?.secondaryPrimaryLocality,
+                            city_town: p.address?.cityTown,
+                            state_province: p.address?.stateProvince,
+                            country: p.address?.country,
+                            pin_code_zip_code: p.address?.pinCodeZipCode,
+                            country_code: p.contact?.countryCode,
+                            official_contact_number: p.contact?.officialContactNumber,
+                            official_email_id: p.contact?.officialEmailId,
+                            official_website_app: p.contact?.officialWebsiteApp,
+                            contact_person_name: p.contact?.contactPersonName,
+                            contact_person_designation: p.contact?.contactPersonDesignation,
+                            preferred_languages: (p.contact?.mostComfortablePreferredLanguages || []).join?.(", ") || undefined,
+                            workingHours: p.workingHours || p.working_hours || undefined,
+                            is_she_pro: p.isShePro || p.is_she_pro || false,
+                        };
+                        setFullBrand(mapped);
+                    }
+                }
+            } catch (err) {
+                // ignore
+                console.error("Failed to fetch full profile", err);
+            }
+        })();
+    }, [isOpen]);
+
     const name =
-        brand.consultant_or_consultation_firm_name ||
-        brand.name_of_the_service_brand_retail_brand_product_brand ||
+        fullBrand.consultant_or_consultation_firm_name ||
+        fullBrand.name_of_the_service_brand_retail_brand_product_brand ||
         `PROFILE NAME`;
 
-    const year = brand.year_of_starting_practice_or_service || brand.year_of_establishment;
+    const professionalTitle = (fullBrand as any).professional_title || (fullBrand as any).professionalTitle || "";
+    const displayName = professionalTitle ? `${professionalTitle} ${name}` : name;
 
-    const phone = brand.official_contact_number
-        ? `${brand.country_code || ""} ${brand.official_contact_number}`.trim()
+    const year = (fullBrand as any).year_of_starting_practice_or_service || fullBrand.year_of_establishment;
+
+    const phone = fullBrand.official_contact_number
+        ? `${fullBrand.country_code || ""} ${fullBrand.official_contact_number}`.trim()
         : null;
 
     const addressParts = [
-        brand.building_mall_property_name,
-        brand.door_shop_no,
-        brand.floor,
-        brand.street_lane_road_name_sub_locality,
-        brand.nearest_landmark ? `Nearest Landmark: ${brand.nearest_landmark}` : undefined,
-        brand.secondary_primary_locality,
-        [brand.city_town, brand.state_province, brand.pin_code_zip_code].filter(Boolean).join(", ") || undefined,
-        brand.country,
+        fullBrand.building_mall_property_name,
+        fullBrand.door_shop_no,
+        fullBrand.floor,
+        fullBrand.street_lane_road_name_sub_locality,
+        fullBrand.nearest_landmark ? `Nearest Landmark: ${fullBrand.nearest_landmark}` : undefined,
+        fullBrand.secondary_primary_locality,
+        [fullBrand.city_town, fullBrand.state_province, fullBrand.pin_code_zip_code].filter(Boolean).join(", ") || undefined,
+        fullBrand.country,
     ].filter(Boolean) as string[];
+
+    const placeholderConsultant = "https://res.cloudinary.com/ovyuvqxa/image/upload/v1787371391/ChatGPT_Image_Aug_22_2026_09_31_19_AM_zbklwv.png";
+    const placeholderOther = "https://res.cloudinary.com/ovyuvqxa/image/upload/v1787672207/ChatGPT_Image_Aug_25_2026_07_19_53_PM_mnmjhn.png";
+    const imgSrc = fullBrand.image || fullBrand.card_image || (isConsultant ? placeholderConsultant : placeholderOther);
 
     return createPortal(
         <AnimatePresence>
@@ -76,18 +141,14 @@ export default function BrandModal({ brand, isOpen, onClose, isConsultant = fals
 
                             <div className="flex flex-col items-center gap-3">
                                 <div className="w-24 h-24 bg-white/90 rounded-lg flex items-center justify-center overflow-hidden border-2 border-white">
-                                    {brand.image || brand.card_image ? (
-                                        <img
-                                            src={brand.image || isConsultant ? "https://res.cloudinary.com/ovyuvqxa/image/upload/v1787371391/ChatGPT_Image_Aug_22_2026_09_31_19_AM_zbklwv.png" : "https://res.cloudinary.com/ovyuvqxa/image/upload/v1787672207/ChatGPT_Image_Aug_25_2026_07_19_53_PM_mnmjhn.png"}
-                                            alt={name}
-                                            className="w-full h-full object-cover"
-                                        />
+                                    {imgSrc ? (
+                                        <img src={imgSrc} alt={displayName} className="w-full h-full object-cover" />
                                     ) : (
                                         <User size={40} className="text-prochure-bg" />
                                     )}
                                 </div>
                                 <div>
-                                    <h2 className="text-2xl font-bold font-maiandra">{name}</h2>
+                                    <h2 className="text-2xl font-bold font-maiandra">{displayName}</h2>
                                     {year && (
                                         <p className="text-white/80 text-sm tracking-wide uppercase mt-1">
                                             {isConsultant ? "Established In" : "Established In"} {year}
@@ -104,22 +165,22 @@ export default function BrandModal({ brand, isOpen, onClose, isConsultant = fals
                             {isConsultant && (
                                 <>
                                     <InfoSection label="Specializations / Skills">
-                                        {brand.specialized_skills && (
-                                            <div className="text-slate-700">{brand.specialized_skills}</div>
+                                        {fullBrand.specialized_skills && (
+                                            <div className="text-slate-700">{fullBrand.specialized_skills}</div>
                                         )}
                                     </InfoSection>
 
                                     <InfoSection label="Services">
-                                        {brand.services && (
-                                            <div className="text-slate-700">{brand.services}</div>
+                                        {fullBrand.services && (
+                                            <div className="text-slate-700">{fullBrand.services}</div>
                                         )}
                                     </InfoSection>
                                 </>
                             )}
 
-                            {brand.qualifications_degrees && (
+                            {fullBrand.qualifications_degrees && (
                                 <InfoSection label="Qualifications">
-                                    <div className="text-slate-700">{brand.qualifications_degrees}</div>
+                                    <div className="text-slate-700">{fullBrand.qualifications_degrees}</div>
                                 </InfoSection>
                             )}
 
@@ -148,11 +209,11 @@ export default function BrandModal({ brand, isOpen, onClose, isConsultant = fals
 
                             <InfoSection label="Email ID" icon={<Mail size={16} className="text-prochure-bg" />}>
                                 <div className="space-y-3">
-                                    {brand.official_email_id && (
+                                    {fullBrand.official_email_id && (
                                         <div className="flex items-center gap-3 text-slate-700">
                                             <Mail size={18} className="prochure-text shrink-0" />
-                                            <a href={`mailto:${brand.official_email_id}`} className="hover:underline break-all">
-                                                {brand.official_email_id}
+                                            <a href={`mailto:${fullBrand.official_email_id}`} className="hover:underline break-all">
+                                                {fullBrand.official_email_id}
                                             </a>
                                         </div>
                                     )}
@@ -161,16 +222,16 @@ export default function BrandModal({ brand, isOpen, onClose, isConsultant = fals
 
                             <InfoSection label="Website" icon={<Globe size={16} className="text-prochure-bg" />}>
                                 <div className="space-y-3">
-                                    {brand.official_website_app && (
+                                    {fullBrand.official_website_app && (
                                         <div className="flex items-center gap-3 text-slate-700">
                                             <Globe size={18} className="prochure-text shrink-0" />
                                             <a
-                                                href={brand.official_website_app}
+                                                href={fullBrand.official_website_app}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="text-prochure-bg hover:underline break-all"
                                             >
-                                                {brand.official_website_app}
+                                                {fullBrand.official_website_app}
                                             </a>
                                         </div>
                                     )}
@@ -179,30 +240,52 @@ export default function BrandModal({ brand, isOpen, onClose, isConsultant = fals
 
                             {/* Availability */}
                             <InfoSection label="Availability Information" icon={<Clock size={16} className="text-prochure-bg" />}>
-                                {brand.availability && (
-                                    <div className="text-slate-700">{brand.availability}</div>
+                                {fullBrand.workingHours && Object.keys(fullBrand.workingHours).length > 0 ? (
+                                    <div className="space-y-1 text-slate-700">
+                                        {[
+                                            ["monday", "Monday"],
+                                            ["tuesday", "Tuesday"],
+                                            ["wednesday", "Wednesday"],
+                                            ["thursday", "Thursday"],
+                                            ["friday", "Friday"],
+                                            ["saturday", "Saturday"],
+                                            ["sunday", "Sunday"],
+                                        ].map(([key, label]) => {
+                                            const val = (fullBrand.workingHours as any)[key];
+                                            if (!val) return null;
+                                            return (
+                                                <div key={key}>
+                                                    <span className="font-semibold text-slate-700">{label}:</span> <span className="text-slate-700">{val}</span>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                ) : (
+                                    fullBrand.availability && (
+                                        <div className="text-slate-700">{fullBrand.availability}</div>
+                                    )
                                 )}
                             </InfoSection>
 
                             {/* Contact Person */}
-                            {(brand.contact_person_name || brand.contact_person_designation || brand.preferred_languages) && (
+                            {(fullBrand.contact_person_name || fullBrand.contact_person_designation || fullBrand.preferred_languages) && (
                                 <InfoSection label="Point of Contact">
                                     <div className="space-y-2 text-slate-700">
-                                        {brand.contact_person_name && (
+                                        {fullBrand.contact_person_name && (
                                             <div>
-                                                <span className="font-semibold text-slate-600">Name:</span> {brand.contact_person_name}
+                                                <span className="font-semibold text-slate-600">Name:</span> {fullBrand.contact_person_name}
                                             </div>
                                         )}
-                                        {brand.contact_person_designation && (
+                                        {fullBrand.contact_person_designation && (
                                             <div>
                                                 <span className="font-semibold text-slate-600">Designation:</span>{" "}
-                                                {brand.contact_person_designation}
+                                                {fullBrand.contact_person_designation}
                                             </div>
                                         )}
-                                        {brand.preferred_languages && (
+                                        {fullBrand.preferred_languages && (
                                             <div>
                                                 <span className="font-semibold text-slate-600">Preferred Languages:</span>{" "}
-                                                {brand.preferred_languages}
+                                                {fullBrand.preferred_languages}
                                             </div>
                                         )}
                                     </div>
