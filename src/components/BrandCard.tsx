@@ -39,6 +39,7 @@ export interface Brand {
     contact_person_name?: string;
     contact_person_designation?: string;
     preferred_languages?: string;
+    workingHours?: { [day: string]: string };
     // Meta
     profile_created_by?: string;
     profile_creator_name?: string;

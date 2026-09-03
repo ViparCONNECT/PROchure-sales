@@ -1,9 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import BrandCard, { type Brand } from "./components/BrandCard";
-import servicesData from "./data/services.json";
-import productsData from "./data/products.json";
-import consultantsData from "./data/consultants.json";
 import { getCategories, getSubcategories, getProfiles } from "./config/api";
 import Breadcrumbs from "./components/Breadcrumbs";
 import SectionHeading from "./components/SectionHeading";
