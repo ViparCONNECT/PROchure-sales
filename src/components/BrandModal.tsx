@@ -47,6 +47,7 @@ export default function BrandModal({ brand, isOpen, onClose, isConsultant = fals
                             consultant_or_consultation_firm_name: p.name,
                             name_of_the_service_brand_retail_brand_product_brand: p.name,
                             year_of_establishment: p.yearOfEstablishment || p.year_of_establishment,
+                            year_of_practice: p.yearOfPractice || p.year_of_practice,
                             professional_title: p.professionalTitle || p.professional_title,
                             qualifications_degrees: p.qualifications || p.qualifications_degrees,
                             specialized_skills: p.specializations,
@@ -89,7 +90,8 @@ export default function BrandModal({ brand, isOpen, onClose, isConsultant = fals
     const professionalTitle = (fullBrand as any).professional_title || (fullBrand as any).professionalTitle || "";
     const displayName = professionalTitle ? `${professionalTitle} ${name}` : name;
 
-    const year = (fullBrand as any).year_of_starting_practice_or_service || fullBrand.year_of_establishment;
+    const yearOfEstablishment = fullBrand.year_of_establishment;
+    const yearOfPractice = fullBrand.year_of_practice;
 
     const phone = fullBrand.official_contact_number
         ? `${fullBrand.country_code || ""} ${fullBrand.official_contact_number}`.trim()
@@ -149,9 +151,14 @@ export default function BrandModal({ brand, isOpen, onClose, isConsultant = fals
                                 </div>
                                 <div>
                                     <h2 className="text-2xl font-bold font-maiandra">{displayName}</h2>
-                                    {year && (
+                                    {yearOfEstablishment && (
                                         <p className="text-white/80 text-sm tracking-wide mt-1">
-                                            {isConsultant ? "established In" : "established In"} {year}
+                                            {isConsultant ? "established in" : "established in"} {yearOfEstablishment}
+                                        </p>
+                                    )}
+                                    {yearOfPractice && (
+                                        <p className="text-white/80 text-sm tracking-wide mt-1">
+                                            {isConsultant ? "practicing since" : "practicing since"} {yearOfPractice}
                                         </p>
                                     )}
                                 </div>
