@@ -150,8 +150,8 @@ export default function BrandModal({ brand, isOpen, onClose, isConsultant = fals
                                 <div>
                                     <h2 className="text-2xl font-bold font-maiandra">{displayName}</h2>
                                     {year && (
-                                        <p className="text-white/80 text-sm tracking-wide uppercase mt-1">
-                                            {isConsultant ? "Established In" : "Established In"} {year}
+                                        <p className="text-white/80 text-sm tracking-wide mt-1">
+                                            {isConsultant ? "established In" : "established In"} {year}
                                         </p>
                                     )}
                                 </div>
@@ -160,67 +160,34 @@ export default function BrandModal({ brand, isOpen, onClose, isConsultant = fals
 
                         {/* Body */}
                         <div className="p-6 overflow-y-auto custom-scrollbar space-y-6">
-
-                            {/* Specialization / Services */}
-                            {isConsultant && (
-                                <>
-                                    <InfoSection label="Specializations / Skills">
-                                        {fullBrand.specialized_skills && (
-                                            <div className="text-slate-700">{fullBrand.specialized_skills}</div>
-                                        )}
-                                    </InfoSection>
-
-                                    <InfoSection label="Services">
-                                        {fullBrand.services && (
-                                            <div className="text-slate-700">{fullBrand.services}</div>
-                                        )}
-                                    </InfoSection>
-                                </>
-                            )}
-
                             {fullBrand.qualifications_degrees && (
                                 <InfoSection label="Qualifications">
                                     <div className="text-slate-700">{fullBrand.qualifications_degrees}</div>
                                 </InfoSection>
                             )}
 
-                            {/* Address */}
-                            <InfoSection label="Address" icon={<MapPin size={16} className="text-prochure-bg" />}>
-                                {addressParts.length > 0 && (
-                                    <div className="space-y-1 text-slate-700">
-                                        {addressParts.map((line, i) => (
-                                            <div key={i}>{line}</div>
-                                        ))}
-                                    </div>
-                                )}
-                            </InfoSection>
-
-                            {/* Contact divided into separate sections */}
-                            <InfoSection label="Contact Number" icon={<Phone size={16} className="text-prochure-bg" />}>
-                                <div className="space-y-3">
-                                    {phone && (
-                                        <div className="flex items-center gap-3 text-slate-700">
-                                            <span>{phone}</span>
-                                        </div>
+                            {/* Specialization / Services */}
+                            {isConsultant && (
+                                <>
+                                    {fullBrand.specialized_skills && (
+                                        <InfoSection label="Specializations / Skills">
+                                            <div className="text-slate-700">{fullBrand.specialized_skills}</div>
+                                        </InfoSection>
                                     )}
-                                </div>
-                            </InfoSection>
 
-                            <InfoSection label="Email ID" icon={<Mail size={16} className="text-prochure-bg" />}>
-                                <div className="space-y-3">
-                                    {fullBrand.official_email_id && (
-                                        <div className="flex items-center gap-3 text-slate-700">
-                                            <a href={`mailto:${fullBrand.official_email_id}`} className="hover:underline break-all">
-                                                {fullBrand.official_email_id}
-                                            </a>
-                                        </div>
+                                    {fullBrand.services && (
+                                        <InfoSection label="Services">
+                                            <div className="text-slate-700">{fullBrand.services}</div>
+                                        </InfoSection>
                                     )}
-                                </div>
-                            </InfoSection>
+                                </>
+                            )}
 
-                            <InfoSection label="Website" icon={<Globe size={16} className="text-prochure-bg" />}>
-                                <div className="space-y-3">
-                                    {fullBrand.official_website_app && (
+                            
+
+                            {fullBrand.official_website_app && (
+                                <InfoSection label="Website" icon={<Globe size={16} className="text-prochure-bg" />}>
+                                    <div className="space-y-3">
                                         <div className="flex items-center gap-3 text-slate-700">
                                             <a
                                                 href={fullBrand.official_website_app}
@@ -231,38 +198,78 @@ export default function BrandModal({ brand, isOpen, onClose, isConsultant = fals
                                                 {fullBrand.official_website_app}
                                             </a>
                                         </div>
-                                    )}
-                                </div>
-                            </InfoSection>
+                                    </div>
+                                </InfoSection>
+                            )}
+
+                            {/* Address */}
+                            {addressParts.length > 0 && (
+                                <InfoSection label="Address" icon={<MapPin size={16} className="text-prochure-bg" />}>
+                                    <div className="space-y-1 text-slate-700">
+                                        {addressParts.map((line, i) => (
+                                            <div key={i}>{line}</div>
+                                        ))}
+                                    </div>
+                                </InfoSection>
+                            )}
+
+                            {/* Contact divided into separate sections */}
+                            {phone && (
+                                <InfoSection label="Contact Number" icon={<Phone size={16} className="text-prochure-bg" />}>
+                                    <div className="space-y-3">
+                                        {phone && (
+                                            <div className="flex items-center gap-3 text-slate-700">
+                                                <span>{phone}</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                </InfoSection>
+                            )}
+
+                            {fullBrand.official_email_id && (
+                                <InfoSection label="Email ID" icon={<Mail size={16} className="text-prochure-bg" />}>
+                                    <div className="space-y-3">
+                                            <div className="flex items-center gap-3 text-slate-700">
+                                                <a href={`mailto:${fullBrand.official_email_id}`} className="hover:underline break-all">
+                                                    {fullBrand.official_email_id}
+                                                </a>
+                                            </div>
+                                    </div>
+                                </InfoSection>
+                            )}
+
+                            
 
                             {/* Availability */}
-                            <InfoSection label="Availability Information" icon={<Clock size={16} className="text-prochure-bg" />}>
-                                {fullBrand.workingHours && Object.keys(fullBrand.workingHours).length > 0 ? (
-                                    <div className="space-y-1 text-slate-700">
-                                        {[
-                                            ["monday", "Monday"],
-                                            ["tuesday", "Tuesday"],
-                                            ["wednesday", "Wednesday"],
-                                            ["thursday", "Thursday"],
-                                            ["friday", "Friday"],
-                                            ["saturday", "Saturday"],
-                                            ["sunday", "Sunday"],
-                                        ].map(([key, label]) => {
-                                            const val = (fullBrand.workingHours as any)[key];
-                                            if (!val) return null;
-                                            return (
-                                                <div key={key}>
-                                                    <span className="font-semibold text-slate-700">{label}:</span> <span className="text-slate-700">{val}</span>
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-                                ) : (
-                                    fullBrand.availability && (
-                                        <div className="text-slate-700">{fullBrand.availability}</div>
-                                    )
-                                )}
-                            </InfoSection>
+                            {fullBrand.workingHours && Object.keys(fullBrand.workingHours).length > 0 || fullBrand.availability && (
+                                <InfoSection label="Availability" icon={<Clock size={16} className="text-prochure-bg" />}>
+                                    {fullBrand.workingHours && Object.keys(fullBrand.workingHours).length > 0 ? (
+                                        <div className="space-y-1 text-slate-700">
+                                            {[
+                                                ["monday", "Monday"],
+                                                ["tuesday", "Tuesday"],
+                                                ["wednesday", "Wednesday"],
+                                                ["thursday", "Thursday"],
+                                                ["friday", "Friday"],
+                                                ["saturday", "Saturday"],
+                                                ["sunday", "Sunday"],
+                                            ].map(([key, label]) => {
+                                                const val = (fullBrand.workingHours as any)[key];
+                                                if (!val) return null;
+                                                return (
+                                                    <div key={key}>
+                                                        <span className="font-semibold text-slate-700">{label} :</span> <span className="text-slate-700">{val}</span>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    ) : (
+                                        fullBrand.availability && (
+                                            <div className="text-slate-700">{fullBrand.availability}</div>
+                                        )
+                                    )}
+                                </InfoSection>
+                            )}
 
                             {/* Contact Person */}
                             {(fullBrand.preferred_languages) && (
