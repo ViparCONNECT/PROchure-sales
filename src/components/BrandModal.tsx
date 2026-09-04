@@ -200,7 +200,6 @@ export default function BrandModal({ brand, isOpen, onClose, isConsultant = fals
                                 <div className="space-y-3">
                                     {phone && (
                                         <div className="flex items-center gap-3 text-slate-700">
-                                            <Phone size={18} className="prochure-text shrink-0" />
                                             <span>{phone}</span>
                                         </div>
                                     )}
@@ -211,7 +210,6 @@ export default function BrandModal({ brand, isOpen, onClose, isConsultant = fals
                                 <div className="space-y-3">
                                     {fullBrand.official_email_id && (
                                         <div className="flex items-center gap-3 text-slate-700">
-                                            <Mail size={18} className="prochure-text shrink-0" />
                                             <a href={`mailto:${fullBrand.official_email_id}`} className="hover:underline break-all">
                                                 {fullBrand.official_email_id}
                                             </a>
@@ -224,7 +222,6 @@ export default function BrandModal({ brand, isOpen, onClose, isConsultant = fals
                                 <div className="space-y-3">
                                     {fullBrand.official_website_app && (
                                         <div className="flex items-center gap-3 text-slate-700">
-                                            <Globe size={18} className="prochure-text shrink-0" />
                                             <a
                                                 href={fullBrand.official_website_app}
                                                 target="_blank"
@@ -269,7 +266,7 @@ export default function BrandModal({ brand, isOpen, onClose, isConsultant = fals
 
                             {/* Contact Person */}
                             {(fullBrand.contact_person_name || fullBrand.contact_person_designation || fullBrand.preferred_languages) && (
-                                <InfoSection label="Point of Contact">
+                                <InfoSection label="Preferred Languages for Communication">
                                     <div className="space-y-2 text-slate-700">
                                         {fullBrand.contact_person_name && (
                                             <div>
@@ -284,7 +281,6 @@ export default function BrandModal({ brand, isOpen, onClose, isConsultant = fals
                                         )}
                                         {fullBrand.preferred_languages && (
                                             <div>
-                                                <span className="font-semibold text-slate-600">Preferred Languages:</span>{" "}
                                                 {fullBrand.preferred_languages}
                                             </div>
                                         )}
