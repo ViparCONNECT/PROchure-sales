@@ -19,6 +19,7 @@ export interface Brand {
     // Service / Retail / Product
     name_of_the_service_brand_retail_brand_product_brand?: string;
     year_of_establishment?: string;
+    year_of_practice?: string;
     // Common address
     building_mall_property_name?: string;
     door_shop_no?: string;
