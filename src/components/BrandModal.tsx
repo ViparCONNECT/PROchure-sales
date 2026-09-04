@@ -1,7 +1,7 @@
 import { useEffect, useState, type MouseEvent, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Mail, Phone, Globe, MapPin, Clock, User } from "lucide-react";
+import { X, Mail, Phone, Globe, MapPin, Clock, User, Languages } from "lucide-react";
 import type { Brand } from "./BrandCard";
 import { getProfile } from "../config/api";
 
@@ -265,20 +265,9 @@ export default function BrandModal({ brand, isOpen, onClose, isConsultant = fals
                             </InfoSection>
 
                             {/* Contact Person */}
-                            {(fullBrand.contact_person_name || fullBrand.contact_person_designation || fullBrand.preferred_languages) && (
-                                <InfoSection label="Preferred Languages for Communication">
+                            {(fullBrand.preferred_languages) && (
+                                <InfoSection label="Preferred Languages for Communication" icon={<Languages size={16} className="text-prochure-bg" />}>
                                     <div className="space-y-2 text-slate-700">
-                                        {fullBrand.contact_person_name && (
-                                            <div>
-                                                <span className="font-semibold text-slate-600">Name:</span> {fullBrand.contact_person_name}
-                                            </div>
-                                        )}
-                                        {fullBrand.contact_person_designation && (
-                                            <div>
-                                                <span className="font-semibold text-slate-600">Designation:</span>{" "}
-                                                {fullBrand.contact_person_designation}
-                                            </div>
-                                        )}
                                         {fullBrand.preferred_languages && (
                                             <div>
                                                 {fullBrand.preferred_languages}
