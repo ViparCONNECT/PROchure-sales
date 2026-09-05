@@ -248,33 +248,28 @@ export default function BrandModal({ brand, isOpen, onClose, isConsultant = fals
                             
 
                             {/* Availability */}
-                            {fullBrand.workingHours && Object.keys(fullBrand.workingHours).length > 0 || fullBrand.availability && (
+                            {fullBrand.workingHours && 
+                              Object.values(fullBrand.workingHours).some(val => typeof val === 'string' && val.trim() !== "") && (
                                 <InfoSection label="Availability" icon={<Clock size={16} className="text-prochure-bg" />}>
-                                    {fullBrand.workingHours && Object.keys(fullBrand.workingHours).length > 0 ? (
-                                        <div className="space-y-1 text-slate-700">
-                                            {[
-                                                ["monday", "Monday"],
-                                                ["tuesday", "Tuesday"],
-                                                ["wednesday", "Wednesday"],
-                                                ["thursday", "Thursday"],
-                                                ["friday", "Friday"],
-                                                ["saturday", "Saturday"],
-                                                ["sunday", "Sunday"],
-                                            ].map(([key, label]) => {
-                                                const val = (fullBrand.workingHours as any)[key];
-                                                if (!val) return null;
-                                                return (
-                                                    <div key={key}>
-                                                        <span className="font-semibold text-slate-700">{label} :</span> <span className="text-slate-700">{val}</span>
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
-                                    ) : (
-                                        fullBrand.availability && (
-                                            <div className="text-slate-700">{fullBrand.availability}</div>
-                                        )
-                                    )}
+                                    <div className="space-y-1 text-slate-700">
+                                        {[
+                                            ["monday", "Monday"],
+                                            ["tuesday", "Tuesday"],
+                                            ["wednesday", "Wednesday"],
+                                            ["thursday", "Thursday"],
+                                            ["friday", "Friday"],
+                                            ["saturday", "Saturday"],
+                                            ["sunday", "Sunday"],
+                                        ].map(([key, label]) => {
+                                            const val = (fullBrand.workingHours as any)[key];
+                                            if (!val || typeof val !== 'string' || val.trim() === "") return null;
+                                            return (
+                                                <div key={key}>
+                                                    <span className="font-semibold text-slate-700">{label} :</span> <span className="text-slate-700">{val}</span>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
                                 </InfoSection>
                             )}
 
