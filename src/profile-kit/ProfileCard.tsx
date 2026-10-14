@@ -61,7 +61,7 @@ export default function ProfileCard({
                         {data.isWomenEntrepreneur ? (
                             <span className="pk-badge">She-Pro</span>
                         ) : placeholders ? (
-                            <span className="pk-badge pk-placeholder" style={{ opacity: 0.35 }}>She-Pro badge</span>
+                            <span></span>
                         ) : null}
                     </div>
 
@@ -120,19 +120,19 @@ function CardDetails({
 
     return (
         <div className="pk-card-body">
-            <Section label="Contact number (s)" blue>
+            <Section label="Contact number (s)">
                 {phones.length
                     ? phones.map((p) => (
-                          <div key={p}>
+                          <div key={p} className="pk-sec-label pk-blue">
                               <a href={`tel:${p}`}>{formatPhone(p)}</a>
                           </div>
                       ))
                     : empty}
             </Section>
-            <Section label="Email ID (s)" blue>
+            <Section label="Email ID (s)">
                 {emails.length
                     ? emails.map((m) => (
-                          <div key={m}>
+                          <div key={m} className="pk-sec-label pk-blue">
                               <a href={`mailto:${m}`}>{m}</a>
                           </div>
                       ))

@@ -9,14 +9,14 @@ import BeAProPopup from "../BeAProPopup";
 /** App theme colour. */
 const THEME_COLOR = "#55374a";
 
-/** Brand wordmark — Maiandra GD, matching the source documents. */
+/** Brand wordmark — set in the PROchure brand font. */
 export function Brand() {
-    return <span className="font-['Maiandra_GD']">PROchure</span>;
+    return <span className="brand-font">PROchure</span>;
 }
 
-/** "Be a PRO" call-to-action wordmark — Maiandra GD (inline text reference). */
+/** "Be a PRO" call-to-action text. */
 export function BeAPro() {
-    return <span className="font-['Maiandra_GD']">Be a PRO</span>;
+    return <span>Be a PRO</span>;
 }
 
 /**
@@ -34,7 +34,7 @@ export function BeAProButton() {
                     e.preventDefault();
                     setIsOpen(true);
                 }}
-                className="inline-block px-4 py-1 bg-white font-semibold rounded-sm cursor-pointer hover:opacity-90 transition-opacity align-middle font-['Maiandra_GD'] no-underline"
+                className="inline-block px-4 py-1 bg-white font-semibold rounded-sm cursor-pointer hover:opacity-90 transition-opacity align-middle no-underline"
                 style={{ color: THEME_COLOR }}
             >
                 Be a PRO !

@@ -53,7 +53,7 @@ export default function SubscriptionFeesModal({ isOpen, onClose }: SubscriptionF
                             <X size={24} />
                         </button>
 
-                        <div className="p-8 sm:p-12 md:p-16 text-white font-maiandra overflow-y-auto custom-scrollbar">
+                        <div className="p-8 sm:p-12 md:p-16 text-white overflow-y-auto custom-scrollbar">
                             {/* Header */}
                             <h2 className="text-2xl sm:text-3xl mb-12 tracking-wide uppercase">
                                 MEMBERSHIP SUBSCRIPTION FEES

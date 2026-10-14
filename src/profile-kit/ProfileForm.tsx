@@ -134,7 +134,7 @@ export default function ProfileForm({
                             )}
                         </Field>
                         {(needsSub || subCategories.length > 0) && (
-                            <Field label="Subcategory" required={needsSub} error={errors.subCategoryId}>
+                            <Field label="Sub-category" required={needsSub} error={errors.subCategoryId}>
                                 {(id) => (
                                     <select
                                         id={id}
@@ -143,7 +143,7 @@ export default function ProfileForm({
                                         aria-invalid={!!errors.subCategoryId}
                                         onChange={(e) => set("subCategoryId", e.target.value)}
                                     >
-                                        <option value="">{needsSub ? "Select a subcategory" : "None"}</option>
+                                        <option value="">{needsSub ? "Select a sub-category" : "None"}</option>
                                         {subCategories.map((s) => (
                                             <option key={s.id} value={s.id}>
                                                 {s.name}
@@ -158,18 +158,18 @@ export default function ProfileForm({
 
                 {/* Card front */}
                 <fieldset className="pk-fieldset">
-                    <legend className="pk-legend">Card details</legend>
+                    <legend className="pk-legend">PROFILE CREATION</legend>
 
                     {isConsultant && (
                         <div className="pk-field">
                             <span className="pk-label">
-                                Are you an <span className="pk-req">*</span>
+                                For <span className="pk-req">*</span>
                             </span>
                             <div className="pk-radio-group" role="radiogroup">
                                 {(
                                     [
-                                        ["INDEPENDENT", "INDEPENDENT Professional Consultants"],
-                                        ["CONSULTANCY", "Professional Consultancy ENTITIES"],
+                                        ["INDEPENDENT", "An INDEPENDENT Professional Consultant"],
+                                        ["CONSULTANCY", "A Professional Consultancy ENTITY"],
                                     ] as const
                                 ).map(([value, label]) => (
                                     <label key={value} className="pk-choice" data-checked={values.consultantKind === value}>
@@ -203,7 +203,7 @@ export default function ProfileForm({
                                             <TextInput id={id} value={values.degrees} max={200} invalid={!!errors.degrees} onChange={(v) => set("degrees", v)} />
                                         )}
                                     </Field>
-                                    <Field label="Statutory body registration number">
+                                    <Field label="Statutory Body Registration Number">
                                         {(id) => (
                                             <TextInput id={id} value={values.registrationNumber} max={100} onChange={(v) => set("registrationNumber", v)} />
                                         )}
@@ -212,7 +212,7 @@ export default function ProfileForm({
                             )}
 
                             {isConsultant && values.consultantKind === "CONSULTANCY" && (
-                                <Field label="Name of consultant">
+                                <Field label="Name (s) of Consultant (s)">
                                     {(id) => (
                                         <TextInput id={id} value={values.consultantName} max={150} onChange={(v) => set("consultantName", v)} />
                                     )}
@@ -255,7 +255,7 @@ export default function ProfileForm({
                                             checked={values.isWomenEntrepreneur}
                                             onChange={(e) => set("isWomenEntrepreneur", e.target.checked)}
                                         />
-                                        Is a woman {isConsultant ? "professional" : "entrepreneur"}?
+                                        I am a Woman {isConsultant ? "Consultant" : "Entrepreneur"}?
                                     </label>
                                 </div>
                             </div>
@@ -265,10 +265,10 @@ export default function ProfileForm({
 
                 {/* Contact */}
                 <fieldset className="pk-fieldset">
-                    <legend className="pk-legend">Contact</legend>
+                    <legend className="pk-legend">Contact INFORMATION</legend>
                     <div className="pk-field">
                         <span className="pk-label">
-                            Contact number (s) <span className="pk-req">*</span>
+                            Contact Number (s) <span className="pk-req">*</span>
                         </span>
                         {values.phones.map((p, i) => (
                             <div key={i} className="pk-field">
@@ -564,7 +564,7 @@ function DayEditor({
                                 onChange(e.target.checked ? { breakStart: "13:00", breakEnd: "14:00" } : { breakStart: "", breakEnd: "" });
                             }}
                         />
-                        Lunch break
+                        Lunch Break (check this box to add your lunch break timings)
                     </label>
                     {showBreak && (
                         <div className="pk-times">

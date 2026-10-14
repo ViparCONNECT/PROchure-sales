@@ -137,7 +137,7 @@ function Modal({ profile, onClose }: { profile: Profile; onClose: () => void }) 
                             )}
                         </div>
                         <div>
-                            <h2 className="text-2xl font-bold font-maiandra">{profile.name}</h2>
+                            <h2 className="text-2xl font-bold">{profile.name}</h2>
                             <p className="text-white/80">{profile.title}</p>
                         </div>
                     </div>

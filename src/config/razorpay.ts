@@ -22,7 +22,7 @@ declare global {
 
 export class PaymentCancelledError extends Error {
     constructor() {
-        super("Payment was cancelled. Your profile is saved — you can pay any time from My Profile.");
+        super("Oops ! Your Payment was Unsuccessful. You can Login any time and complete your payment from ‘My Profile’ (on the navigation bar) to Publish your Profile.");
     }
 }
 

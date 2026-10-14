@@ -76,7 +76,7 @@ export function variantLabels(type: ProfileType, kind?: string | null): VariantL
         name: consultancy ? "Name of Entity" : "Name",
         since: consultancy ? "Established in" : "Practicing since",
         sinceShort: consultancy ? "Established in" : "Practicing since",
-        services: "Services offered / Areas of practice",
+        services: "Services Offered / Areas of Practice",
         address: "Office address",
         hours: "Working days & hours",
     };

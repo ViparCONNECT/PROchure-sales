@@ -29,10 +29,15 @@ export default function PublishProfilePage() {
     const { user, isLoading } = useAuth();
     const [fee, setFee] = useState<number | null>(null);
     const [checking, setChecking] = useState(false);
+    const isProfessionalConsultants = type === "professional-consultants";
+    console.log(type);
+    
+
+    const cardPublicName = isProfessionalConsultants ? 'Digital Business Card' : 'profile'
 
     useSeo({
-        title: `Publish your ${route?.singular ?? ""} profile | PROchure`,
-        description: "Create your PROchure visiting-card profile and get discovered.",
+        title: `Publish your ${route?.singular ?? ""} ${cardPublicName} | PROchure`,
+        description: `Create your PROchure ${cardPublicName} and get discovered.`,
     });
 
     useEffect(() => {
@@ -72,7 +77,7 @@ export default function PublishProfilePage() {
     if (!user) {
         return (
             <div className="container mx-auto px-4 max-w-xl py-16 text-center">
-                <h1 className="text-2xl font-bold text-slate-800 mb-2">Publish your {route.singular} profile</h1>
+                <h1 className="text-2xl font-bold text-slate-800 mb-2">Publish your {route.singular} {cardPublicName}</h1>
                 <p className="text-slate-600 mb-8">Please log in or register first. Your profile will be linked to your account.</p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                     <button
@@ -107,9 +112,9 @@ export default function PublishProfilePage() {
     return (
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-8">
             <div className="mb-6">
-                <h1 className="text-2xl sm:text-3xl font-bold text-slate-800">Publish your {route.singular} profile</h1>
+                <h1 className="text-2xl sm:text-3xl font-bold text-slate-800">Publish your {route.singular} {cardPublicName}</h1>
                 <p className="mt-2 text-slate-600">
-                    Fill in your details — the preview shows exactly how your visiting card will look.
+                    Fill in your details — the live preview shows exactly how your {isProfessionalConsultants ? 'e-visiting card' : 'profile'} will look to the public.
                 </p>
             </div>
             <ProfileForm
@@ -119,7 +124,7 @@ export default function PublishProfilePage() {
                 loadSubCategories={loadSubCategoryOptions}
                 getErrorMessages={getErrorMessages}
                 onSubmit={handleSubmit}
-                submitLabel={fee !== null ? `Save & pay ${formatFee(fee)}` : "Save & continue to payment"}
+                submitLabel={"PUBLISH"}
                 submittingLabel="Please wait…"
                 onCancel={() => navigate(-1)}
             />

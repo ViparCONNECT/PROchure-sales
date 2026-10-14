@@ -1,7 +1,7 @@
 export default function Footer() {
   return (
     <footer className="py-8 text-center text-slate-300 text-sm bg-prochure-bg border-t border-prochure-bg">
-      &copy; {new Date().getFullYear()} PROchure<sup>&thinsp;®</sup>. All rights reserved.
+      &copy; {new Date().getFullYear()} <span className="brand-font">PROchure</span><sup>&thinsp;®</sup>. All rights reserved.
     </footer>
   );
 }

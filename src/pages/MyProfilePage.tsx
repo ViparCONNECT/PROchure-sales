@@ -154,8 +154,8 @@ export default function MyProfilePage() {
                     <div className="flex items-start gap-3 text-yellow-900">
                         <Clock className="shrink-0 mt-0.5" size={20} />
                         <div>
-                            <p className="font-semibold">Your profile is saved but not published yet</p>
-                            <p className="text-sm">Pay the one-time listing fee of {formatFee(data.fee.amount)} to make it visible on PROchure.</p>
+                            <p className="font-semibold">Your Profile is SAVED but NOT PUBLISHED yet !</p>
+                            <p className="text-sm">Pay ₹ {formatFee(data.fee.amount)} to make it globally visible on PROchure.</p>
                         </div>
                     </div>
                     <button
@@ -163,7 +163,7 @@ export default function MyProfilePage() {
                         disabled={paying}
                         className="px-6 py-3 rounded-lg bg-prochure-bg text-white font-semibold hover:opacity-90 disabled:opacity-60 cursor-pointer"
                     >
-                        {paying ? "Opening payment…" : `Pay ${formatFee(data.fee.amount)} & publish`}
+                        {paying ? "Opening payment…" : "Make Payment to PUBLISH"}
                     </button>
                 </div>
             ) : profile.isDisabled ? (
@@ -184,7 +184,7 @@ export default function MyProfilePage() {
                     loadSubCategories={loadSubCategoryOptions}
                     getErrorMessages={getErrorMessages}
                     onSubmit={handleSave}
-                    submitLabel="Save changes"
+                    submitLabel="PUBLISH"
                     onCancel={() => setEditing(false)}
                 />
             ) : (

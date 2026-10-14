@@ -8,7 +8,7 @@
     --pk-border: #d6d3d1;
     --pk-muted: #78716c;
     --pk-error: #dc2626;
-    font-family: "Maiandra GD", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     color: #1c1917;
     box-sizing: border-box;
 }

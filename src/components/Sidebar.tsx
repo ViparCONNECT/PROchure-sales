@@ -25,7 +25,7 @@ interface SidebarProps {
 
 const LINK_CLASS = "block p-2 text-white/90 hover:text-white text-sm transition-colors";
 const BTN_CLASS = "block w-full text-left p-2 text-white/90 hover:text-white text-sm transition-colors focus:outline-none cursor-pointer";
-const SECTION_TITLE_CLASS = "text-center text-xs font-bold text-white/70 pb-2 border-b border-white/20 mt-3 uppercase";
+const SECTION_TITLE_CLASS = "text-center text-xs font-bold text-white pb-2 border-b border-white/20 mt-3 uppercase";
 
 export default function Sidebar({ isOpen, onClose, onOpenLocation, onOpenAuth }: SidebarProps) {
     const [openDoc, setOpenDoc] = useState<{ title: string; Component: ComponentType } | null>(null);
@@ -82,7 +82,7 @@ export default function Sidebar({ isOpen, onClose, onOpenLocation, onOpenAuth }:
                                         className="w-36 h-9 sm:w-48 sm:h-12"
                                     >
                                         <text
-                                            className="fill-white font-bold"
+                                            className="fill-white font-bold brand-font"
                                             transform="translate(37 165) scale(1.172 1.069)"
                                             style={{ fontSize: "160px" }}
                                         >

@@ -54,7 +54,7 @@ export default function AppOverviewModal({ isOpen, onClose }: AppOverviewModalPr
                             <X size={24} />
                         </button>
 
-                        <div className="p-8 sm:p-12 text-white font-maiandra overflow-y-auto custom-scrollbar">
+                        <div className="p-8 sm:p-12 text-white overflow-y-auto custom-scrollbar">
                             {/* ==================== PAGE 1 CONTENT ==================== */}
                             <div className="space-y-8 mb-16">
                                 {/* Header */}

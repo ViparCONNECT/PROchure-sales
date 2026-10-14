@@ -45,7 +45,7 @@ export default function D1ForYourKindInformation() {
             <p className="text-sm sm:text-base pt-2">
                 Our Brand Name is mentioned only in this manner in this font :
             </p>
-            <p className="font-['Maiandra_GD'] text-2xl sm:text-3xl">PROchure</p>
+            <p className="brand-font text-2xl sm:text-3xl">PROchure</p>
 
             <p className="text-sm sm:text-base pt-2">
                 PLEASE READ ' POLICIES &amp; REGULATION ' clearly on the navigation bar.

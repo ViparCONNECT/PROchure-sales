@@ -36,7 +36,7 @@ export default function Navbar({ onToggleSidebar }: NavbarProps) {
                     className="w-36 h-9 sm:w-48 sm:h-12"
                   >
                     <text
-                      className="fill-white font-bold"
+                      className="fill-white font-bold brand-font"
                       // Adjusted translate Y slightly to keep it centered with new size if needed,
                       // but keeping your original coordinates usually works fine for small bumps.
                       transform="translate(37 165) scale(1.172 1.069)"
