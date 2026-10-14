@@ -14,7 +14,7 @@ import {
     loadCategoryOptions,
     loadSubCategoryOptions,
 } from "../config/myProfileApi";
-import { formatFee, payListingFee } from "../config/razorpay";
+import { payListingFee } from "../config/razorpay";
 import PageSpinner from "../components/PageSpinner";
 import { useSeo } from "../hooks/useSeo";
 
@@ -30,7 +30,7 @@ export default function PublishProfilePage() {
     const [fee, setFee] = useState<number | null>(null);
     const [checking, setChecking] = useState(false);
     const isProfessionalConsultants = type === "professional-consultants";
-    console.log(type);
+    console.log(fee);
     
 
     const cardPublicName = isProfessionalConsultants ? 'Digital Business Card' : 'profile'
