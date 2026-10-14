@@ -1,17 +1,23 @@
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import BrandCard, { type Brand } from "./components/BrandCard";
 import { getCategories, getSubcategories, getProfiles } from "./config/api";
 import Breadcrumbs from "./components/Breadcrumbs";
 import SectionHeading from "./components/SectionHeading";
 import { Users, MapPin, Filter } from "lucide-react";
 import { useSeo } from "./hooks/useSeo";
 import PageSpinner from "./components/PageSpinner";
+import ProfileCard from "./profile-kit/ProfileCard";
+import ProfileCardModal from "./components/ProfileCardModal";
+import type { ProfileCardData } from "./profile-kit/types";
+import { routeForSlug } from "./config/profileTypes";
+import { matchesSlug } from "./helper/helper";
+
+type PublicProfile = ProfileCardData & { id: string };
 
 interface Subcategory {
     id: number;
     name: string;
-    profiles: Brand[];
+    profiles: PublicProfile[];
 }
 
 interface Category {
@@ -20,7 +26,6 @@ interface Category {
     subcategories: Subcategory[];
 }
 
-const toSlug = (str: string) => str.toLowerCase().replace(/\s+/g, "-");
 
 const INDIAN_CITIES = [
     "Ahmedabad",
@@ -100,6 +105,8 @@ export default function SubcategoryPage() {
     const [appliedIsSheOnly, setAppliedIsSheOnly] = useState<boolean>(false);
     const [showFilterModal, setShowFilterModal] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
+    const [openProfile, setOpenProfile] = useState<PublicProfile | null>(null);
+    const typeRoute = routeForSlug(type);
 
     useEffect(() => {
         const saved = localStorage.getItem("prochure_selected_city");
@@ -117,28 +124,24 @@ export default function SubcategoryPage() {
     }, [selectedCity]);
 
     useEffect(() => {
-        if (!type || !categorySlug || !subcategoryParam) return;
+        if (!categorySlug || !subcategoryParam) return;
+        if (!typeRoute) {
+            setData(null);
+            return;
+        }
+        const toCard = (profiles: PublicProfile[]) =>
+            (profiles || []).map((p) => ({ ...p, profileType: typeRoute.type }));
 
         let cancelled = false;
 
         (async () => {
             setLoading(true);
             try {
-                // Map route type to API type value
-                const typeMap: Record<string, string> = {
-                    consultants: "PROFESSIONAL_CONSULTANT",
-                    services: "SERVICE_BRANDS",
-                    products: "PRODUCT_BRANDS",
-                    retail: "RETAIL_BRANDS",
-                };
-
-                const apiType = typeMap[type as string] || "SERVICE_BRANDS";
-
-                const categories = await getCategories(apiType);
+                const categories = await getCategories(typeRoute.type);
 
                 if (cancelled) return;
 
-                const category = categories.find((c: any) => c.id === categorySlug || (c.urlSlug || toSlug(c.name)) === categorySlug || toSlug(c.name) === categorySlug);
+                const category = categories.find((c: any) => matchesSlug(c, categorySlug));
                 if (!category) {
                     setData(null);
                     return;
@@ -149,9 +152,7 @@ export default function SubcategoryPage() {
 
 
                 const subcategory = subcats.find((s: any) =>
-                    s.id === subcategoryParam ||
-                    (s.urlSlug || toSlug(s.name)) === subcategoryParam ||
-                    toSlug(s.name) === subcategoryParam
+                    matchesSlug(s, subcategoryParam)
                 ) as any | undefined;
 
                 // If subcategory not found, but route indicates 'profiles', fetch by categoryId
@@ -164,37 +165,7 @@ export default function SubcategoryPage() {
                         if (appliedIsSheOnly) params.isWomenEntrepreneur = true;
                         const profiles = await getProfiles(params);
                         if (cancelled) return;
-                        const mapped = (profiles || []).map((p: any) => ({
-                            id: p.id,
-                            image: p.image || p.logo,
-                            card_image: p.image || p.logo,
-                            consultant_or_consultation_firm_name: p.name,
-                            name_of_the_service_brand_retail_brand_product_brand: p.name,
-                            year_of_establishment: p.yearOfEstablishment || p.year_of_establishment,
-                            year_of_practice: p.yearOfPractice || p.year_of_practice,
-                            professional_title: p.professionalTitle || p.professional_title,
-                            qualifications_degrees: p.qualifications || p.qualifications_degrees,
-                            specialized_skills: p.specializations,
-                            services: p.services,
-                            building_mall_property_name: p.address?.buildingMallPropertyName,
-                            door_shop_no: p.address?.doorShopNo,
-                            floor: p.address?.floor,
-                            street_lane_road_name_sub_locality: p.address?.streetLaneRoadNameSubLocality,
-                            nearest_landmark: p.address?.nearestLandmark,
-                            secondary_primary_locality: p.address?.secondaryPrimaryLocality,
-                            city_town: p.address?.cityTown,
-                            state_province: p.address?.stateProvince,
-                            country: p.address?.country,
-                            pin_code_zip_code: p.address?.pinCodeZipCode,
-                            country_code: p.contact?.countryCode,
-                            official_contact_number: p.contact?.officialContactNumber,
-                            official_email_id: p.contact?.officialEmailId,
-                            official_website_app: p.contact?.officialWebsiteApp,
-                            contact_person_name: p.contact?.contactPersonName,
-                            contact_person_designation: p.contact?.contactPersonDesignation,
-                            preferred_languages: (p.contact?.mostComfortablePreferredLanguages || []).join?.(", ") || undefined,
-                            is_she_pro: p.isShePro || p.is_she_pro || false,
-                        })) as unknown as Brand[];
+                        const mapped = toCard(profiles);
 
                         // create a pseudo-subcategory to render profiles under
                         const pseudoSub: any = { id: `category-${category.id}`, name: `${category.name}`, profiles: mapped };
@@ -217,38 +188,7 @@ export default function SubcategoryPage() {
 
                 if (cancelled) return;
 
-                // Map API profile objects to local Brand shape (best effort)
-                const mapped = (profiles || []).map((p: any) => ({
-                    id: p.id,
-                    image: p.image || p.logo,
-                    card_image: p.image || p.logo,
-                    consultant_or_consultation_firm_name: p.name,
-                    name_of_the_service_brand_retail_brand_product_brand: p.name,
-                    year_of_establishment: p.yearOfEstablishment || p.year_of_establishment,
-                    year_of_practice: p.yearOfPractice || p.year_of_practice,
-                    professional_title: p.professionalTitle || p.professional_title,
-                    qualifications_degrees: p.qualifications || p.qualifications_degrees,
-                    specialized_skills: p.specializations,
-                    services: p.services,
-                    building_mall_property_name: p.address?.buildingMallPropertyName,
-                    door_shop_no: p.address?.doorShopNo,
-                    floor: p.address?.floor,
-                    street_lane_road_name_sub_locality: p.address?.streetLaneRoadNameSubLocality,
-                    nearest_landmark: p.address?.nearestLandmark,
-                    secondary_primary_locality: p.address?.secondaryPrimaryLocality,
-                    city_town: p.address?.cityTown,
-                    state_province: p.address?.stateProvince,
-                    country: p.address?.country,
-                    pin_code_zip_code: p.address?.pinCodeZipCode,
-                    country_code: p.contact?.countryCode,
-                    official_contact_number: p.contact?.officialContactNumber,
-                    official_email_id: p.contact?.officialEmailId,
-                    official_website_app: p.contact?.officialWebsiteApp,
-                    contact_person_name: p.contact?.contactPersonName,
-                    contact_person_designation: p.contact?.contactPersonDesignation,
-                    preferred_languages: (p.contact?.mostComfortablePreferredLanguages || []).join?.(", ") || undefined,
-                    is_she_pro: p.isShePro || p.is_she_pro || false,
-                })) as unknown as Brand[];
+                const mapped = toCard(profiles);
 
                 setData({ category: category as unknown as Category, subcategory: { ...subcategory, profiles: mapped } as unknown as Subcategory });
             } catch (err) {
@@ -264,7 +204,7 @@ export default function SubcategoryPage() {
         return () => {
             cancelled = true;
         };
-    }, [type, categorySlug, subcategoryParam, appliedCity, appliedIsSheOnly]);
+    }, [typeRoute, categorySlug, subcategoryParam, appliedCity, appliedIsSheOnly]);
 
     useSeo({
         title: data ? `${data.subcategory.name} | PROchure` : "Subcategory | PROchure",
@@ -297,20 +237,20 @@ export default function SubcategoryPage() {
         // Apply global selectedCity if present
         if (selectedCity) {
             filteredProfiles = filteredProfiles.filter(
-                (p) => (p.city_town || "").toLowerCase() === selectedCity.toLowerCase()
+                (p) => (p.address?.cityTown || "").toLowerCase() === selectedCity.toLowerCase()
             );
         }
 
         // Apply page-level city filter (select)
         if (cityFilter && cityFilter !== "All") {
             filteredProfiles = filteredProfiles.filter(
-                (p) => ((p.city_town || "") === cityFilter)
+                (p) => ((p.address?.cityTown || "") === cityFilter)
             );
         }
 
-        // Apply is_she_pro filter (checkbox)
+        // Apply SHE-PRO filter (checkbox)
         if (isSheOnly) {
-            filteredProfiles = filteredProfiles.filter((p) => p.is_she_pro === true);
+            filteredProfiles = filteredProfiles.filter((p) => p.isWomenEntrepreneur === true);
         }
     }
 
@@ -321,7 +261,7 @@ export default function SubcategoryPage() {
             {/* Breadcrumbs */}
             <Breadcrumbs
                 items={[
-                    { label: type || "", to: `/${type}` },
+                    { label: typeRoute?.label || type || "", to: `/${type}` },
                     { label: category.name, to: `/${type}/${categorySlug}` },
                     { label: subcategory.name }
                 ]}
@@ -353,7 +293,7 @@ export default function SubcategoryPage() {
                         <span className="text-sm bg-slate-100 border border-slate-200 px-2 py-1 rounded">{appliedCity}</span>
                     )}
                     {appliedIsSheOnly && (
-                        <span className="text-sm bg-prochure-50 border border-prochure-200 px-2 py-1 rounded prochure-text">{type === "consultants" ? "Women Professionals" : "Women Entrepreneurs"}</span>
+                        <span className="text-sm bg-prochure-50 border border-prochure-200 px-2 py-1 rounded prochure-text">{typeRoute?.type === "PROFESSIONAL_CONSULTANT" ? "Women Professionals" : "Women Entrepreneurs"}</span>
                     )}
                 </div>
             </div>
@@ -385,7 +325,7 @@ export default function SubcategoryPage() {
 
                             <div className="flex items-center gap-2">
                                 <input id="sheOnly" type="checkbox" checked={isSheOnly} onChange={(e) => setIsSheOnly(e.target.checked)} className="w-4 h-4" />
-                                <label htmlFor="sheOnly" className="text-sm">{type === "consultants" ? "Women Professionals only" : "Women Entrepreneurs only"}</label>
+                                <label htmlFor="sheOnly" className="text-sm">{typeRoute?.type === "PROFESSIONAL_CONSULTANT" ? "Women Professionals only" : "Women Entrepreneurs only"}</label>
                             </div>
                         </div>
 
@@ -415,9 +355,19 @@ export default function SubcategoryPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 {filteredProfiles.map(profile => (
-                    <BrandCard key={profile.id} brand={profile} isConsultant={type === "consultants"} />
+                    <button
+                        key={profile.id}
+                        type="button"
+                        onClick={() => setOpenProfile(profile)}
+                        className="block w-full text-left shadow-sm hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-prochure-bg"
+                        aria-label={`View ${profile.name ?? "profile"}`}
+                    >
+                        <ProfileCard data={profile} tone="light" />
+                    </button>
                 ))}
             </div>
+
+            <ProfileCardModal data={openProfile} onClose={() => setOpenProfile(null)} />
 
             {filteredProfiles.length === 0 && (
                 <div className="text-center py-12 text-slate-400 bg-gray-50 rounded-xl border border-dashed border-gray-200">

@@ -1,7 +1,8 @@
 import axios from "axios";
+import { API_BASE_URL } from "./authApi";
 
 const api = axios.create({
-    baseURL: "https://api.prochure.app/api/v1/public",
+    baseURL: `${API_BASE_URL}/public`,
     timeout: 10000,
 });
 

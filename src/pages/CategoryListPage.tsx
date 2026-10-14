@@ -1,10 +1,9 @@
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Folder, MapPin } from "lucide-react";
-import servicesData from "../data/services.json";
-import productsData from "../data/products.json";
-import consultantsData from "../data/consultants.json";
 import { getCategories } from "../config/api";
+import { routeForSlug } from "../config/profileTypes";
+import { slugOf } from "../helper/helper";
 import Breadcrumbs from "../components/Breadcrumbs";
 import SectionHeading from "../components/SectionHeading";
 import { useSeo } from "../hooks/useSeo";
@@ -41,7 +40,8 @@ export default function CategoryListPage() {
     const [loading, setLoading] = useState<boolean>(false);
     const [selectedCity, setSelectedCity] = useState<string | null>(null);
 
-    const pageTitle = type === "consultants" ? "Consultant Brands" : type === "services" ? "Service Brands" : "Product & Retail Brands";
+    const typeRoute = routeForSlug(type);
+    const pageTitle = typeRoute?.label ?? "Profiles";
     useSeo({
         title: `${pageTitle} | PROchure`,
         description: `Browse ${pageTitle.toLowerCase()} on PROchure — an e-brochure of professional services and products across India.`,
@@ -56,34 +56,28 @@ export default function CategoryListPage() {
     }, []);
 
     useEffect(() => {
-        if (!type) return;
+        if (!typeRoute) {
+            setCategories([]);
+            return;
+        }
 
         let cancelled = false;
         (async () => {
             setLoading(true);
             try {
-                const typeMap: Record<string, string> = {
-                    consultants: "PROFESSIONAL_CONSULTANT",
-                    services: "SERVICE_BRANDS",
-                    products: "PRODUCT_BRANDS",
-                    retail: "RETAIL_BRANDS",
-                };
-                const apiType = typeMap[type as string] || "SERVICE_BRANDS";
-                const cats = await getCategories(apiType);
+                const cats = await getCategories(typeRoute.type);
                 if (cancelled) return;
                 setCategories(cats);
             } catch (err) {
-                const dataKey = type === "consultants" ? "consultant" : type === "services" ? "service" : "product";
-                const data = type === "consultants" ? consultantsData : type === "services" ? servicesData : productsData;
-                // @ts-ignore - dynamic access
-                setCategories(data[dataKey]?.categories || []);
+                console.error("Failed to load categories", err);
+                if (!cancelled) setCategories([]);
             } finally {
                 if (!cancelled) setLoading(false);
             }
         })();
 
         return () => { cancelled = true; };
-    }, [type]);
+    }, [typeRoute]);
 
     const filteredCategories = FILTER_BY_CITY && selectedCity
         ? categories.filter((c) => getProfileCount(c, selectedCity) > 0)
@@ -99,11 +93,11 @@ export default function CategoryListPage() {
 
     return (
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-8">
-            <Breadcrumbs items={[{ label: type || "" }]} />
+            <Breadcrumbs items={[{ label: pageTitle }]} />
 
             <SectionHeading
                 icon={Folder}
-                title={`${type === "consultants" ? "Professional Consultant" : type === "services" ? "Service Brand" : "Retail Brand"} Categories`}
+                title={`${typeRoute?.singular ?? ""} Categories`}
             />
 
             {selectedCity && (
@@ -117,7 +111,7 @@ export default function CategoryListPage() {
                 {filteredCategories.map((category) => {
                     // const profileCount = getProfileCount(category, selectedCity);
                     // const subCatCount = getSubcategoryCount(category, selectedCity);
-                    const target = (category.isSubCategoryNeeded === false) ? `/${type}/${category.id}/profiles` : `/${type}/${category.id}`;
+                    const target = (category.isSubCategoryNeeded === false) ? `/${type}/${slugOf(category)}/profiles` : `/${type}/${slugOf(category)}`;
                     return (
                         <Link to={target} key={category.id}>
                             <div

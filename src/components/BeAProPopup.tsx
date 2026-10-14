@@ -1,11 +1,16 @@
 import { X } from "lucide-react";
 import { createPortal } from "react-dom";
-import {
-    GOOGLE_FORM_CONSULTANTS_URL,
-    GOOGLE_FORM_BUSINESS_URL,
-} from "../config/constants";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { openAuthModal } from "../config/authEvents";
+import { PROFILE_TYPE_ROUTES } from "../config/profileTypes";
 
 const THEME_COLOR = "#55374a";
+
+const BUTTON_LABEL: Record<string, string> = {
+    "professional-consultants": "PROFESSIONAL CONSULTANTS",
+    "service-and-retail-brands": "SERVICE & RETAIL BRANDS",
+};
 
 interface BeAProPopupProps {
     isOpen: boolean;
@@ -13,7 +18,17 @@ interface BeAProPopupProps {
 }
 
 export default function BeAProPopup({ isOpen, onClose }: BeAProPopupProps) {
+    const navigate = useNavigate();
+    const { user } = useAuth();
+
     if (!isOpen) return null;
+
+    const start = (slug: string) => {
+        onClose();
+        navigate(`/publish/${slug}`);
+        // The form needs an account; ask the user to register/login straight away
+        if (!user) openAuthModal("register");
+    };
 
     return createPortal(
         <div className="fixed inset-0 z-[400] flex items-center justify-center p-4">
@@ -38,26 +53,17 @@ export default function BeAProPopup({ isOpen, onClose }: BeAProPopupProps) {
                 </h2>
 
                 <div className="space-y-4">
-                    <a
-                        href={GOOGLE_FORM_CONSULTANTS_URL}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="block w-full py-3 px-4 rounded-sm bg-white font-semibold no-underline transition-opacity hover:opacity-90"
-                        style={{ color: THEME_COLOR }}
-                        onClick={onClose}
-                    >
-                        PROFESSIONAL CONSULTANTS
-                    </a>
-                    <a
-                        href={GOOGLE_FORM_BUSINESS_URL}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="block w-full py-3 px-4 rounded-sm bg-white font-semibold no-underline transition-opacity hover:opacity-90"
-                        style={{ color: THEME_COLOR }}
-                        onClick={onClose}
-                    >
-                        BUSINESS BRANDS
-                    </a>
+                    {PROFILE_TYPE_ROUTES.map((r) => (
+                        <button
+                            key={r.slug}
+                            type="button"
+                            className="block w-full py-3 px-4 rounded-sm bg-white font-semibold transition-opacity hover:opacity-90 cursor-pointer"
+                            style={{ color: THEME_COLOR }}
+                            onClick={() => start(r.slug)}
+                        >
+                            {BUTTON_LABEL[r.slug]}
+                        </button>
+                    ))}
                 </div>
             </div>
         </div>,
