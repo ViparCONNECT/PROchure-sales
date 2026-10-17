@@ -1,12 +1,30 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { X, UserPlus, LogIn, ArrowLeft, Loader2, MessageCircle } from "lucide-react";
 import { useEffect, useState } from "react";
-import type { FormEvent } from "react";
+import type { ComponentType, FormEvent } from "react";
 import { createPortal } from "react-dom";
 import { useAuth } from "../context/AuthContext";
 import { getErrorMessage } from "../config/authApi";
+import ContentModal from "./ContentModal";
+import D1ForYourKindInformation from "./docs/D1ForYourKindInformation";
+import D2BeAware from "./docs/D2BeAware";
+import D3TermsOfUse from "./docs/D3TermsOfUse";
+import D4PrivacyPolicy from "./docs/D4PrivacyPolicy";
+import D5CancellationPolicy from "./docs/D5CancellationPolicy";
+import D6Disclaimer from "./docs/D6Disclaimer";
 
 export type AuthMode = "register" | "login";
+
+type PolicyDocument = { title: string; Component: ComponentType };
+
+const POLICY_DOCUMENTS: PolicyDocument[] = [
+    { title: "For Your Kind Information", Component: D1ForYourKindInformation },
+    { title: "Be Aware", Component: D2BeAware },
+    { title: "Terms of Use", Component: D3TermsOfUse },
+    { title: "Privacy Policy", Component: D4PrivacyPolicy },
+    { title: "Cancellation Policy", Component: D5CancellationPolicy },
+    { title: "Disclaimer", Component: D6Disclaimer },
+];
 
 interface AuthModalProps {
     isOpen: boolean;
@@ -57,6 +75,9 @@ export default function AuthModal({ isOpen, initialMode, onClose }: AuthModalPro
     const [maskedPhone, setMaskedPhone] = useState("");
     const [resendIn, setResendIn] = useState(0);
     const [error, setError] = useState<string | null>(null);
+    const [acceptedPolicies, setAcceptedPolicies] = useState(false);
+    const [isPolicyMenuOpen, setIsPolicyMenuOpen] = useState(false);
+    const [selectedPolicy, setSelectedPolicy] = useState<PolicyDocument | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
@@ -65,6 +86,9 @@ export default function AuthModal({ isOpen, initialMode, onClose }: AuthModalPro
         setMode(initialMode);
         setStep("details");
         setOtp("");
+        setAcceptedPolicies(false);
+        setIsPolicyMenuOpen(false);
+        setSelectedPolicy(null);
         setError(null);
         return () => {
             document.body.style.overflow = "unset";
@@ -114,6 +138,10 @@ export default function AuthModal({ isOpen, initialMode, onClose }: AuthModalPro
 
     const handleDetailsSubmit = (e: FormEvent) => {
         e.preventDefault();
+        if (mode === "register" && !acceptedPolicies) {
+            setError("Please agree to the App Policies & Regulation before registering.");
+            return;
+        }
         const validationError = validateDetails();
         if (validationError) return setError(validationError);
         void requestOtp();
@@ -138,6 +166,7 @@ export default function AuthModal({ isOpen, initialMode, onClose }: AuthModalPro
     const switchMode = (next: AuthMode) => {
         setMode(next);
         setStep("details");
+        setAcceptedPolicies(false);
         setError(null);
     };
 
@@ -287,7 +316,42 @@ export default function AuthModal({ isOpen, initialMode, onClose }: AuthModalPro
                                     </div>
                                 )}
 
-                                {error && <p className="text-sm text-red-300" role="alert">{error}</p>}
+                                {mode === "register" && (
+                                    <div className="space-y-1">
+                                        <div className="flex items-start gap-2 text-xs text-white/85">
+                                            <input
+                                                id="auth-policy-consent"
+                                                type="checkbox"
+                                                checked={acceptedPolicies}
+                                                onChange={(e) => {
+                                                    setAcceptedPolicies(e.target.checked);
+                                                    if (e.target.checked) setError(null);
+                                                }}
+                                                className="mt-0.5 accent-white shrink-0"
+                                            />
+                                            <span>
+                                                <label htmlFor="auth-policy-consent" className="cursor-pointer">
+                                                    By clicking ‘REGISTER’, you agree to comply with all of {" "}
+                                                </label>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setIsPolicyMenuOpen(true)}
+                                                    className="underline font-semibold hover:text-white cursor-pointer"
+                                                >
+                                                    PROchure’s App Policies &amp; Regulation
+                                                </button>
+                                                .
+                                            </span>
+                                        </div>
+                                        {error && !acceptedPolicies && (
+                                            <p className="text-sm text-red-300" role="alert">{error}</p>
+                                        )}
+                                    </div>
+                                )}
+
+                                {error && (mode !== "register" || acceptedPolicies) && (
+                                    <p className="text-sm text-red-300" role="alert">{error}</p>
+                                )}
 
                                 <button type="submit" disabled={isSubmitting} className={PRIMARY_BTN_CLASS}>
                                     {isSubmitting ? <Loader2 size={18} className="animate-spin" /> : <MessageCircle size={18} />}
@@ -365,6 +429,34 @@ export default function AuthModal({ isOpen, initialMode, onClose }: AuthModalPro
                     </div>
                 </motion.div>
             </motion.div>
+            <ContentModal
+                isOpen={isPolicyMenuOpen}
+                title="App Policies & Regulation"
+                onClose={() => setIsPolicyMenuOpen(false)}
+            >
+                <div className="space-y-2">
+                    {POLICY_DOCUMENTS.map((policy) => (
+                        <button
+                            key={policy.title}
+                            type="button"
+                            onClick={() => {
+                                setIsPolicyMenuOpen(false);
+                                setSelectedPolicy(policy);
+                            }}
+                            className="block w-full rounded-sm border border-white/20 px-4 py-3 text-left text-white hover:bg-white/10 transition-colors cursor-pointer"
+                        >
+                            {policy.title}
+                        </button>
+                    ))}
+                </div>
+            </ContentModal>
+            <ContentModal
+                isOpen={!!selectedPolicy}
+                title={selectedPolicy?.title ?? "App Policy"}
+                onClose={() => setSelectedPolicy(null)}
+            >
+                {selectedPolicy ? <selectedPolicy.Component /> : null}
+            </ContentModal>
         </AnimatePresence>,
         document.body
     );
