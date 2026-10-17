@@ -39,7 +39,7 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const INPUT_CLASS =
     "w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/40 focus:outline-none focus:border-white transition-colors";
-const LABEL_CLASS = "block text-xs font-semibold uppercase tracking-wide text-white/70 mb-1.5";
+const LABEL_CLASS = "block text-xs font-semibold uppercase tracking-wide text-white mb-1.5";
 const PRIMARY_BTN_CLASS =
     "w-full flex items-center justify-center gap-2 py-3 rounded-lg bg-white text-prochure-bg font-bold uppercase tracking-wide hover:bg-gray-100 transition-colors disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer";
 
@@ -219,7 +219,7 @@ export default function AuthModal({ isOpen, initialMode, onClose }: AuthModalPro
                                                         : "border-white/20 text-white/70 hover:text-white"
                                                 }`}
                                             >
-                                                Use {by}
+                                                <span className="lowercase">via</span> {by}
                                             </button>
                                         ))}
                                     </div>
@@ -234,7 +234,7 @@ export default function AuthModal({ isOpen, initialMode, onClose }: AuthModalPro
                                             autoComplete="name"
                                             value={name}
                                             onChange={(e) => setName(e.target.value)}
-                                            placeholder="Your name"
+                                            placeholder="Your Name"
                                             maxLength={100}
                                             className={INPUT_CLASS}
                                         />
@@ -295,13 +295,13 @@ export default function AuthModal({ isOpen, initialMode, onClose }: AuthModalPro
                                 </button>
 
                                 <p className="text-center text-xs text-white/60">
-                                    {mode === "register" ? "Already registered? " : "New to PROchure? "}
+                                    {mode === "register" ? "Already Registered ? " : "New to PROchure ? "}
                                     <button
                                         type="button"
                                         onClick={() => switchMode(mode === "register" ? "login" : "register")}
                                         className="text-white underline cursor-pointer"
                                     >
-                                        {mode === "register" ? "Login" : "Register"}
+                                        {mode === "register" ? "LOGIN" : "REGISTER"}
                                     </button>
                                 </p>
                             </form>
@@ -320,7 +320,7 @@ export default function AuthModal({ isOpen, initialMode, onClose }: AuthModalPro
 
                                 <p className="text-sm text-white/80">
                                     We've sent an OTP to your WhatsApp number{" "}
-                                    <strong className="text-white">{maskedPhone}</strong>.
+                                    <strong className="text-white">{maskedPhone}</strong> via ‘Verify’.
                                 </p>
 
                                 <div>
@@ -348,7 +348,7 @@ export default function AuthModal({ isOpen, initialMode, onClose }: AuthModalPro
                                 <p className="text-center text-xs text-white/60">
                                     Didn't receive it?{" "}
                                     {resendIn > 0 ? (
-                                        <span>Resend in {resendIn}s</span>
+                                        <span>RESEND in {resendIn}s</span>
                                     ) : (
                                         <button
                                             type="button"
@@ -356,7 +356,7 @@ export default function AuthModal({ isOpen, initialMode, onClose }: AuthModalPro
                                             disabled={isSubmitting}
                                             className="text-yellow-400 hover:text-yellow-300 underline cursor-pointer disabled:opacity-60"
                                         >
-                                            Resend OTP
+                                            RESEND OTP
                                         </button>
                                     )}
                                 </p>

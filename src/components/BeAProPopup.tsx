@@ -48,7 +48,7 @@ export default function BeAProPopup({ isOpen, onClose }: BeAProPopupProps) {
                     <X size={22} />
                 </button>
 
-                <h2 className="text-white font-semibold text-lg mb-6">
+                <h2 className="text-white font-semibold text-lg mb-6 brand-font">
                     Be a PRO !
                 </h2>
 

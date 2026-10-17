@@ -66,7 +66,7 @@ export function variantLabels(type: ProfileType, kind?: string | null): VariantL
             name: "Name of Service / Retail Brand",
             since: "Serving since / Established in",
             sinceShort: "Serving since",
-            services: "Services offered / Product line",
+            services: "Services Offered / Product Line",
             address: "Business / Outlet address",
             hours: "Operational / Business days & hours",
         };

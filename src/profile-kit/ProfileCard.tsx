@@ -132,7 +132,7 @@ function CardDetails({
             <Section label="Email ID (s)">
                 {emails.length
                     ? emails.map((m) => (
-                          <div key={m} className="pk-sec-label pk-blue">
+                          <div key={m} className="pk-sec-label-lower pk-blue">
                               <a href={`mailto:${m}`}>{m}</a>
                           </div>
                       ))

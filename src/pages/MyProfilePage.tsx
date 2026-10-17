@@ -60,6 +60,7 @@ export default function MyProfilePage() {
 
     const profile = data?.profile ?? null;
     const profileType = profile?.category?.type;
+    
     const initialValues = useMemo(() => (profile ? toFormValues(profile) : null), [profile]);
 
     if (isLoading) return <div className="min-h-[50vh] flex items-center justify-center"><PageSpinner /></div>;
@@ -93,8 +94,8 @@ export default function MyProfilePage() {
     if (!profile || !profileType || !initialValues) {
         return (
             <div className="container mx-auto px-4 max-w-2xl py-16 text-center">
-                <h1 className="text-2xl font-bold text-slate-800 mb-2">You haven't published a profile yet</h1>
-                <p className="text-slate-600 mb-8">Choose your profile type to get started.</p>
+                <h1 className="text-2xl font-bold text-slate-800 mb-2">You haven't Published a Professional Profile / Brand Profile yet !</h1>
+                <p className="text-slate-600 mb-8">Choose your Classification to get started.</p>
                 <div className="grid sm:grid-cols-2 gap-4">
                     {PROFILE_TYPE_ROUTES.map((r) => (
                         <Link
@@ -154,7 +155,7 @@ export default function MyProfilePage() {
                     <div className="flex items-start gap-3 text-yellow-900">
                         <Clock className="shrink-0 mt-0.5" size={20} />
                         <div>
-                            <p className="font-semibold">Your Profile is SAVED but NOT PUBLISHED yet !</p>
+                            <p className="font-semibold">Your {profileType === "PROFESSIONAL_CONSULTANT" ? "Professional" : "Business Brand"} Profile is SAVED but NOT PUBLISHED yet !</p>
                             <p className="text-sm">Pay ₹ {formatFee(data.fee.amount)} to make it globally visible on PROchure.</p>
                         </div>
                     </div>

@@ -255,7 +255,7 @@ export default function ProfileForm({
                                             checked={values.isWomenEntrepreneur}
                                             onChange={(e) => set("isWomenEntrepreneur", e.target.checked)}
                                         />
-                                        I am a Woman {isConsultant ? "Consultant" : "Entrepreneur"}?
+                                        {isConsultant && values.consultantKind === "CONSULTANCY" ? "Owned by a Woman / Women" : "I am a Woman"} {isConsultant ? values.consultantKind === "CONSULTANCY" ? "" : "Consultant" : "Entrepreneur"} (check this box to add the ‘SHE-PRO’ badge on your e-visiting card)
                                     </label>
                                 </div>
                             </div>

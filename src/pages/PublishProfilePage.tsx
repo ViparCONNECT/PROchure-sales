@@ -33,7 +33,7 @@ export default function PublishProfilePage() {
     console.log(fee);
     
 
-    const cardPublicName = isProfessionalConsultants ? 'Digital Business Card' : 'profile'
+    const cardPublicName = isProfessionalConsultants ? 'Digital Visiting Card' : 'profile'
 
     useSeo({
         title: `Publish your ${route?.singular ?? ""} ${cardPublicName} | PROchure`,
@@ -78,7 +78,7 @@ export default function PublishProfilePage() {
         return (
             <div className="container mx-auto px-4 max-w-xl py-16 text-center">
                 <h1 className="text-2xl font-bold text-slate-800 mb-2">Publish your {route.singular} {cardPublicName}</h1>
-                <p className="text-slate-600 mb-8">Please log in or register first. Your profile will be linked to your account.</p>
+                <p className="text-slate-600 mb-8">Please log in or register first.</p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                     <button
                         onClick={() => openAuthModal("register")}
@@ -114,7 +114,7 @@ export default function PublishProfilePage() {
             <div className="mb-6">
                 <h1 className="text-2xl sm:text-3xl font-bold text-slate-800">Publish your {route.singular} {cardPublicName}</h1>
                 <p className="mt-2 text-slate-600">
-                    Fill in your details — the live preview shows exactly how your {isProfessionalConsultants ? 'e-visiting card' : 'profile'} will look to the public.
+                    Fill in your details — the live preview shows exactly how your {isProfessionalConsultants ? 'professional profile' : 'business brand profile'} will be visible to the public.
                 </p>
             </div>
             <ProfileForm
