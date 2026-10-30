@@ -11,6 +11,7 @@ import {
     createMyProfile,
     getErrorMessages,
     getMyProfile,
+    loadCategoryGroupOptions,
     loadCategoryOptions,
     loadSubCategoryOptions,
 } from "../config/myProfileApi";
@@ -120,6 +121,7 @@ export default function PublishProfilePage() {
             <ProfileForm
                 profileType={route.type}
                 initialValues={initialValues}
+                loadCategoryGroups={loadCategoryGroupOptions}
                 loadCategories={loadCategoryOptions}
                 loadSubCategories={loadSubCategoryOptions}
                 getErrorMessages={getErrorMessages}

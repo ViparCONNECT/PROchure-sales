@@ -1,5 +1,11 @@
 import { createPaymentOrder, verifyPayment } from "./myProfileApi";
-import type { MyProfileResponse } from "./myProfileApi";
+import type { MyProfileResponse, PaymentOrder } from "./myProfileApi";
+
+export interface PaymentVerification {
+    razorpayOrderId: string;
+    razorpayPaymentId: string;
+    razorpaySignature: string;
+}
 
 const CHECKOUT_SRC = "https://checkout.razorpay.com/v1/checkout.js";
 
@@ -45,8 +51,17 @@ function loadCheckout(): Promise<void> {
 }
 
 /** Creates an order, opens Razorpay Checkout and verifies the payment on the server. Resolves when the profile is live. */
-export async function payListingFee(): Promise<MyProfileResponse> {
-    const [order] = await Promise.all([createPaymentOrder(), loadCheckout()]);
+export function payListingFee(): Promise<MyProfileResponse> {
+    return checkout(createPaymentOrder, verifyPayment);
+}
+
+/** Generic checkout flow: `createOrder` → Razorpay Checkout → `verify` (used by My Profile and payment links). */
+export async function checkout<T>(
+    createOrder: () => Promise<PaymentOrder>,
+    verify: (body: PaymentVerification) => Promise<T>,
+    cancelledError: Error = new PaymentCancelledError(),
+): Promise<T> {
+    const [order] = await Promise.all([createOrder(), loadCheckout()]);
     const Razorpay = window.Razorpay;
     if (!Razorpay) throw new Error("Could not load the payment page. Please try again.");
 
@@ -61,7 +76,7 @@ export async function payListingFee(): Promise<MyProfileResponse> {
             prefill: order.prefill,
             theme: { color: "#55374a" },
             handler: resolve,
-            modal: { ondismiss: () => reject(new PaymentCancelledError()) },
+            modal: { ondismiss: () => reject(cancelledError) },
         });
         rzp.on("payment.failed", (resp) => {
             // Checkout stays open so the user can retry; we only surface the reason if they close it.
@@ -70,7 +85,7 @@ export async function payListingFee(): Promise<MyProfileResponse> {
         rzp.open();
     });
 
-    return verifyPayment({
+    return verify({
         razorpayOrderId: result.razorpay_order_id,
         razorpayPaymentId: result.razorpay_payment_id,
         razorpaySignature: result.razorpay_signature,

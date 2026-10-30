@@ -1,18 +1,32 @@
 import { AxiosError } from "axios";
 import { userApi, getErrorMessage } from "./authApi";
 import api from "./api";
-import type { CategoryOption, ProfilePayload, ProfileType, SubCategoryOption } from "../profile-kit/types";
+import type {
+    CategoryGroupOption,
+    CategoryOption,
+    ProfilePayload,
+    ProfileType,
+    SubCategoryOption,
+} from "../profile-kit/types";
 
 export type ProfileStatus = "PENDING_PAYMENT" | "ACTIVE";
 
-export interface MyProfile extends Omit<ProfilePayload, "profileType" | "subCategoryId"> {
+export interface MyProfile extends Omit<ProfilePayload, "profileType" | "subCategoryId" | "servicesDetail"> {
     id: string;
     status: ProfileStatus;
     isDisabled: boolean;
     subCategoryId?: string | null;
-    category?: { id: string; name: string; type: ProfileType; isSubCategoryNeeded: boolean };
+    servicesDetail?: string | null;
+    category?: {
+        id: string;
+        name: string;
+        type: ProfileType;
+        isSubCategoryNeeded: boolean;
+        groupId?: string | null;
+    };
     subCategory?: { id: string; name: string } | null;
     publishedAt?: string | null;
+    paidAt?: string | null;
 }
 
 export interface MyProfileResponse {
@@ -38,10 +52,57 @@ export const createPaymentOrder = () => data<PaymentOrder>(userApi.post("/me/pro
 export const verifyPayment = (body: { razorpayOrderId: string; razorpayPaymentId: string; razorpaySignature: string }) =>
     data<MyProfileResponse>(userApi.post("/me/profile/payment/verify", body));
 
+// ─── GST invoice ─────────────────────────────────────────────────────────────
+
+export interface Invoice {
+    invoiceNumber: string;
+    invoiceDate: string;
+    orderId: string;
+    paymentId?: string | null;
+    currency: string;
+    seller: { name: string; addressLines: string[]; gstin: string };
+    recipient: string;
+    profileDisplayChoice: string;
+    /** All amounts in paise */
+    amounts: { advertising: number; techSupport: number; cgst: number; sgst: number; roundOff: number; total: number };
+    amountInWords: string;
+}
+
+export const getMyInvoice = () => data<Invoice>(userApi.get("/me/profile/invoice"));
+
+// ─── Payment links (no login) ────────────────────────────────────────────────
+
+export interface PaymentLinkInfo {
+    profile: Omit<MyProfile, "status" | "isDisabled"> & { category?: MyProfile["category"] };
+    ownerName: string | null;
+    fee: { amount: number; currency: string };
+    paid: boolean;
+    paidAt: string | null;
+}
+
+const linkPath = (token: string) => `/payment-links/${encodeURIComponent(token)}`;
+
+export const getPaymentLink = (token: string) => data<PaymentLinkInfo>(api.get(linkPath(token)));
+export const createPaymentLinkOrder = (token: string) => data<PaymentOrder>(api.post(`${linkPath(token)}/order`));
+export const verifyPaymentLink = (
+    token: string,
+    body: { razorpayOrderId: string; razorpayPaymentId: string; razorpaySignature: string },
+) => data<PaymentLinkInfo>(api.post(`${linkPath(token)}/verify`, body));
+
 // Loaders for the shared ProfileForm (public endpoints)
 export async function loadCategoryOptions(type: ProfileType): Promise<CategoryOption[]> {
     const res = await api.get("/categories", { params: { type } });
-    return (res.data?.data ?? []).map((c: CategoryOption) => ({ id: c.id, name: c.name, isSubCategoryNeeded: !!c.isSubCategoryNeeded }));
+    return (res.data?.data ?? []).map((c: CategoryOption) => ({
+        id: c.id,
+        name: c.name,
+        isSubCategoryNeeded: !!c.isSubCategoryNeeded,
+        groupId: c.groupId ?? null,
+    }));
+}
+
+export async function loadCategoryGroupOptions(type: ProfileType): Promise<CategoryGroupOption[]> {
+    const res = await api.get("/category-groups", { params: { type } });
+    return (res.data?.data ?? []).map((g: CategoryGroupOption) => ({ id: g.id, name: g.name }));
 }
 
 export async function loadSubCategoryOptions(categoryId: string): Promise<SubCategoryOption[]> {

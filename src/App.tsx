@@ -4,6 +4,8 @@ import { AnimatePresence } from "framer-motion";
 import { BrowserRouter, Routes, Route, Navigate, useParams } from "react-router-dom";
 import PublishProfilePage from "./pages/PublishProfilePage";
 import MyProfilePage from "./pages/MyProfilePage";
+import PaymentLinkPage from "./pages/PaymentLinkPage";
+import InvoicePage from "./pages/InvoicePage";
 import { LEGACY_TYPE_SLUGS } from "./config/profileTypes";
 import Layout from "./components/Layout";
 import LobbyPage from "./pages/LobbyPage";
@@ -46,6 +48,8 @@ export default function App() {
               <Route path="/policies/:policySlug" element={<PolicyPage />} />
               <Route path="/publish/:type" element={<PublishProfilePage />} />
               <Route path="/my-profile" element={<MyProfilePage />} />
+              <Route path="/my-profile/invoice" element={<InvoicePage />} />
+              <Route path="/pay/:token" element={<PaymentLinkPage />} />
               {Object.keys(LEGACY_TYPE_SLUGS).map((old) => (
                 <Route key={old} path={`/${old}/*`} element={<LegacyTypeRedirect from={old} />} />
               ))}

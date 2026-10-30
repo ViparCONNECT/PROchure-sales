@@ -117,9 +117,13 @@ function CardDetails({
     const hours = workingHoursLines(data.workingHours);
     const languages = (data.languages ?? []).filter(Boolean);
     const empty = placeholders ? <span className="pk-empty">—</span> : null;
+    const servicesDetail = data.servicesDetail?.trim();
 
     return (
         <div className="pk-card-body">
+            <Section label={labels.servicesDetail}>
+                {servicesDetail ? <div style={{ whiteSpace: "pre-line" }}>{servicesDetail}</div> : empty}
+            </Section>
             <Section label="Contact number (s)">
                 {phones.length
                     ? phones.map((p) => (

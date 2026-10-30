@@ -95,11 +95,6 @@ export default function CategoryListPage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-8">
             <Breadcrumbs items={[{ label: pageTitle }]} />
 
-            <SectionHeading
-                icon={Folder}
-                title={`${typeRoute?.singular ?? ""} Categories`}
-            />
-
             {selectedCity && (
                 <div className="mb-6 flex items-center gap-2 text-sm text-slate-500 bg-yellow-50 border border-yellow-200 rounded-lg px-4 py-2 w-fit mx-auto">
                     <MapPin size={16} className="text-yellow-600" />
@@ -107,8 +102,11 @@ export default function CategoryListPage() {
                 </div>
             )}
 
+            {groupSections(filteredCategories, `${typeRoute?.singular ?? ""}`).map((section) => (
+            <section key={section.key} className="mb-12">
+            <SectionHeading icon={Folder} title={`${section.title} Categories`} />
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredCategories.map((category) => {
+                {section.categories.map((category) => {
                     // const profileCount = getProfileCount(category, selectedCity);
                     // const subCatCount = getSubcategoryCount(category, selectedCity);
                     const target = (category.isSubCategoryNeeded === false) ? `/${type}/${slugOf(category)}/profiles` : `/${type}/${slugOf(category)}`;
@@ -131,6 +129,34 @@ export default function CategoryListPage() {
                     );
                 })}
             </div>
+            </section>
+            ))}
         </div>
     );
+}
+
+interface CategoryGroupRef {
+    id: string;
+    name: string;
+    sortOrder?: number;
+}
+
+/** Splits categories under their category type ("group") headings, in the group's display order. */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function groupSections(categories: any[], fallbackTitle: string) {
+    const sections = new Map<string, { key: string; title: string; order: number; categories: typeof categories }>();
+    for (const c of categories) {
+        const g = c.group as CategoryGroupRef | null | undefined;
+        const key = g?.id ?? "__ungrouped";
+        if (!sections.has(key)) {
+            sections.set(key, {
+                key,
+                title: g?.name ?? fallbackTitle,
+                order: g ? (g.sortOrder ?? 0) : Number.MAX_SAFE_INTEGER,
+                categories: [],
+            });
+        }
+        sections.get(key)!.categories.push(c);
+    }
+    return [...sections.values()].sort((a, b) => a.order - b.order || a.title.localeCompare(b.title));
 }

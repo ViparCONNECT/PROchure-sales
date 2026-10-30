@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { CheckCircle2, Clock, EyeOff, LogIn, Pencil } from "lucide-react";
+import { CheckCircle2, Clock, EyeOff, FileText, LogIn, Pencil } from "lucide-react";
 import ProfileCard from "../profile-kit/ProfileCard";
 import ProfileForm from "../profile-kit/ProfileForm";
 import { toFormValues } from "../profile-kit/format";
@@ -11,6 +11,7 @@ import { PROFILE_TYPE_ROUTES } from "../config/profileTypes";
 import {
     getErrorMessages,
     getMyProfile,
+    loadCategoryGroupOptions,
     loadCategoryOptions,
     loadSubCategoryOptions,
     updateMyProfile,
@@ -139,12 +140,22 @@ export default function MyProfilePage() {
             <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
                 <h1 className="text-2xl sm:text-3xl font-bold text-slate-800">My Profile</h1>
                 {!editing && (
-                    <button
-                        onClick={() => setEditing(true)}
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-prochure-bg prochure-text font-semibold hover:bg-prochure-50 cursor-pointer"
-                    >
-                        <Pencil size={16} /> Edit profile
-                    </button>
+                    <div className="flex flex-wrap gap-2">
+                        {profile.paidAt && (
+                            <Link
+                                to="/my-profile/invoice"
+                                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-prochure-bg prochure-text font-semibold hover:bg-prochure-50"
+                            >
+                                <FileText size={16} /> View invoice
+                            </Link>
+                        )}
+                        <button
+                            onClick={() => setEditing(true)}
+                            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-prochure-bg prochure-text font-semibold hover:bg-prochure-50 cursor-pointer"
+                        >
+                            <Pencil size={16} /> Edit profile
+                        </button>
+                    </div>
                 )}
             </div>
 
@@ -181,6 +192,7 @@ export default function MyProfilePage() {
                 <ProfileForm
                     profileType={profileType}
                     initialValues={initialValues}
+                    loadCategoryGroups={loadCategoryGroupOptions}
                     loadCategories={loadCategoryOptions}
                     loadSubCategories={loadSubCategoryOptions}
                     getErrorMessages={getErrorMessages}
