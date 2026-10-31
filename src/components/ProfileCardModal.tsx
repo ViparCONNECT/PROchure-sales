@@ -38,9 +38,11 @@ export default function ProfileCardModal({ data, onClose }: ProfileCardModalProp
                         initial={{ opacity: 0, scale: 0.96, y: 16 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.96, y: 16 }}
-                        className="relative w-full max-w-lg shadow-2xl my-8"
+                        className="relative w-full max-w-lg max-h-[90vh] my-8 overflow-hidden rounded-2xl shadow-2xl"
                     >
-                        <ProfileCard data={data} showDetails onClose={onClose} />
+                        <div className="max-h-[90vh] overflow-y-auto">
+                            <ProfileCard data={data} showDetails onClose={onClose} />
+                        </div>
                     </motion.div>
                 </motion.div>
             )}
