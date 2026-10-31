@@ -11,7 +11,7 @@ export const PROFILE_TYPE_ROUTES: ProfileTypeRoute[] = [
     {
         slug: "professional-consultants",
         type: "PROFESSIONAL_CONSULTANT",
-        label: "Professional CONSULTANTS",
+        label: "PROFESSIONAL CONSULTANTS",
         singular: "Professional Consultant",
     },
     {

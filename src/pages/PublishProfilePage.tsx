@@ -79,19 +79,20 @@ export default function PublishProfilePage() {
         return (
             <div className="container mx-auto px-4 max-w-xl py-16 text-center">
                 <h1 className="text-2xl font-bold text-slate-800 mb-2">Publish your {route.singular} {cardPublicName}</h1>
-                <p className="text-slate-600 mb-8">Please log in or register first.</p>
+                <p className="text-slate-600 mt-3">Please Login if you are already a registered PRO member.</p>
+                <p className="text-slate-600 mb-6">{isProfessionalConsultants ? "Else Register to PUBLISH your PROFESSIONAL PROFILE." : "Else Register to PUBLISH your BUSINESS BRAND PROFILE."}</p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                     <button
                         onClick={() => openAuthModal("register")}
                         className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-prochure-bg text-white font-semibold hover:opacity-90 cursor-pointer"
                     >
-                        <UserPlus size={18} /> Register
+                        <UserPlus size={18} /> REGISTER
                     </button>
                     <button
                         onClick={() => openAuthModal("login")}
                         className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg border border-prochure-bg prochure-text font-semibold hover:bg-prochure-50 cursor-pointer"
                     >
-                        <LogIn size={18} /> Login
+                        <LogIn size={18} /> LOGIN
                     </button>
                 </div>
             </div>

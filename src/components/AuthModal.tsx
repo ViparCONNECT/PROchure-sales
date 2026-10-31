@@ -379,7 +379,7 @@ export default function AuthModal({ isOpen, initialMode, onClose }: AuthModalPro
                                     }}
                                     className="flex items-center gap-1 text-xs text-white/70 hover:text-white cursor-pointer"
                                 >
-                                    <ArrowLeft size={14} /> Edit details
+                                    <ArrowLeft size={14} /> Go Back to Edit Login Credentials
                                 </button>
 
                                 <p className="text-sm text-white/80">

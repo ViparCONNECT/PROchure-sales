@@ -104,7 +104,7 @@ export default function CategoryListPage() {
 
             {groupSections(filteredCategories, `${typeRoute?.singular ?? ""}`).map((section) => (
             <section key={section.key} className="mb-12">
-            <SectionHeading icon={Folder} title={`${section.title} Categories`} />
+            <SectionHeading icon={Folder} title={`${section.title}`} />
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {section.categories.map((category) => {
                     // const profileCount = getProfileCount(category, selectedCity);
