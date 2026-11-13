@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { LogIn, UserPlus } from "lucide-react";
 import ProfileForm from "../profile-kit/ProfileForm";
@@ -14,6 +14,7 @@ import {
     loadCategoryGroupOptions,
     loadCategoryOptions,
     loadSubCategoryOptions,
+    saveProfileGstin,
 } from "../config/myProfileApi";
 import { payListingFee } from "../config/razorpay";
 import PageSpinner from "../components/PageSpinner";
@@ -28,13 +29,11 @@ export default function PublishProfilePage() {
     const route = routeForSlug(type);
     const navigate = useNavigate();
     const { user, isLoading } = useAuth();
-    const [fee, setFee] = useState<number | null>(null);
     const [checking, setChecking] = useState(false);
+    const savedProfileRef = useRef(false);
     const isProfessionalConsultants = type === "professional-consultants";
-    console.log(fee);
-    
 
-    const cardPublicName = isProfessionalConsultants ? 'Digital Visiting Card' : 'profile'
+    const cardPublicName = isProfessionalConsultants ? 'Digital Visiting Card' : 'profile';
 
     useSeo({
         title: `Publish your ${route?.singular ?? ""} ${cardPublicName} | PROchure`,
@@ -49,7 +48,6 @@ export default function PublishProfilePage() {
             .then((res) => {
                 if (!alive) return;
                 if (res.profile) navigate("/my-profile", { replace: true });
-                else setFee(res.fee.amount);
             })
             .catch(() => undefined)
             .finally(() => alive && setChecking(false));
@@ -99,8 +97,17 @@ export default function PublishProfilePage() {
         );
     }
 
-    const handleSubmit = async (payload: ProfilePayload) => {
+    const handleBackgroundSave = async (payload: ProfilePayload) => {
+        if (savedProfileRef.current) return;
         await createMyProfile(payload);
+        savedProfileRef.current = true;
+    };
+
+    const handleSubmit = async (payload: ProfilePayload) => {
+        if (!savedProfileRef.current) {
+            await createMyProfile(payload);
+            savedProfileRef.current = true;
+        }
         let state: MyProfileLocationState;
         try {
             await payListingFee();
@@ -127,6 +134,10 @@ export default function PublishProfilePage() {
                 loadSubCategories={loadSubCategoryOptions}
                 getErrorMessages={getErrorMessages}
                 onSubmit={handleSubmit}
+                onSaveDraft={handleBackgroundSave}
+                onGstinSave={async (gstin) => {
+                    await saveProfileGstin({ gstin });
+                }}
                 submitLabel={"PUBLISH"}
                 submittingLabel="Please wait…"
                 onCancel={() => navigate(-1)}

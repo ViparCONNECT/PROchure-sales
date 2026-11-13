@@ -14,12 +14,12 @@ export const PROFILE_TYPE_ROUTES: ProfileTypeRoute[] = [
         label: "PROFESSIONAL CONSULTANTS",
         singular: "Professional Consultant",
     },
-    {
-        slug: "service-and-retail-brands",
-        type: "SERVICE_AND_RETAIL_BRANDS",
-        label: "SERVICE & RETAIL Brands",
-        singular: "Service & Retail Brand",
-    },
+    // {
+    //     slug: "service-and-retail-brands",
+    //     type: "SERVICE_AND_RETAIL_BRANDS",
+    //     label: "SERVICE & RETAIL Brands",
+    //     singular: "Service & Retail Brand",
+    // },
 ];
 
 export const routeForSlug = (slug?: string) => PROFILE_TYPE_ROUTES.find((r) => r.slug === slug);

@@ -14,11 +14,13 @@ import {
     loadCategoryGroupOptions,
     loadCategoryOptions,
     loadSubCategoryOptions,
+    saveProfileGstin,
     updateMyProfile,
 } from "../config/myProfileApi";
 import type { MyProfileResponse } from "../config/myProfileApi";
 import { formatFee, payListingFee } from "../config/razorpay";
 import PageSpinner from "../components/PageSpinner";
+import ProfileCardModal from "../components/ProfileCardModal";
 import { useSeo } from "../hooks/useSeo";
 import type { MyProfileLocationState } from "./PublishProfilePage";
 
@@ -38,6 +40,11 @@ export default function MyProfilePage() {
     const [loadError, setLoadError] = useState<string | null>(null);
     const [editing, setEditing] = useState(false);
     const [paying, setPaying] = useState(false);
+    const [previewOpen, setPreviewOpen] = useState(false);
+    const [previewDeclarationAccepted, setPreviewDeclarationAccepted] = useState(false);
+    const [previewGstinEnabled, setPreviewGstinEnabled] = useState(false);
+    const [previewGstinValue, setPreviewGstinValue] = useState("");
+    const [previewError, setPreviewError] = useState<string | null>(null);
     const [notice, setNotice] = useState<Notice | null>((location.state as MyProfileLocationState | null)?.notice ?? null);
 
     useSeo({ title: "My Profile | PROchure", description: "Manage your PROchure profile." });
@@ -61,7 +68,13 @@ export default function MyProfilePage() {
 
     const profile = data?.profile ?? null;
     const profileType = profile?.category?.type;
-    
+
+    useEffect(() => {
+        if (!profile) return;
+        setPreviewGstinEnabled(!!profile.gstin);
+        setPreviewGstinValue(profile.gstin ?? "");
+    }, [profile]);
+
     const initialValues = useMemo(() => (profile ? toFormValues(profile) : null), [profile]);
 
     if (isLoading) return <div className="min-h-[50vh] flex items-center justify-center"><PageSpinner /></div>;
@@ -125,6 +138,38 @@ export default function MyProfilePage() {
         }
     };
 
+    const openPaymentPreview = () => {
+        setPreviewError(null);
+        setPreviewDeclarationAccepted(false);
+        setPreviewGstinEnabled(!!profile?.gstin);
+        setPreviewGstinValue(profile?.gstin ?? "");
+        setPreviewOpen(true);
+    };
+
+    const continuePayment = async () => {
+        if (!previewDeclarationAccepted) {
+            setPreviewError("Please confirm the declaration to continue.");
+            return;
+        }
+        if (previewGstinEnabled && previewGstinValue.trim().length !== 15) {
+            setPreviewError("Please enter a valid 15-character GSTIN if you want to add it.");
+            return;
+        }
+        setPreviewError(null);
+
+        try {
+            const updated = await saveProfileGstin({ gstin: previewGstinEnabled ? previewGstinValue.trim() : null });
+            setData((d) => (d ? { ...d, profile: updated } : d));
+        } catch (err) {
+            setPreviewOpen(false);
+            setNotice({ kind: "error", text: getErrorMessages(err)[0] });
+            return;
+        }
+
+        setPreviewOpen(false);
+        await handlePay();
+    };
+
     const handleSave = async (payload: ProfilePayload) => {
         const updated = await updateMyProfile(payload);
         setData((d) => (d ? { ...d, profile: updated } : d));
@@ -171,7 +216,7 @@ export default function MyProfilePage() {
                         </div>
                     </div>
                     <button
-                        onClick={handlePay}
+                        onClick={openPaymentPreview}
                         disabled={paying}
                         className="px-6 py-3 rounded-lg bg-prochure-bg text-white font-semibold hover:opacity-90 disabled:opacity-60 cursor-pointer"
                     >
@@ -204,6 +249,92 @@ export default function MyProfilePage() {
                 <div className="max-w-lg mx-auto shadow-lg">
                     <ProfileCard data={{ ...profile, profileType }} showDetails />
                 </div>
+            )}
+
+            {profile && (
+                <ProfileCardModal
+                    data={previewOpen ? { ...profile, profileType, consultantKind: profile.consultantKind ?? null, gstin: previewGstinEnabled ? previewGstinValue : null } : null}
+                    onClose={() => {
+                        setPreviewOpen(false);
+                        setPreviewError(null);
+                        setPreviewDeclarationAccepted(false);
+                        setPreviewGstinEnabled(!!profile.gstin);
+                        setPreviewGstinValue(profile.gstin ?? "");
+                    }}
+                    title="PROFILE PREVIEW"
+                    actions={
+                        <>
+                            <button
+                                type="button"
+                                className="pk-btn pk-btn-ghost"
+                                onClick={() => {
+                                    setPreviewOpen(false);
+                                    setPreviewError(null);
+                                    setPreviewDeclarationAccepted(false);
+                                    setPreviewGstinEnabled(!!profile.gstin);
+                                    setPreviewGstinValue(profile.gstin ?? "");
+                                    setEditing(true);
+                                }}
+                                disabled={paying}
+                            >
+                                EDIT PROFILE
+                            </button>
+                            <button type="button" className="pk-btn pk-btn-primary" onClick={() => void continuePayment()} disabled={paying}>
+                                {paying ? "Opening payment…" : "CONTINUE"}
+                            </button>
+                        </>
+                    }
+                >
+                    <label className="pk-declaration" htmlFor="profile-payment-declaration">
+                        <input
+                            id="profile-payment-declaration"
+                            type="checkbox"
+                            checked={previewDeclarationAccepted}
+                            onChange={(e) => {
+                                setPreviewDeclarationAccepted(e.target.checked);
+                                if (previewError) setPreviewError(null);
+                            }}
+                        />
+                        <span className="pk-declaration-text">
+                            I / We hereby declare that all the information provided in this profile is true and to the best of my / our knowledge.
+                        </span>
+                    </label>
+
+                    <label className="pk-declaration pk-declaration-sub" htmlFor="profile-payment-gstin-check">
+                        <input
+                            id="profile-payment-gstin-check"
+                            type="checkbox"
+                            checked={previewGstinEnabled}
+                            onChange={(e) => {
+                                const checked = e.target.checked;
+                                setPreviewGstinEnabled(checked);
+                                if (!checked) {
+                                    setPreviewGstinValue("");
+                                }
+                                if (previewError) setPreviewError(null);
+                            }}
+                        />
+                        <span className="pk-declaration-text">I want to add my/our GSTIN</span>
+                    </label>
+
+                    {previewGstinEnabled && (
+                        <div className="pk-gstin-wrap">
+                            <input
+                                className="pk-input"
+                                type="text"
+                                value={previewGstinValue}
+                                maxLength={15}
+                                placeholder="Enter GSTIN"
+                                onChange={(e) => setPreviewGstinValue(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 15))}
+                            />
+                            <p className="pk-gstin-note">
+                                Your Payment (GST) Invoice will be sent to your registered Email ID and will also be available on the ‘My Profile’ link of your PROchure account after logging in, to download / print.
+                            </p>
+                        </div>
+                    )}
+
+                    {previewError && <div className="pk-alert pk-alert-inline" role="alert">{previewError}</div>}
+                </ProfileCardModal>
             )}
         </div>
     );

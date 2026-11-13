@@ -108,6 +108,7 @@ export default function InvoicePage() {
                     <div>
                         <p>Recipient</p>
                         <p className="uppercase">{invoice.recipient}</p>
+                        {invoice.gstin && <p className="uppercase">GSTIN : {invoice.gstin}</p>}
                     </div>
 
                     <table className="w-full border-collapse">

@@ -86,7 +86,7 @@ export function variantLabels(type: ProfileType, kind?: string | null): VariantL
         sinceShort: consultancy ? "Established in" : "Practicing since",
         services: "Core or Primary Services Offered / Areas of Practice",
         servicesDetail: "All the Services Offered / Areas of Practice in detail",
-        address: "Office address",
+        address: "address",
         hours: "Working days & hours",
     };
 }

@@ -2,7 +2,7 @@
 import { useEffect, useId, useMemo, useState } from "react";
 import type { FormEvent, ReactNode } from "react";
 import "./profile-kit.css";
-import ProfileCard from "./ProfileCard";
+import ProfileCardModal from "../components/ProfileCardModal";
 import {
     ADDRESS_FIELDS,
     CORE_SERVICES_MAX,
@@ -12,7 +12,7 @@ import {
     SERVICES_DETAIL_MAX,
     variantLabels,
 } from "./constants";
-import { toCardData, toPayload, validateProfile } from "./format";
+import { toPayload, validateProfile } from "./format";
 import type { FormErrors, ProfileFormValues } from "./format";
 import type {
     CategoryGroupOption,
@@ -32,8 +32,12 @@ export interface ProfileFormProps {
     loadCategoryGroups: (type: ProfileType) => Promise<CategoryGroupOption[]>;
     loadCategories: (type: ProfileType) => Promise<CategoryOption[]>;
     loadSubCategories: (categoryId: string) => Promise<SubCategoryOption[]>;
-    /** Throw to show an error; the form stays filled in. */
+    /** Final action after the user confirms the preview. */
     onSubmit: (payload: ProfilePayload) => Promise<void>;
+    /** Optional background save while the preview modal is open. */
+    onSaveDraft?: (payload: ProfilePayload) => Promise<void>;
+    /** Optional extra step before the final action, e.g. save GST against the profile. */
+    onGstinSave?: (gstin: string | null) => Promise<void>;
     getErrorMessages: (err: unknown) => string[];
     submitLabel: string;
     submittingLabel?: string;
@@ -50,6 +54,8 @@ export default function ProfileForm({
     loadCategories,
     loadSubCategories,
     onSubmit,
+    onSaveDraft,
+    onGstinSave,
     getErrorMessages,
     submitLabel,
     submittingLabel = "Saving…",
@@ -65,6 +71,11 @@ export default function ProfileForm({
     const [showErrors, setShowErrors] = useState(false);
     const [serverErrors, setServerErrors] = useState<string[]>([]);
     const [submitting, setSubmitting] = useState(false);
+    const [previewOpen, setPreviewOpen] = useState(false);
+    const [previewPayload, setPreviewPayload] = useState<ProfilePayload | null>(null);
+    const [previewDeclarationAccepted, setPreviewDeclarationAccepted] = useState(false);
+    const [previewGstinEnabled, setPreviewGstinEnabled] = useState(false);
+    const [previewError, setPreviewError] = useState<string | null>(null);
 
     const isConsultant = profileType === "PROFESSIONAL_CONSULTANT";
     const labels = variantLabels(profileType, values.consultantKind || "INDEPENDENT");
@@ -75,7 +86,6 @@ export default function ProfileForm({
     const groupId = groups.length === 1 ? groups[0].id : values.categoryGroupId;
     const groupCategories = groups.length > 0 ? categories.filter((c) => c.groupId === groupId) : categories;
     const errors: FormErrors = showErrors ? validateProfile(profileType, values, needsSub, needsGroup) : {};
-    const cardData = useMemo(() => toCardData(profileType, values), [profileType, values]);
 
     const dirty = useMemo(() => JSON.stringify(values) !== JSON.stringify(initialValues), [values, initialValues]);
     useEffect(() => onDirtyChange?.(dirty), [dirty, onDirtyChange]);
@@ -125,15 +135,48 @@ export default function ProfileForm({
         e.preventDefault();
         setShowErrors(true);
         setServerErrors([]);
+        setPreviewError(null);
         if (Object.keys(validateProfile(profileType, values, needsSub, needsGroup)).length) {
             setServerErrors(["Please fix the highlighted fields."]);
             return;
         }
+
+        const payload = toPayload(profileType, values);
+        setPreviewPayload(payload);
+        setPreviewDeclarationAccepted(false);
+        setPreviewGstinEnabled(!!values.gstin);
+        setPreviewOpen(true);
+
+        if (onSaveDraft) {
+            void onSaveDraft(payload).catch((err) => {
+                const messages = getErrorMessages(err);
+                setServerErrors(messages);
+                setPreviewError(messages[0] ?? "Could not save your profile in the background.");
+            });
+        }
+    };
+
+    const handleContinue = async () => {
+        if (!previewPayload) return;
+        if (!previewDeclarationAccepted) {
+            setPreviewError("Please confirm the declaration to continue.");
+            return;
+        }
+        if (previewGstinEnabled && values.gstin.trim().length !== 15) {
+            setPreviewError("Please enter a valid 15-character GSTIN if you want to add it.");
+            return;
+        }
+        setPreviewError(null);
         setSubmitting(true);
         try {
-            await onSubmit(toPayload(profileType, values));
+            if (onGstinSave) {
+                await onGstinSave(previewGstinEnabled ? values.gstin.trim() : null);
+            }
+            await onSubmit(previewPayload);
+            setPreviewOpen(false);
         } catch (err) {
             setServerErrors(getErrorMessages(err));
+            setPreviewOpen(false);
         } finally {
             setSubmitting(false);
         }
@@ -282,7 +325,7 @@ export default function ProfileForm({
                                 label={labels.services}
                                 required
                                 error={errors.servicesOffered}
-                                hint={`Displayed on your card — ${values.servicesOffered.length}/${CORE_SERVICES_MAX} characters`}
+                                hint={`Displayed on your profile card — ${values.servicesOffered.length}/${CORE_SERVICES_MAX} characters`}
                             >
                                 {(id) => (
                                     <textarea
@@ -534,10 +577,86 @@ export default function ProfileForm({
                 </div>
             </form>
 
-            <aside className="pk-preview" aria-label="Live preview">
-                <div className="pk-preview-title">Live preview</div>
-                <ProfileCard data={cardData} showDetails placeholders />
-            </aside>
+            <ProfileCardModal
+                data={previewOpen && previewPayload ? { ...previewPayload, consultantKind: values.consultantKind || null } : null}
+                onClose={() => {
+                    setPreviewOpen(false);
+                    setPreviewError(null);
+                    setPreviewDeclarationAccepted(false);
+                    setPreviewGstinEnabled(!!values.gstin);
+                }}
+                title="PROFILE PREVIEW"
+                actions={
+                    <>
+                        <button
+                            type="button"
+                            className="pk-btn pk-btn-ghost"
+                            onClick={() => {
+                                setPreviewOpen(false);
+                                setPreviewError(null);
+                                setPreviewDeclarationAccepted(false);
+                                setPreviewGstinEnabled(!!values.gstin);
+                            }}
+                            disabled={submitting}
+                        >
+                            EDIT PROFILE
+                        </button>
+                        <button type="button" className="pk-btn pk-btn-primary" onClick={handleContinue} disabled={submitting}>
+                            {submitting ? submittingLabel : "CONTINUE"}
+                        </button>
+                    </>
+                }
+            >
+                <label className="pk-declaration" htmlFor="profile-declaration">
+                    <input
+                        id="profile-declaration"
+                        type="checkbox"
+                        checked={previewDeclarationAccepted}
+                        onChange={(e) => {
+                            setPreviewDeclarationAccepted(e.target.checked);
+                            if (previewError) setPreviewError(null);
+                        }}
+                    />
+                    <span className="pk-declaration-text">
+                        I / We hereby declare that all the information provided in this profile is true and to the best of my / our knowledge.
+                    </span>
+                </label>
+
+                <label className="pk-declaration pk-declaration-sub" htmlFor="profile-gstin-check">
+                    <input
+                        id="profile-gstin-check"
+                        type="checkbox"
+                        checked={previewGstinEnabled}
+                        onChange={(e) => {
+                            const checked = e.target.checked;
+                            setPreviewGstinEnabled(checked);
+                            if (!checked) {
+                                set("gstin", "");
+                            }
+                            if (previewError) setPreviewError(null);
+                        }}
+                    />
+                    <span className="pk-declaration-text">I want to add my/our GSTIN</span>
+                </label>
+
+                {previewGstinEnabled && (
+                    <div className="pk-gstin-wrap">
+                        <input
+                            className="pk-input"
+                            type="text"
+                            value={values.gstin}
+                            maxLength={15}
+                            placeholder="Enter GSTIN"
+                            onChange={(e) => set("gstin", e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 15))}
+                        />
+                        <p className="pk-gstin-note">
+                            Your Payment (GST) Invoice will be sent to your registered Email ID and will also be available on the ‘My Profile’ link of your PROchure account after logging in, to download / print.
+                        </p>
+                    </div>
+                )}
+
+                {previewError && <div className="pk-alert pk-alert-inline" role="alert">{previewError}</div>}
+            </ProfileCardModal>
         </div>
     );
 }

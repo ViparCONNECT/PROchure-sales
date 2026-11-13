@@ -53,6 +53,7 @@ export interface ProfilePayload {
     address: ProfileAddress;
     workingHours: WorkingHours;
     languages: string[];
+    gstin?: string | null;
 }
 
 /** What the visiting card needs. Matches the public profile API (all fields may be partial while typing). */
@@ -72,6 +73,7 @@ export interface ProfileCardData {
     address?: Partial<ProfileAddress> | null;
     workingHours?: Partial<WorkingHours> | null;
     languages?: string[] | null;
+    gstin?: string | null;
 }
 
 /** "Category Type" — a group of categories within a profile type. */

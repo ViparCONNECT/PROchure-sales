@@ -90,6 +90,7 @@ export interface ProfileFormValues {
     address: AddressValues;
     workingHours: WorkingHours;
     languages: string[];
+    gstin: string;
 }
 
 const day = (closed = false): DaySchedule => ({
@@ -122,6 +123,7 @@ export function emptyFormValues(prefill: { phone?: string; email?: string } = {}
         address: emptyAddress(),
         workingHours: { weekdays: day(), saturday: day(), sunday: day(true) },
         languages: [],
+        gstin: "",
     };
 }
 
@@ -166,6 +168,7 @@ export function toFormValues(
             sunday: normDay(p.workingHours?.sunday, day(true)),
         },
         languages: p.languages ?? [],
+        gstin: p.gstin ?? "",
     };
 }
 
@@ -210,6 +213,7 @@ export function toPayload(type: ProfileType, v: ProfileFormValues): ProfilePaylo
             sunday: cleanDay(v.workingHours.sunday),
         },
         languages: v.languages,
+        gstin: t(v.gstin) || undefined,
     };
 }
 

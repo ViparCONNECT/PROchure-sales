@@ -48,6 +48,7 @@ const data = <T,>(p: Promise<{ data: { data: T } }>) => p.then((r) => r.data.dat
 export const getMyProfile = () => data<MyProfileResponse>(userApi.get("/me/profile"));
 export const createMyProfile = (body: ProfilePayload) => data<MyProfile>(userApi.post("/me/profile", body));
 export const updateMyProfile = (body: ProfilePayload) => data<MyProfile>(userApi.put("/me/profile", body));
+export const saveProfileGstin = (body: { gstin: string | null }) => data<MyProfile>(userApi.put("/me/profile/gstin", body));
 export const createPaymentOrder = () => data<PaymentOrder>(userApi.post("/me/profile/payment/order"));
 export const verifyPayment = (body: { razorpayOrderId: string; razorpayPaymentId: string; razorpaySignature: string }) =>
     data<MyProfileResponse>(userApi.post("/me/profile/payment/verify", body));
@@ -63,6 +64,7 @@ export interface Invoice {
     seller: { name: string; addressLines: string[]; gstin: string };
     recipient: string;
     profileDisplayChoice: string;
+    gstin?: string | null;
     /** All amounts in paise */
     amounts: { advertising: number; techSupport: number; cgst: number; sgst: number; roundOff: number; total: number };
     amountInWords: string;

@@ -7,12 +7,12 @@ const api = axios.create({
 });
 
 export async function getCategories(type: string) {
-    const res = await api.get("/categories", { params: { type } });
+    const res = await api.get("/categories-with-profiles", { params: { type } });
     return res.data?.data || [];
 }
 
 export async function getSubcategories(categoryId: string) {
-    const res = await api.get("/subcategories", { params: { categoryId } });
+    const res = await api.get("/subcategories-with-profiles", { params: { categoryId } });
     return res.data?.data || [];
 }
 
