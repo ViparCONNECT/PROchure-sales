@@ -110,7 +110,7 @@ export default function MyProfilePage() {
             <div className="container mx-auto px-4 max-w-2xl py-16 text-center">
                 <h1 className="text-2xl font-bold text-slate-800 mb-2">You haven't Published a Professional Profile / Brand Profile yet !</h1>
                 <p className="text-slate-600 mb-8">Choose your Classification to get started.</p>
-                <div className="grid sm:grid-cols-2 gap-4">
+                <div className="flex flex-wrap justify-center gap-4">
                     {PROFILE_TYPE_ROUTES.map((r) => (
                         <Link
                             key={r.slug}
