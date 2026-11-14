@@ -13,6 +13,7 @@ export type ProfileStatus = "PENDING_PAYMENT" | "ACTIVE";
 
 export interface MyProfile extends Omit<ProfilePayload, "profileType" | "subCategoryId" | "servicesDetail"> {
     id: string;
+    profileCode?: string | null;
     status: ProfileStatus;
     isDisabled: boolean;
     subCategoryId?: string | null;
@@ -31,6 +32,7 @@ export interface MyProfile extends Omit<ProfilePayload, "profileType" | "subCate
 
 export interface MyProfileResponse {
     profile: MyProfile | null;
+    profileComplete: boolean;
     /** Listing fee in paise */
     fee: { amount: number; currency: string };
 }

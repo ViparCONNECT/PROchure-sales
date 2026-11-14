@@ -61,6 +61,7 @@ export interface ProfileCardData {
     profileType: ProfileType;
     consultantKind?: ConsultantKind | null;
     name?: string | null;
+    profileCode?: string | null;
     consultantName?: string | null;
     degrees?: string | null;
     registrationNumber?: string | null;

@@ -1,6 +1,6 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getCategories, getSubcategories, getProfiles } from "./config/api";
+import { getCategories, getProfileByCode, getSubcategories, getProfiles } from "./config/api";
 import Breadcrumbs from "./components/Breadcrumbs";
 import SectionHeading from "./components/SectionHeading";
 import { Users, MapPin, Filter } from "lucide-react";
@@ -12,7 +12,7 @@ import type { ProfileCardData } from "./profile-kit/types";
 import { routeForSlug } from "./config/profileTypes";
 import { matchesSlug } from "./helper/helper";
 
-type PublicProfile = ProfileCardData & { id: string };
+type PublicProfile = ProfileCardData & { id: string; profileCode?: string | null };
 
 interface Subcategory {
     id: number;
@@ -94,8 +94,30 @@ const INDIAN_CITIES = [
     "Vijayawada"
 ];
 
+const normalizeProfileCode = (value?: string | null) => {
+    const text = (value ?? "").trim().toUpperCase();
+    if (!text) return null;
+    const match = text.match(/^([A-Z]+-\d+)(?:-.+)?$/);
+    return match ? match[1] : text;
+};
+
+const slugifyName = (value?: string | null) => {
+    return (value ?? "profile")
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "") || "profile";
+};
+
+const buildProfileRoute = (base: string, profile: Partial<PublicProfile>) => {
+    const code = normalizeProfileCode(profile.profileCode ?? profile.id ?? null) ?? "profile";
+    return `${base}/${code}-${slugifyName(profile.name)}`;
+};
+
 export default function SubcategoryPage() {
-    const { type, category: categorySlug, subcategory: subcategoryParam } = useParams();
+    const { type, category: categorySlug, subcategory: subcategoryParam, profileCode: routeProfileCode } = useParams();
+    const location = useLocation();
+    const navigate = useNavigate();
     const [data, setData] = useState<{ category: Category; subcategory: Subcategory } | null>(null);
     const [selectedCity, setSelectedCity] = useState<string | null>(null);
     const [cityFilter, setCityFilter] = useState<string | "All">("All");
@@ -107,6 +129,7 @@ export default function SubcategoryPage() {
     const [loading, setLoading] = useState<boolean>(false);
     const [openProfile, setOpenProfile] = useState<PublicProfile | null>(null);
     const typeRoute = routeForSlug(type);
+    const baseRoute = type && categorySlug && subcategoryParam ? `/${type}/${categorySlug}/${subcategoryParam}` : null;
 
     useEffect(() => {
         const saved = localStorage.getItem("prochure_selected_city");
@@ -122,6 +145,26 @@ export default function SubcategoryPage() {
         // if no appliedCity set yet, initialize appliedCity from global selectedCity
         if (appliedCity === undefined) setAppliedCity(selectedCity || undefined);
     }, [selectedCity]);
+
+    useEffect(() => {
+        if (!routeProfileCode || !typeRoute) return;
+        const code = normalizeProfileCode(routeProfileCode);
+        if (!code) return;
+
+        let cancelled = false;
+        getProfileByCode(code)
+            .then((profile) => {
+                if (!profile || cancelled) return;
+                setOpenProfile({ ...profile, profileType: typeRoute.type, profileCode: profile.profileCode ?? code });
+            })
+            .catch(() => {
+                if (!cancelled) setOpenProfile(null);
+            });
+
+        return () => {
+            cancelled = true;
+        };
+    }, [routeProfileCode, typeRoute]);
 
     useEffect(() => {
         if (!categorySlug || !subcategoryParam) return;
@@ -358,7 +401,12 @@ export default function SubcategoryPage() {
                     <button
                         key={profile.id}
                         type="button"
-                        onClick={() => setOpenProfile(profile)}
+                        onClick={() => {
+                            if (!baseRoute) return;
+                            const next = buildProfileRoute(baseRoute, profile);
+                            navigate(next, { replace: false });
+                            setOpenProfile({ ...profile, profileCode: profile.profileCode ?? (profile as any).profileCode ?? null });
+                        }}
                         className="block w-full text-left shadow-sm hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-prochure-bg"
                         aria-label={`View ${profile.name ?? "profile"}`}
                     >
@@ -367,7 +415,15 @@ export default function SubcategoryPage() {
                 ))}
             </div>
 
-            <ProfileCardModal data={openProfile} onClose={() => setOpenProfile(null)} />
+            <ProfileCardModal
+                data={openProfile}
+                allowShare={!!openProfile}
+                shareUrl={openProfile && baseRoute ? `${window.location.origin}${buildProfileRoute(baseRoute, openProfile)}` : undefined}
+                onClose={() => {
+                    setOpenProfile(null);
+                    if (baseRoute && location.pathname !== baseRoute) navigate(baseRoute, { replace: true });
+                }}
+            />
 
             {filteredProfiles.length === 0 && (
                 <div className="text-center py-12 text-slate-400 bg-gray-50 rounded-xl border border-dashed border-gray-200">

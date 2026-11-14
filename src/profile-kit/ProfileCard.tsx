@@ -13,6 +13,8 @@ interface ProfileCardProps {
     placeholders?: boolean;
     /** Renders the X close button in the top-left corner. */
     onClose?: () => void;
+    /** Optional action inserted between the themed top and the white detail section. */
+    actionSlot?: ReactNode;
     /** "light" = white card with theme-colour text (used for listing grids). */
     tone?: "dark" | "light";
     className?: string;
@@ -24,6 +26,7 @@ export default function ProfileCard({
     showDetails = false,
     placeholders = false,
     onClose,
+    actionSlot,
     tone = "dark",
     className,
 }: ProfileCardProps) {
@@ -97,6 +100,7 @@ export default function ProfileCard({
                 </div>
             </div>
 
+            {actionSlot && <div className="pk-card-divider">{actionSlot}</div>}
             {showDetails && <CardDetails data={data} labels={labels} placeholders={placeholders} />}
         </div>
     );
@@ -127,19 +131,19 @@ function CardDetails({
             <Section label="Contact number (s)">
                 {phones.length
                     ? phones.map((p) => (
-                          <div key={p} className="pk-sec-label pk-blue">
-                              <a href={`tel:${p}`}>{formatPhone(p)}</a>
-                          </div>
-                      ))
+                        <div key={p} className="pk-sec-label pk-blue">
+                            <a href={`tel:${p}`}>{formatPhone(p)}</a>
+                        </div>
+                    ))
                     : empty}
             </Section>
             <Section label="Email ID (s)">
                 {emails.length
                     ? emails.map((m) => (
-                          <div key={m} className="pk-sec-label-lower pk-blue">
-                              <a href={`mailto:${m}`}>{m}</a>
-                          </div>
-                      ))
+                        <div key={m} className="pk-sec-label-lower pk-blue">
+                            <a href={`mailto:${m}`}>{m}</a>
+                        </div>
+                    ))
                     : empty}
             </Section>
             <Section label={labels.address}>

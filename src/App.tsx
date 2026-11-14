@@ -1,7 +1,7 @@
 import LoadingAnimation from "./components/LoadingAnimation";
 import { useEffect, useState } from "react";
 import { AnimatePresence } from "framer-motion";
-import { BrowserRouter, Routes, Route, Navigate, useParams } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate, useParams } from "react-router-dom";
 import PublishProfilePage from "./pages/PublishProfilePage";
 import MyProfilePage from "./pages/MyProfilePage";
 import PaymentLinkPage from "./pages/PaymentLinkPage";
@@ -14,11 +14,50 @@ import SubcategoryListPage from "./pages/SubcategoryListPage";
 import SubcategoryPage from "./SubcategoryPage";
 import { SubscptionPage } from "./pages/SubscptionPage";
 import PolicyPage from "./pages/PolicyPage";
+import { useAuth } from "./context/AuthContext";
+import { getMyProfile } from "./config/myProfileApi";
 
 /** Old /consultants, /services, /retail, /products links → new type URLs (keeps the rest of the path). */
 function LegacyTypeRedirect({ from }: { from: string }) {
   const rest = useParams()["*"];
   return <Navigate to={`/${LEGACY_TYPE_SLUGS[from]}${rest ? `/${rest}` : ""}`} replace />;
+}
+
+function ProfileCompletionGate() {
+  const { user, isLoading } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isLoading || !user) return;
+    const allowed = ["/my-profile", "/my-profile/invoice"];
+    if (allowed.includes(location.pathname)) return;
+    if (location.pathname.startsWith("/my-profile")) return;
+
+    let active = true;
+    getMyProfile()
+      .then((res) => {
+        if (!active) return;
+        if (res.profile && !res.profileComplete) {
+          navigate("/my-profile", {
+            replace: true,
+            state: {
+              notice: {
+                kind: "info",
+                text: "Please complete the remaining mandatory profile details before continuing.",
+              },
+            },
+          });
+        }
+      })
+      .catch(() => undefined);
+
+    return () => {
+      active = false;
+    };
+  }, [isLoading, location.pathname, navigate, user]);
+
+  return null;
 }
 
 export default function App() {
@@ -41,6 +80,7 @@ export default function App() {
         </AnimatePresence>
       ) : (
         <BrowserRouter>
+          <ProfileCompletionGate />
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route index element={<LobbyPage />} />
@@ -55,7 +95,7 @@ export default function App() {
               ))}
               <Route path=":type" element={<CategoryListPage />} />
               <Route path=":type/:category" element={<SubcategoryListPage />} />
-              <Route path=":type/:category/:subcategory" element={<SubcategoryPage />} />
+              <Route path=":type/:category/:subcategory/:profileCode?" element={<SubcategoryPage />} />
             </Route>
           </Routes>
         </BrowserRouter>

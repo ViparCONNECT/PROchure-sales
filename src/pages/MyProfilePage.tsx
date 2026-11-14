@@ -68,12 +68,14 @@ export default function MyProfilePage() {
 
     const profile = data?.profile ?? null;
     const profileType = profile?.category?.type;
+    const requiresProfileCompletion = !!profile && !!data && !data.profileComplete;
 
     useEffect(() => {
         if (!profile) return;
+        setEditing(requiresProfileCompletion);
         setPreviewGstinEnabled(!!profile.gstin);
         setPreviewGstinValue(profile.gstin ?? "");
-    }, [profile]);
+    }, [profile, requiresProfileCompletion]);
 
     const initialValues = useMemo(() => (profile ? toFormValues(profile) : null), [profile]);
 
@@ -253,6 +255,7 @@ export default function MyProfilePage() {
 
             {profile && (
                 <ProfileCardModal
+                    allowShare={false}
                     data={previewOpen ? { ...profile, profileType, consultantKind: profile.consultantKind ?? null, gstin: previewGstinEnabled ? previewGstinValue : null } : null}
                     onClose={() => {
                         setPreviewOpen(false);

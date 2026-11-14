@@ -27,4 +27,9 @@ export async function getProfile(profileId: string) {
     return res.data?.data || null;
 }
 
+export async function getProfileByCode(profileCode: string) {
+    const res = await api.get(`/profiles/code/${encodeURIComponent(profileCode)}`);
+    return res.data?.data || null;
+}
+
 export default api;
