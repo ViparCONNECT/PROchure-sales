@@ -45,8 +45,10 @@ export function addressLines(a?: Partial<ProfileAddress> | null): string[] {
         join([a.doorShopNo, a.floor && !/floor/i.test(a.floor) ? `${a.floor} Floor` : a.floor, a.buildingMallPropertyName]),
         join([a.streetLaneRoadNameSubLocality, a.secondaryPrimaryLocality]),
         a.nearestLandmark ? `Near ${a.nearestLandmark}` : "",
-        join([join([a.cityTown, a.pinCodeZipCode], " – "), a.stateProvince, a.country]),
-    ].filter(Boolean);
+        join([a.cityTown, a.stateProvince]),
+        a.pinCodeZipCode,
+        a.country,
+    ].filter((line): line is string => Boolean(line && line.trim()));
 }
 
 export function splitPhone(e164?: string | null): { code: string; number: string } {

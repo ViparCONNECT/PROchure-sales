@@ -9,10 +9,10 @@ export interface ProfileTypeRoute {
 
 export const PROFILE_TYPE_ROUTES: ProfileTypeRoute[] = [
     {
-        slug: "professional-consultants",
+        slug: "professional-consultants-and-practitioners",
         type: "PROFESSIONAL_CONSULTANT",
-        label: "PROFESSIONAL CONSULTANTS",
-        singular: "Professional Consultant",
+        label: "PROFESSIONAL CONSULTANTS & PRACTITIONERS",
+        singular: "Professional Consultant & Practitioner",
     },
     // {
     //     slug: "service-and-retail-brands",
@@ -27,7 +27,10 @@ export const routeForType = (type?: string | null) => PROFILE_TYPE_ROUTES.find((
 
 /** Old URL segments, redirected to the new ones. */
 export const LEGACY_TYPE_SLUGS: Record<string, string> = {
-    consultants: "professional-consultants",
+    professionalConsultants: "professional-consultants-and-practitioners",
+    consultants: "professional-consultants-and-practitioners",
+    "professional-consultants": "professional-consultants-and-practitioners",
+    "professional-consultants-practitioners": "professional-consultants-and-practitioners",
     services: "service-and-retail-brands",
     retail: "service-and-retail-brands",
     products: "service-and-retail-brands",

@@ -76,23 +76,24 @@ export default function ProfileCardModal({
                         initial={{ opacity: 0, scale: 0.96, y: 16 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.96, y: 16 }}
-                        className="pk-root relative w-full max-w-lg max-h-[90vh] my-8 overflow-hidden rounded-2xl bg-white shadow-2xl"
+                        className="pk-root relative flex h-[calc(100vh-4rem)] max-h-[90vh] w-full max-w-lg flex-col my-8 overflow-hidden rounded-2xl bg-white shadow-2xl"
                     >
                         {title && (
-                            <div className="border-b border-slate-200 bg-slate-50 px-5 py-3 text-center text-xs font-bold uppercase tracking-[0.12em] text-slate-700">
+                            <div className="shrink-0 border-b border-slate-200 bg-slate-50 px-5 py-3 text-center text-xs font-bold uppercase tracking-[0.12em] text-slate-700">
                                 {title}
                             </div>
                         )}
-                        <div className="max-h-[70vh] overflow-y-auto p-4 sm:p-5">
+                        <div className="min-h-0 flex-1 overflow-y-auto p-4 sm:p-5">
                             <ProfileCard
                                 data={data}
                                 showDetails
                                 onClose={onClose}
+                                tone="light"
                                 actionSlot={allowShare && shareUrl ? (
                                     <button
                                         type="button"
                                         onClick={handleShare}
-                                        className="inline-flex items-center justify-center rounded-lg border border-prochure-bg bg-prochure-bg/5 px-3 py-2 text-sm font-semibold text-prochure-bg transition hover:bg-prochure-bg hover:text-white"
+                                        className="inline-flex items-center justify-center rounded-md border border-prochure-bg bg-white px-2.5 py-1 text-xs font-bold text-prochure-bg transition hover:bg-prochure-bg hover:text-white"
                                     >
                                         {shareStatus === "copied" ? "Copied" : shareStatus === "failed" ? "Try again" : "Share profile"}
                                     </button>

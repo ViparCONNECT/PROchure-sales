@@ -31,7 +31,7 @@ export default function PublishProfilePage() {
     const { user, isLoading } = useAuth();
     const [checking, setChecking] = useState(false);
     const savedProfileRef = useRef(false);
-    const isProfessionalConsultants = type === "professional-consultants";
+    const isProfessionalConsultants = type === "professional-consultants-and-practitioners";
 
     const cardPublicName = isProfessionalConsultants ? 'Digital Visiting Card' : 'profile';
 

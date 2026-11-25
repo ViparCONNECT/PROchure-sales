@@ -187,7 +187,7 @@ export default function LobbyPage() {
                         images={BANNER_CAROUSEL_IMAGES}
                         aspectRatio="1.75 / 1"
                         className="w-full shadow-lg"
-                        carouselTitle="PROFESSIONAL CONSULTANTS"
+                        carouselTitle="PROFESSIONAL CONSULTANTS & PRACTITIONERS"
                     />
                     {/* <ImageCarousel
                         images={SQUARE_CAROUSEL_IMAGES}

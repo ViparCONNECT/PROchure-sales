@@ -22,6 +22,7 @@
 
 .pk-card {
     width: 100%;
+    container-type: inline-size;
     background: #fff;
     border: 1px solid var(--pk-brand-dark);
     overflow: hidden;
@@ -155,20 +156,60 @@
 }
 
 .pk-card-divider {
-    border-top: 1px solid rgba(85, 55, 74, 0.15);
-    border-bottom: 1px solid rgba(85, 55, 74, 0.15);
-    background: #f7f4f5;
-    padding: 12px 16px;
+    border: 0;
+    background: var(--pk-brand);
+    min-height: 38px;
+    padding: 6px 16px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .pk-card-body {
-    padding: 16px 18px 18px;
     display: grid;
-    gap: 14px;
+    gap: 0;
     font-size: 14px;
+    background: var(--pk-brand);
+}
+.pk-card-section {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1.75 / 1;
+    min-height: 190px;
+    padding: 10px 18px;
+    background: #fff;
+    overflow: hidden;
+}
+.pk-card-section-expanded {
+    aspect-ratio: auto;
+    min-height: 190px;
+    overflow: visible;
+}
+.pk-card-section:not(.pk-card-section-expanded) .pk-sec-value {
+    max-height: calc(100% - 20px);
+    overflow: hidden;
+}
+.pk-contact-group {
+    display: grid;
+    gap: 10px;
+}
+.pk-see-more {
+    position: absolute;
+    right: 18px;
+    bottom: 12px;
+    border: 0;
+    background: #fff;
+    padding: 4px 0 4px 8px;
+    color: var(--pk-brand);
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+.pk-see-more:hover {
+    text-decoration: underline;
+}
+.pk-card-section + .pk-card-section {
+    border-top: 10px solid var(--pk-brand);
 }
 .pk-sec-label {
     font-size: 11px;
@@ -521,3 +562,35 @@
     justify-content: flex-end;
     flex-wrap: wrap;
 }
+.pk-card-section,
+.pk-card-section .pk-sec-value,
+.pk-card-section .pk-contact-group,
+.pk-card-section .pk-hours,
+.pk-card-section .pk-hours dt,
+.pk-card-section .pk-hours dd {
+    font-size: 14px;
+}
+.pk-card-section .pk-sec-label,
+.pk-card-section .pk-sec-label-lower {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: normal;
+    text-transform: none;
+}
+
+/* @container (min-width: 1px) {
+    .pk-card-section,
+    .pk-card-section .pk-sec-value,
+    .pk-card-section .pk-sec-value > *,
+    .pk-card-section .pk-sec-label,
+    .pk-card-section .pk-sec-label-lower,
+    .pk-card-section .pk-contact-group,
+    .pk-card-section .pk-contact-group > *,
+    .pk-card-section .pk-hours,
+    .pk-card-section .pk-hours dt,
+    .pk-card-section .pk-hours dd,
+    .pk-card-section .pk-empty {
+        font-size: clamp(12px, 2.7cqw, 16px) !important;
+        line-height: 1.45 !important;
+    }
+} */

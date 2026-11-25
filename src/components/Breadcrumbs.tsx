@@ -14,7 +14,7 @@ export default function Breadcrumbs({ items }: BreadcrumbsProps) {
         } else if (label.toLowerCase() === "retail") {
             return "Retail Brands";
         } else if (label.toLowerCase() === "consultants") {
-            return "Professional Consultants";
+            return "Professional Consultants & Practitioners";
         } else {
             return label;
         }

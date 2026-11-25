@@ -1,5 +1,5 @@
 // profile-kit — shared by PROchure-sales and PROchure.app-admin. Keep both copies identical.
-import type { ReactNode } from "react";
+import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import "./profile-kit.css";
 import { variantLabels } from "./constants";
 import { addressLines, formatPhone, workingHoursLines } from "./format";
@@ -71,7 +71,7 @@ export default function ProfileCard({
                     <div className="pk-card-main">
                         {kind === "INDEPENDENT" && (
                             <>
-                                <div className="pk-left">
+                                <div className="pk-center">
                                     <div className="pk-name">{name}</div>
                                     {degrees && <div className="pk-line">{degrees}</div>}
                                     {regNo && <div className="pk-line pk-line-sm">{regNo}</div>}
@@ -101,18 +101,16 @@ export default function ProfileCard({
             </div>
 
             {actionSlot && <div className="pk-card-divider">{actionSlot}</div>}
-            {showDetails && <CardDetails data={data} labels={labels} placeholders={placeholders} />}
+            {showDetails && <CardDetails data={data} placeholders={placeholders} />}
         </div>
     );
 }
 
 function CardDetails({
     data,
-    labels,
     placeholders,
 }: {
     data: ProfileCardData;
-    labels: ReturnType<typeof variantLabels>;
     placeholders: boolean;
 }) {
     const phones = (data.contactNumbers ?? []).filter(Boolean);
@@ -125,46 +123,56 @@ function CardDetails({
 
     return (
         <div className="pk-card-body">
-            <Section label={labels.servicesDetail}>
+            <Section label="">
                 {servicesDetail ? <div style={{ whiteSpace: "pre-line" }}>{servicesDetail}</div> : empty}
             </Section>
-            <Section label="Contact number (s)">
-                {phones.length
-                    ? phones.map((p) => (
-                        <div key={p} className="pk-sec-label pk-blue">
-                            <a href={`tel:${p}`}>{formatPhone(p)}</a>
-                        </div>
-                    ))
-                    : empty}
+
+            <Section label="">
+                <div className="pk-contact-group">
+                    <div>
+                        {/* <div className="pk-sec-label">Contact number (s)</div> */}
+                        {phones.length
+                            ? phones.map((p) => (
+                                <div key={p} className="pk-sec-label pk-blue">
+                                    <a href={`tel:${p}`}>{formatPhone(p)}</a>
+                                </div>
+                            ))
+                            : empty}
+                    </div>
+                    <div className="">
+                        {/* <div className="pk-sec-label">{labels.hours}</div> */}
+                        {hours.length ? (
+                            <dl className="pk-hours" style={{ margin: 0 }}>
+                                {hours.map((h) => (
+                                    <div key={h.label} style={{ display: "contents" }}>
+                                        <dt>{h.label}</dt>
+                                        <dd>{h.text}</dd>
+                                    </div>
+                                ))}
+                            </dl>
+                        ) : empty}
+                    </div>
+
+                </div>
             </Section>
-            <Section label="Email ID (s)">
-                {emails.length
-                    ? emails.map((m) => (
-                        <div key={m} className="pk-sec-label-lower pk-blue">
-                            <a href={`mailto:${m}`}>{m}</a>
-                        </div>
-                    ))
-                    : empty}
+            <Section label="">
+                {address.length ? (
+                    <div style={{ whiteSpace: "pre-line" }}>{address.join("\n")}</div>
+                ) : empty}
             </Section>
-            <Section label={labels.address}>
-                {address.length ? address.map((l, i) => <div key={i}>{l}</div>) : empty}
-            </Section>
-            <Section label={labels.hours}>
-                {hours.length ? (
-                    <dl className="pk-hours" style={{ margin: 0 }}>
-                        {hours.map((h) => (
-                            <div key={h.label} style={{ display: "contents" }}>
-                                <dt>{h.label}</dt>
-                                <dd>{h.text}</dd>
+
+            <Section label="">
+                <>
+                    {emails.length
+                        ? emails.map((email) => (
+                            <div key={email} className="pk-sec-label-lower pk-blue">
+                                <a href={`mailto:${email}`}>{email}</a>
                             </div>
-                        ))}
-                    </dl>
-                ) : (
-                    empty
-                )}
-            </Section>
-            <Section label="Preferred languages for communication">
-                {languages.length ? languages.join(", ") : empty}
+                        ))
+                        : empty}
+                    <div className="pk-sec-label mt-10">Preferred languages for communication</div>
+                    {languages.length ? languages.join(", ") : empty}
+                </>
             </Section>
         </div>
     );
@@ -172,10 +180,52 @@ function CardDetails({
 
 function Section({ label, blue, children }: { label: string; blue?: boolean; children: ReactNode }) {
     if (children === null || children === undefined) return null;
+
+    const sectionRef = useRef<HTMLDivElement>(null);
+    const valueRef = useRef<HTMLDivElement>(null);
+    const [expanded, setExpanded] = useState(false);
+    const [hasOverflow, setHasOverflow] = useState(false);
+
+    useLayoutEffect(() => {
+        const section = sectionRef.current;
+        const value = valueRef.current;
+        if (!section || !value) return;
+
+        const measure = () => {
+            if (expanded) {
+                setHasOverflow(value.scrollHeight > section.clientHeight);
+                return;
+            }
+            const labelHeight = 24;
+            const availableHeight = section.clientHeight - 12 - labelHeight;
+            console.log("Section measure", { label, availableHeight, scrollHeight: value.scrollHeight });
+            setHasOverflow(value.scrollHeight > availableHeight);
+        };
+
+        measure();
+        const observer = new ResizeObserver(measure);
+        observer.observe(section);
+        observer.observe(value);
+        return () => observer.disconnect();
+    }, [children, expanded]);
+
     return (
-        <div>
+        <div
+            ref={sectionRef}
+            className={`pk-card-section${expanded ? " pk-card-section-expanded" : ""}`}
+        >
             <div className={`pk-sec-label${blue ? " pk-blue" : ""}`}>{label}</div>
-            <div className="pk-sec-value">{children}</div>
+            <div ref={valueRef} className="pk-sec-value">{children}</div>
+            {hasOverflow && (
+                <button
+                    type="button"
+                    className="pk-see-more"
+                    onClick={() => setExpanded((current) => !current)}
+                    aria-expanded={expanded}
+                >
+                    {expanded ? "Show Less" : "See More..."}
+                </button>
+            )}
         </div>
     );
 }

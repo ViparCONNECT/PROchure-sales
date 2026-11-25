@@ -8,8 +8,7 @@ import { PROFILE_TYPE_ROUTES } from "../config/profileTypes";
 const THEME_COLOR = "#55374a";
 
 const BUTTON_LABEL: Record<string, string> = {
-    "professional-consultants": "PROFESSIONAL CONSULTANTS",
-    "service-and-retail-brands": "SERVICE & RETAIL BRANDS",
+    "professional-consultants-and-practitioners": "PROFESSIONAL CONSULTANTS & PRACTITIONERS",
 };
 
 interface BeAProPopupProps {
