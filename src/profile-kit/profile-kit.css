@@ -577,6 +577,32 @@
     letter-spacing: normal;
     text-transform: none;
 }
+.pk-detail-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+.pk-card-section .lucide-icon,
+.pk-card-section .pk-detail-row > .lucide-icon {
+    width: 16px;
+    height: 16px;
+    flex: 0 0 16px;
+    margin-top: 2px;
+    color: var(--pk-brand);
+}
+.pk-card-section .pk-sec-label a,
+.pk-card-section .pk-sec-label-lower a {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+.pk-card-section .pk-sec-label a .lucide-icon,
+.pk-card-section .pk-sec-label-lower a .lucide-icon {
+    color: currentColor;
+}
+.pk-card-section .pk-hours {
+    flex: 1;
+}
 
 /* @container (min-width: 1px) {
     .pk-card-section,

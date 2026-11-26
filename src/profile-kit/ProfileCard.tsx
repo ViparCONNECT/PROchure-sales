@@ -1,5 +1,6 @@
 // profile-kit — shared by PROchure-sales and PROchure.app-admin. Keep both copies identical.
 import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
+import { Clock3, Mail, MapPin, Phone } from "lucide-react";
 import "./profile-kit.css";
 import { variantLabels } from "./constants";
 import { addressLines, formatPhone, workingHoursLines } from "./format";
@@ -11,7 +12,7 @@ interface ProfileCardProps {
     showDetails?: boolean;
     /** Show field names in empty slots (form preview / stencil mode). */
     placeholders?: boolean;
-    /** Renders the X close button in the top-left corner. */
+    /** Retained for API compatibility; closing is handled by the popup frame. */
     onClose?: () => void;
     /** Optional action inserted between the themed top and the white detail section. */
     actionSlot?: ReactNode;
@@ -25,7 +26,7 @@ export default function ProfileCard({
     data,
     showDetails = false,
     placeholders = false,
-    onClose,
+    onClose: _onClose,
     actionSlot,
     tone = "dark",
     className,
@@ -56,11 +57,6 @@ export default function ProfileCard({
             <div className="pk-card-top">
                 <div className="pk-card-top-inner">
                     <div className="pk-card-head">
-                        {onClose && (
-                            <button type="button" className="pk-x" onClick={onClose} aria-label="Close">
-                                X
-                            </button>
-                        )}
                         {data.isWomenEntrepreneur ? (
                             <span className="pk-badge">She-Pro</span>
                         ) : placeholders ? (
@@ -71,7 +67,7 @@ export default function ProfileCard({
                     <div className="pk-card-main">
                         {kind === "INDEPENDENT" && (
                             <>
-                                <div className="pk-center">
+                                <div className="pk-left">
                                     <div className="pk-name">{name}</div>
                                     {degrees && <div className="pk-line">{degrees}</div>}
                                     {regNo && <div className="pk-line pk-line-sm">{regNo}</div>}
@@ -134,7 +130,10 @@ function CardDetails({
                         {phones.length
                             ? phones.map((p) => (
                                 <div key={p} className="pk-sec-label pk-blue">
-                                    <a href={`tel:${p}`}>{formatPhone(p)}</a>
+                                    <a href={`tel:${p}`}>
+                                        <Phone className="lucide-icon" />
+                                        {formatPhone(p)}
+                                    </a>
                                 </div>
                             ))
                             : empty}
@@ -142,14 +141,17 @@ function CardDetails({
                     <div className="">
                         {/* <div className="pk-sec-label">{labels.hours}</div> */}
                         {hours.length ? (
-                            <dl className="pk-hours" style={{ margin: 0 }}>
-                                {hours.map((h) => (
-                                    <div key={h.label} style={{ display: "contents" }}>
-                                        <dt>{h.label}</dt>
-                                        <dd>{h.text}</dd>
-                                    </div>
-                                ))}
-                            </dl>
+                            <div className="pk-detail-row">
+                                <Clock3 className="lucide-icon" />
+                                <dl className="pk-hours" style={{ margin: 0 }}>
+                                    {hours.map((h) => (
+                                        <div key={h.label} style={{ display: "contents" }}>
+                                            <dt>{h.label}</dt>
+                                            <dd>{h.text}</dd>
+                                        </div>
+                                    ))}
+                                </dl>
+                            </div>
                         ) : empty}
                     </div>
 
@@ -157,7 +159,10 @@ function CardDetails({
             </Section>
             <Section label="">
                 {address.length ? (
-                    <div style={{ whiteSpace: "pre-line" }}>{address.join("\n")}</div>
+                    <div style={{ whiteSpace: "pre-line" }}>
+                        <MapPin className="lucide-icon" />
+                        {address.join("\n")}
+                    </div>
                 ) : empty}
             </Section>
 
@@ -166,11 +171,14 @@ function CardDetails({
                     {emails.length
                         ? emails.map((email) => (
                             <div key={email} className="pk-sec-label-lower pk-blue">
-                                <a href={`mailto:${email}`}>{email}</a>
+                                <a href={`mailto:${email}`}>
+                                    <Mail className="lucide-icon" />
+                                    {email}
+                                </a>
                             </div>
                         ))
                         : empty}
-                    <div className="pk-sec-label mt-10">Preferred languages for communication</div>
+                    <div className="pk-sec-label mt-10">Preferred Languages for Communication</div>
                     {languages.length ? languages.join(", ") : empty}
                 </>
             </Section>

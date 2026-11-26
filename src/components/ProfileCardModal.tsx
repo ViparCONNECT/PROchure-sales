@@ -1,6 +1,7 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
+import { X } from "lucide-react";
 import ProfileCard from "../profile-kit/ProfileCard";
 import type { ProfileCardData } from "../profile-kit/types";
 
@@ -78,16 +79,26 @@ export default function ProfileCardModal({
                         exit={{ opacity: 0, scale: 0.96, y: 16 }}
                         className="pk-root relative flex h-[calc(100vh-4rem)] max-h-[90vh] w-full max-w-lg flex-col my-8 overflow-hidden rounded-2xl bg-white shadow-2xl"
                     >
-                        {title && (
-                            <div className="shrink-0 border-b border-slate-200 bg-slate-50 px-5 py-3 text-center text-xs font-bold uppercase tracking-[0.12em] text-slate-700">
-                                {title}
-                            </div>
-                        )}
+                        <div className="shrink-0 border-b border-slate-200 bg-slate-50 px-12 py-2 text-center text-slate-700">
+                            <div className="text-sm">e-Visiting Card</div>
+                            {title && (
+                                <div className="mt-0.5 text-[10px] uppercase tracking-[0.12em] text-slate-500">
+                                    {title}
+                                </div>
+                            )}
+                        </div>
+                        <button
+                            type="button"
+                            onClick={onClose}
+                            className="absolute right-3 top-2 z-10 rounded-md p-2 text-slate-600 transition hover:bg-slate-100"
+                            aria-label="Close"
+                        >
+                            <X className="h-5 w-5" />
+                        </button>
                         <div className="min-h-0 flex-1 overflow-y-auto p-4 sm:p-5">
                             <ProfileCard
                                 data={data}
                                 showDetails
-                                onClose={onClose}
                                 tone="light"
                                 actionSlot={allowShare && shareUrl ? (
                                     <button
@@ -95,7 +106,7 @@ export default function ProfileCardModal({
                                         onClick={handleShare}
                                         className="inline-flex items-center justify-center rounded-md border border-prochure-bg bg-white px-2.5 py-1 text-xs font-bold text-prochure-bg transition hover:bg-prochure-bg hover:text-white"
                                     >
-                                        {shareStatus === "copied" ? "Copied" : shareStatus === "failed" ? "Try again" : "Share profile"}
+                                        {shareStatus === "copied" ? "Copied" : shareStatus === "failed" ? "Try again" : "Share Profile"}
                                     </button>
                                 ) : null}
                             />

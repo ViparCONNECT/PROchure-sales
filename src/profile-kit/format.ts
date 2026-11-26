@@ -43,8 +43,8 @@ export function addressLines(a?: Partial<ProfileAddress> | null): string[] {
     const join = (parts: (string | null | undefined)[], sep = ", ") => parts.filter((p) => p && p.trim()).join(sep);
     return [
         join([a.doorShopNo, a.floor && !/floor/i.test(a.floor) ? `${a.floor} Floor` : a.floor, a.buildingMallPropertyName]),
-        join([a.streetLaneRoadNameSubLocality, a.secondaryPrimaryLocality]),
-        a.nearestLandmark ? `Near ${a.nearestLandmark}` : "",
+        join([a.streetLaneRoadNameSubLocality]),
+        join([a.secondaryPrimaryLocality,a.nearestLandmark ? `Near ${a.nearestLandmark}` : "" ]),
         join([a.cityTown, a.stateProvince]),
         a.pinCodeZipCode,
         a.country,
