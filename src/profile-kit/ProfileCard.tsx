@@ -96,7 +96,11 @@ export default function ProfileCard({
                 </div>
             </div>
 
-            {actionSlot && <div className="pk-card-divider">{actionSlot}</div>}
+            {(actionSlot || showDetails) && (
+                <div className={`pk-card-divider${actionSlot ? " pk-card-divider-action" : " pk-card-divider-empty"}`}>
+                    {actionSlot}
+                </div>
+            )}
             {showDetails && <CardDetails data={data} placeholders={placeholders} />}
         </div>
     );

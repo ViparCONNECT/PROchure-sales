@@ -74,9 +74,8 @@ export default function PaymentLinkPage() {
 
             {notice && (
                 <div
-                    className={`mb-6 border rounded-lg px-4 py-3 text-sm ${
-                        notice.kind === "success" ? "bg-green-50 border-green-200 text-green-800" : "bg-red-50 border-red-200 text-red-800"
-                    }`}
+                    className={`mb-6 border rounded-lg px-4 py-3 text-sm ${notice.kind === "success" ? "bg-green-50 border-green-200 text-green-800" : "bg-red-50 border-red-200 text-red-800"
+                        }`}
                 >
                     {notice.text}
                 </div>
@@ -84,7 +83,7 @@ export default function PaymentLinkPage() {
 
             <div className="grid md:grid-cols-[1fr_minmax(260px,320px)] gap-8 items-start">
                 <div className="shadow-lg">
-                    <ProfileCard data={{ ...info.profile, profileType }} showDetails />
+                    <ProfileCard data={{ ...info.profile, profileType }} showDetails tone="light" />
                 </div>
 
                 <div className="border border-slate-200 rounded-xl p-6 bg-white md:sticky md:top-6">

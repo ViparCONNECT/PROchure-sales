@@ -68,7 +68,7 @@ export default function ProfileCardModal({
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="pk-root fixed inset-0 z-[300] flex items-start sm:items-center justify-center p-4 overflow-y-auto"
+                    className="pk-root fixed inset-0 z-300 flex items-start sm:items-center justify-center p-4 overflow-y-auto"
                     role="dialog"
                     aria-modal="true"
                 >
